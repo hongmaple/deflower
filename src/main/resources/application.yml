@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: HaiYanFlowers
+  datasource:
+    url: jdbc:mysql://localhost:3306/ry-vue?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8080
+#在线文档配置
+deflower-swagger:
+  enable: true
+  api-info:
+    title: 采花
+    description: 采花API
+    version: 1.0.0
