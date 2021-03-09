@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haiyan.deflower.mapper.SaysCommentaryMapper">
+    <resultMap id="" type="">
+        <id property="" column=""  />
+        <result property="" column=""  />
+        <association property="" columnPrefix="" resultMap="" />
+    </resultMap>
+
+    <sql id = "">
+       
+    </sql>
+    <select id="" resultMap="" >
+        
+    </select>
+
+    <select id="" resultMap="" >
+       
+    </select>
+
+    <select id="" resultMap="" >
+        <include refid="" />
+    </select>
+
+    <select id="" resultMap="" >
+        <include refid="" />
+        <where>
+            <if test="">
+                <foreach collection="" item=""
+                         open="(" separator="" close=")">
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>
