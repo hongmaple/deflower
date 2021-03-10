@@ -1,9 +1,11 @@
 package com.haiyan.deflower.dao;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.haiyan.deflower.pojo.User;
+import com.haiyan.deflower.pojo.FlowerFavorite;
+
+
 /**
  * @author haiyan
  */
-public interface UserDao  {
+public interface FlowerFavoriteDao extends IService<FlowerFavorite> {
 }
