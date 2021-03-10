@@ -1,16 +1,22 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-
-import javax.persistence.Table;
 
 /**
  * 购物车
  * @author haiyan
  */
 @Data
-@Table(name="tb_cart")
+@TableName("tb_cart")
 public class Cart {
+    /**
+     * 主键
+     */
+    @TableId(type = IdType.AUTO)
+    private Long id;
     /**
      * 用户id
      */

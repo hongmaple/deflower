@@ -1,24 +1,22 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * 收货地址
  * @author haiyan
  */
 @Data
-@Table(name="tb_address")
+@TableName("tb_address")
 public class Address {
     /**
      * 主键
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 用户id

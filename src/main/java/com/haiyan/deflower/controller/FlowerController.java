@@ -1,0 +1,66 @@
+package com.haiyan.deflower.controller;
+
+import com.haiyan.deflower.dto.request.FlowerQuery;
+import com.haiyan.deflower.pojo.AjaxResult;
+import com.haiyan.deflower.pojo.Flower;
+import com.haiyan.deflower.pojo.PageList;
+import com.haiyan.deflower.service.FlowerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 花请求处理
+ *
+ * @author haiyan
+ */
+@Slf4j
+@Api(tags = "花相关")
+@RestController("flower")
+public class FlowerController {
+
+    private final FlowerService flowerService;
+
+    public FlowerController(FlowerService flowerService) {
+        this.flowerService = flowerService;
+    }
+
+    /**
+     * 新增花
+     * @param flower 花
+     * @return 花id
+     */
+    @ApiOperation("新增花")
+    @PostMapping()
+    public AjaxResult addFlower(@RequestBody Flower flower) {
+        AjaxResult ajaxResult = AjaxResult.success("新增花成功",flowerService.addFlower(flower));
+        return ajaxResult;
+    }
+
+    /**
+     * 修改花
+     * @param flower 花
+     * @return 结果
+     */
+    @ApiOperation("修改花")
+    @PutMapping()
+    public AjaxResult updateFlower(@RequestBody Flower flower) {
+        AjaxResult ajaxResult = AjaxResult.success("修改花成功",flowerService.updateFlower(flower));
+        return ajaxResult;
+    }
+
+
+    /**
+     * 分页查询
+     * @param query 参数
+     * @return 分页数据
+     */
+    @ApiOperation("分页查询花")
+    @PostMapping()
+    public AjaxResult listFlower(@RequestBody FlowerQuery query) {
+        AjaxResult ajaxResult = AjaxResult.success(flowerService.listFlower(query));
+        return ajaxResult;
+    }
+}

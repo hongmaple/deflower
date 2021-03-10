@@ -6,5 +6,4 @@
         <result property="username" column="username"  />
     </resultMap>
 
-
 </mapper>

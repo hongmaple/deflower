@@ -1,24 +1,21 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * 花语解说
  * @author haiyan
  */
-@Table(name = "tb_says_commentary")
+@TableName("tb_says_commentary")
 @Data
 public class SaysCommentary {
     /**
      * 主键
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 花名

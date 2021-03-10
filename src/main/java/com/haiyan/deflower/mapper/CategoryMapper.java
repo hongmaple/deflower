@@ -1,10 +1,10 @@
 package com.haiyan.deflower.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.haiyan.deflower.pojo.OrderStatus;
+import com.haiyan.deflower.pojo.Category;
 
 /**
  * @author haiyan
  */
-public interface OrderStatusMapper extends BaseMapper<OrderStatus> {
+public interface CategoryMapper extends BaseMapper<Category> {
 }

@@ -1,21 +1,18 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * 分类
  * @author haiyan
  */
 @Data
-@Table(name="tb_category")
+@TableName("tb_category")
 public class Category {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @TableId(type = IdType.AUTO)
     private Long id;
     private String name;
 }

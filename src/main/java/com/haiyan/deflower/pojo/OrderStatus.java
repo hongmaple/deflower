@@ -1,20 +1,21 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * 订单状态
  * @author haiyan
  */
-@Table(name = "tb_order_status")
+@TableName("tb_order_status")
 @Data
 public class OrderStatus {
 
-    @Id
+    @TableId(type = IdType.AUTO)
     private Long orderId;
     /**
      * 初始阶段：1、未付款、未发货；初始化所有数据

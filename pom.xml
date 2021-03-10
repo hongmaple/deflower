@@ -20,6 +20,7 @@
         <fastjson.version>1.2.75</fastjson.version>
         <pagehelper.version>1.2.10</pagehelper.version>
         <mybatis.version>2.1.0</mybatis.version>
+        <mybatis.plus.version>3.3.2</mybatis.plus.version>
     </properties>
     <dependencies>
         <dependency>
@@ -37,10 +38,16 @@
             <version>${mybatis.version}</version>
         </dependency>
         <!-- 通用mapper启动器 -->
+<!--        <dependency>-->
+<!--            <groupId>tk.mybatis</groupId>-->
+<!--            <artifactId>mapper-spring-boot-starter</artifactId>-->
+<!--            <version>${mybatis.version}</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>${mybatis.version}</version>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis.plus.version}</version>
+            <optional>true</optional>
         </dependency>
         <!-- 分页助手启动器 -->
         <dependency>
@@ -88,6 +95,11 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>${commons.fileupload.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
 
         <!-- 阿里JSON解析器 -->

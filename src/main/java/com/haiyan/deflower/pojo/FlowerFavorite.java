@@ -1,22 +1,20 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 花
+ * 花 收藏
  * @author haiyan
  */
 @Data
-@Table(name = "tb_flower_favorite")
+@TableName("tb_flower_favorite")
 public class FlowerFavorite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -31,8 +29,4 @@ public class FlowerFavorite {
      * 创建时间
      */
     private Date createTime;
-    /**
-     * 最后修改时间
-     */
-    private Date lastUpdateTime;
 }

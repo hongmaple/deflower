@@ -1,8 +1,10 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -10,10 +12,9 @@ import java.util.Date;
  * @author haiyan
  */
 @Data
-@Table(name = "tb_flower")
+@TableName("tb_flower")
 public class Flower {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 分类id

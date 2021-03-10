@@ -1,11 +1,12 @@
 package com.haiyan.deflower.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import java.beans.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +14,11 @@ import java.util.List;
  * 订单
  * @author haiyan
  */
-@Table(name = "tb_order")
+@TableName("tb_order")
 @Data
 public class Order {
 
-    @Id
+    @TableId(type = IdType.AUTO)
     private Long orderId;
 
     /**
@@ -77,9 +78,7 @@ public class Order {
      */
     private String receiverAddress;
 
-    @Transient
     private List<OrderDetail> orderDetails;
 
-    @Transient
     private Integer status;
 }
