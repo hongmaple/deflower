@@ -3,14 +3,17 @@ package com.haiyan.deflower.utils;
 import com.alibaba.fastjson.JSON;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.pojo.User;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 
+import javax.net.ssl.SSLSession;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author haiyan
  */
+@Component
 public class UserUtils {
     private static final String TOKEN = "token";
 
@@ -21,7 +24,7 @@ public class UserUtils {
      * @param request
      * @return token
      */
-    public static User getUser(HttpServletRequest request)
+    public User getUser(HttpServletRequest request)
     {
         String token = request.getHeader(TOKEN);
         if (!StringUtils.hasText(token)) {

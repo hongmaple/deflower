@@ -3,12 +3,10 @@ package com.haiyan.deflower.controller;
 import com.haiyan.deflower.dto.request.FlowerQuery;
 import com.haiyan.deflower.pojo.AjaxResult;
 import com.haiyan.deflower.pojo.Flower;
-import com.haiyan.deflower.pojo.PageList;
 import com.haiyan.deflower.service.FlowerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @Api(tags = "花相关")
-@RestController("flower")
+@RestController
+@RequestMapping("/flower")
 public class FlowerController {
 
     private final FlowerService flowerService;
@@ -58,7 +57,7 @@ public class FlowerController {
      * @return 分页数据
      */
     @ApiOperation("分页查询花")
-    @PostMapping()
+    @PostMapping("/list")
     public AjaxResult listFlower(@RequestBody FlowerQuery query) {
         AjaxResult ajaxResult = AjaxResult.success(flowerService.listFlower(query));
         return ajaxResult;

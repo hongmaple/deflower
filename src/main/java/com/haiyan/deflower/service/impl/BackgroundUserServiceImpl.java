@@ -1,10 +1,11 @@
 package com.haiyan.deflower.service.impl;
 
-import com.haiyan.deflower.dao.UserDao;
+import com.haiyan.deflower.dao.BackgroundUserDao;
 import com.haiyan.deflower.exception.ExceptionResult;
-import com.haiyan.deflower.mapper.UserMapper;
+import com.haiyan.deflower.mapper.BackgroundUserMapper;
+import com.haiyan.deflower.pojo.BackgroundUser;
 import com.haiyan.deflower.pojo.User;
-import com.haiyan.deflower.service.UserService;
+import com.haiyan.deflower.service.BackgroundUserService;
 import com.haiyan.deflower.utils.ServletUtils;
 import com.haiyan.deflower.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +19,22 @@ import java.util.Objects;
  * @author haiyan
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class BackgroundUserServiceImpl implements BackgroundUserService {
 
-    private final UserMapper userMapper;
-    private final UserDao userDao;
+    private final BackgroundUserMapper userMapper;
+    private final BackgroundUserDao userDao;
 
     @Autowired
     private UserUtils userUtils;
 
-    public UserServiceImpl(UserMapper userMapper, UserDao userDao) {
+    public BackgroundUserServiceImpl(BackgroundUserMapper userMapper, BackgroundUserDao userDao) {
         this.userMapper = userMapper;
         this.userDao = userDao;
     }
 
     @Override
-    public Boolean register(User user) {
-        if(userDao.lambdaQuery().eq(User::getPhone,user.getPhone()).count()>0) {
+    public Boolean register(BackgroundUser user) {
+        if(userDao.lambdaQuery().eq(BackgroundUser::getPhone,user.getPhone()).count()>0) {
             throw new ExceptionResult("user","false",null,"注册失败，手机号码已存在");
         }
         user.setCreateTime(new Date());
@@ -44,15 +45,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean login(User user) {
+    public Boolean login(BackgroundUser user) {
         if (userDao.lambdaQuery()
-                .eq(User::getPhone,user.getPhone())
+                .eq(BackgroundUser::getPhone,user.getPhone())
                 .count()==0) {
             throw new ExceptionResult("user","false",null,"登陆失败，手机号码不存在");
         }
-        User loginUser = userDao.lambdaQuery()
-                .eq(User::getPhone, user.getPhone())
-                .eq(User::getPassword, user.getPassword())
+        BackgroundUser loginUser = userDao.lambdaQuery()
+                .eq(BackgroundUser::getPhone, user.getPhone())
+                .eq(BackgroundUser::getPassword, user.getPassword())
                 .one();
         if(Objects.isNull(loginUser)) {
             throw new ExceptionResult("user","false",null,"登陆失败，密码不正确");
@@ -65,9 +66,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean updateUser(User user) {
+    public Boolean updateUser(BackgroundUser user) {
         User loginUser = userUtils.getUser(ServletUtils.getRequest());
-        if (userDao.lambdaQuery().eq(User::getId,loginUser.getId()).count()==0) {
+        if (userDao.lambdaQuery().eq(BackgroundUser::getId,loginUser.getId()).count()==0) {
             throw new ExceptionResult("user","false",null,"该用户不存在");
         }
         if(!userDao.lambdaUpdate().update(user)) {

@@ -55,6 +55,7 @@ public class FlowerServiceImpl implements FlowerService {
         if (StringUtils.hasText(query.getTitle())) {
             lambdaQuery.like(Flower::getTitle,query.getTitle());
         }
+        lambdaQuery.orderByDesc(Flower::getUpdateTime);
         Page<Flower> page = lambdaQuery.page(new Page<>(query.getPageNum(), query.getPageSize()));
         List<Flower> flowers = page.getRecords();
         return PageList.of(flowers, page);

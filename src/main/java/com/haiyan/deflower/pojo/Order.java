@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 public class Order {
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.INPUT)
     private Long orderId;
 
     /**

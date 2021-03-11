@@ -6,21 +6,17 @@ import com.haiyan.deflower.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * 通用请求处理
+ * 分类相关
  *
  * @author haiyan
  */
 @Slf4j
 @Api(tags = "分类相关")
-@RestController("category")
+@RestController
+@RequestMapping("/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -36,7 +32,7 @@ public class CategoryController {
      */
     @ApiOperation("新增分类")
     @PostMapping()
-    public AjaxResult addCategory(Category category) {
+    public AjaxResult addCategory(@RequestBody Category category) {
         AjaxResult ajaxResult = AjaxResult.success("新增分类成功",categoryService.addCategory(category));
         return ajaxResult;
     }
@@ -48,7 +44,7 @@ public class CategoryController {
      */
     @ApiOperation("修改分类")
     @PutMapping()
-    public AjaxResult updateCategory(Category category) {
+    public AjaxResult updateCategory(@RequestBody Category category) {
         AjaxResult ajaxResult = AjaxResult.success("修改分类成功",categoryService.updateCategory(category));
         return ajaxResult;
     }
