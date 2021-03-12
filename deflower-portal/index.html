@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>青青食品网--首页</title>
+	<link rel="icon" href="/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="css/webbase.css" />
+    <link rel="stylesheet" type="text/css" href="css/pages-JD-index.css" />
+    <link rel="stylesheet" type="text/css" href="css/widget-jquery.autocomplete.css" />
+    <link rel="stylesheet" type="text/css" href="css/widget-cartPanelView.css" />
+
+</head>
+
+<body>
+	
+	<!-- 头部栏位 -->
+	<div id="nav-bottom">
+		<ly-top/>
+	</div>
+	<!--页面顶部，由js动态加载-->
+	<script src="./js/vue/vue.js"></script>
+	<script src="./js/axios.min.js"></script>
+	<script src="./js/common.js"></script>
+	<script type="text/javascript">
+        var indexVm = new Vue({
+            el:"#nav-bottom",
+            components:{
+                lyTop:() => import('./js/pages/top.js')
+			}
+        });
+	</script>
+
+
+	<!--列表-->
+	<div class="sort">
+		<div class="py-container">
+			<div class="yui3-g SortList ">
+				<div class="yui3-u Left all-sort-list">
+					<div class="all-sort-list2">
+						<div class="item bo">
+							<h3><a href="">肉类食品</a></h3>
+							<div class="item-list clearfix">
+								<div class="subitem">
+									<dl class="fore1">
+										<dt><a href="/search.html?key=猪肉">猪肉</a></dt>
+									</dl>
+									<dl class="fore2">
+										<dt><a href="/search.html?key=牛肉">牛肉</a></dt>
+									</dl>
+									<dl class="fore3">
+										<dt><a href="/search.html?key=鸡肉">鸡肉</a></dt>
+									</dl>
+									<dl class="fore4">
+										<dt><a href="/search.html?key=狗肉">狗肉</a></dt>
+									</dl>
+									<dl class="fore5">
+										<dt><a href="/search.html?key=羊肉">羊肉</a></dt>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div class="item">
+							<h3><a href="">蔬菜水果</a></h3>
+							<div class="item-list clearfix">
+								<div class="subitem">
+									<dl class="fore1">
+										<dt><a href="/search.html?key=白菜">白菜</a></dt>
+										<dd><em><a href="/search.html?key=小白菜">小白菜</a></em><em><a href="/search.html?key=大白菜">大白菜</a></em></dd>
+									</dl>
+									<dl class="fore2">
+										<dt><a href="/search.html?key=萝卜">萝卜</a></dt>
+										<dd><em><a href="/search.html?key=红萝卜">红萝卜</a></em><em><a href="/search.html?key=白萝卜">白萝卜</a></em></dd>
+									</dl>
+									<dl class="fore3">
+										<dt><a href="/search.html?key=苹果">苹果</a></dt>
+										<dd><em><a href="/search.html?key=红富士苹果">红富士苹果</a></em></dd>
+									</dl>
+									<dl class="fore4">
+										<dt>香蕉</dt>
+										<dd><em><a href="/search.html?key=越南香蕉">越南香蕉</a></em><em><a href="/search.html?key=广东香蕉">广东香蕉</a></em></dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="yui3-u Center banerArea">
+					<!--banner轮播-->
+					<div id="myCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
+					  <ol class="carousel-indicators">
+					    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					    <li data-target="#myCarousel" data-slide-to="1"></li>
+					    <li data-target="#myCarousel" data-slide-to="2"></li>
+					  </ol>
+					  <div class="carousel-inner">
+					    <div class="active item">
+					    <a href="/">
+					    	<img src="img/banner1.jpg"  />
+					      </a>
+					    </div>
+					    <div class="item">
+						 <a href="/">
+						<img src="img/banner2.jpg"  />
+					     </a>
+					    </div>
+					    <div class="item">
+						 <a href="/">
+						<img src="img/banner3x.jpg"  />
+						</a>
+					     
+					    </div>
+					  </div><a href="#myCarousel" data-slide="prev" class="carousel-control left">‹</a><a href="#myCarousel" data-slide="next" class="carousel-control right">›</a>
+					</div>
+				</div>
+				<div class="yui3-u Right">
+					<div class="news">
+						<h4><em class="fl">青青快报</em><span class="fr tip">更多 ></span></h4>
+						<div class="clearix"></div>
+						<ul class="news-list unstyled">
+							<li>
+								<span class="bold">[特惠]</span>年关将至，优惠多多
+							</li>
+							<li>
+								<span class="bold">[公告]</span>今年寒冬，青青给你温暖
+							</li>
+							<li>
+								<span class="bold">[公告]</span>2021年，青青将在上海开线下实体店
+							</li>
+							<li>
+								<span class="bold">[名言]</span>真实爱情的途径并不平坦
+							</li>
+							<li>
+								<span class="bold">[名言]</span>爱情使人心的憧憬升华到至善之境。
+							</li>
+						</ul>
+					</div>
+					<ul class="yui3-g Lifeservice">
+						<li class="yui3-u-1-4 life-item tab-item">
+							<i class="list-item list-item-1"></i>
+							<span class="service-intro">话费</span>
+						</li>
+						<li class="yui3-u-1-4 life-item tab-item">
+							<i class="list-item list-item-2"></i>
+							<span class="service-intro">机票</span>
+						</li>
+						<li class="yui3-u-1-4 life-item tab-item">
+							<i class="list-item list-item-3"></i>
+							<span class="service-intro">电影票</span>
+						</li>
+						<li class="yui3-u-1-4 life-item tab-item">
+							<i class="list-item list-item-4"></i>
+							<span class="service-intro">游戏</span>
+						</li>
+						<li class="yui3-u-1-4 life-item notab-item">
+							<i class="list-item list-item-5"></i>
+							<span class="service-intro">彩票</span>
+						</li>
+						<li class="yui3-u-1-4 life-item notab-item">
+							<i class="list-item list-item-6"></i>
+							<span class="service-intro">加油站</span>
+						</li>
+						<li class="yui3-u-1-4 life-item notab-item">
+							<i class="list-item list-item-7"></i>
+							<span class="service-intro">酒店</span>
+						</li>
+						<li class="yui3-u-1-4 life-item notab-item">
+							<i class="list-item list-item-8"></i>
+							<span class="service-intro">火车票</span>
+						</li>
+						<li class="yui3-u-1-4 life-item  notab-item">
+							<i class="list-item list-item-9"></i>
+							<span class="service-intro">众筹</span>
+						</li>
+						<li class="yui3-u-1-4 life-item notab-item">
+							<i class="list-item list-item-10"></i>
+							<span class="service-intro">理财</span>
+						</li>
+						<li class="yui3-u-1-4 life-item notab-item">
+							<i class="list-item list-item-11"></i>
+							<span class="service-intro">礼品卡</span>
+						</li>
+						<li class="yui3-u-1-4 life-item notab-item">
+							<i class="list-item list-item-12"></i>
+							<span class="service-intro">白条</span>
+						</li>
+					</ul>
+					<div class="life-item-content">
+						<div class="life-detail">
+							<i class="close">关闭</i>
+							<p>话费充值</p>
+							<form action="" class="sui-form form-horizontal">
+								号码：<input type="text" id="inputphoneNumber" placeholder="输入你的号码" />
+							</form>
+							<button class="sui-btn btn-danger">快速充值</button>
+						</div>
+						<div class="life-detail">
+							<i class="close">关闭</i> 机票
+						</div>
+						<div class="life-detail">
+							<i class="close">关闭</i> 电影票
+						</div>
+						<div class="life-detail">
+							<i class="close">关闭</i> 游戏
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--楼层-->
+	<div id="floor-1" class="floor">
+		<div class="py-container">
+			<div class="title floors">
+				<h3 class="fl">休闲零食</h3>
+			</div>
+			<div class="clearfix  tab-content floor-content">
+				<div id="tab1" class="tab-pane active">
+					<div class="yui3-g Floor-1">
+						<div class="yui3-u Left blockgary">
+							<ul class="jd-list">
+								<li><a href="/search.html?key=三只松鼠">三只松鼠</a></li>
+								<li><a href="/search.html?key=良品铺子">良品铺子</a></li>
+								<li><a href="/search.html?key=QUAKER桂格">QUAKER桂格</a></li>
+								<li><a href="/search.html?key=SEAMILD西麦">SEAMILD西麦</a></li>
+							</ul>
+							<a href="/item/27.html"><img style="width:100%; height:275px"; src="img/floor-1-1.png" /></a>
+						</div>
+						<div class="yui3-u row-330 floorBanner">
+							<div id="floorCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
+								<ol class="carousel-indicators">
+									<li data-target="#floorCarousel" data-slide-to="0" class="active"></li>
+									<li data-target="#floorCarousel" data-slide-to="1"></li>
+									<li data-target="#floorCarousel" data-slide-to="2"></li>
+								</ol>
+								<div class="carousel-inner">
+									<div class="active item">
+										<a style="width:90%; height:90%; " href="/item/8.html"><img src="img/floor-1-b01.png"></a>
+									</div>
+									<div class="item">
+										<a style="width:90%; height:90%; " href="/item/7.html"><img src="img/floor-1-b02.png"></a>
+									</div>
+									<div class="item">
+										<a style="width:90%; height:90%; " href="/item/28.html"><img src="img/floor-1-b03.png"></a>
+									</div>
+								</div>
+								<a href="#floorCarousel" data-slide="prev" class="carousel-control left">‹</a>
+								<a href="#floorCarousel" data-slide="next" class="carousel-control right">›</a>
+							</div>
+						</div>
+						<div class="yui3-u row-220 split">
+							<span class="floor-x-line"></span>
+							<div class="floor-conver-pit">
+								<img style="width:100%; height:180px; " src="https://img.alicdn.com/bao/uploaded/i1/1646579318/O1CN01CaAWm82IhhB5mVKiz_!!0-item_pic.jpg_180x180.jpg" />
+							</div>
+							<div class="floor-conver-pit">
+								<img style="width:100%; height:180px; " src="https://img.alicdn.com/bao/uploaded/i1/1646579318/O1CN01CaAWm82IhhB5mVKiz_!!0-item_pic.jpg_180x180.jpg" />
+							</div>
+						</div>
+						<div class="yui3-u row-218 split">
+							<img style="width:90%; height:90%; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg" />
+						</div>
+						<div class="yui3-u row-220 split">
+							<span class="floor-x-line"></span>
+							<div class="floor-conver-pit">
+								<img style="width:90%; height:180px; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg" />
+							</div>
+							<div class="floor-conver-pit">
+								<img style="width:90%; height:180px; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="tab2" class="tab-pane">
+					<p>第二个</p>
+				</div>
+				<div id="tab3" class="tab-pane">
+					<p>第三个</p>
+				</div>
+				<div id="tab4" class="tab-pane">
+					<p>第4个</p>
+				</div>
+				<div id="tab5" class="tab-pane">
+					<p>第5个</p>
+				</div>
+				<div id="tab6" class="tab-pane">
+					<p>第6个</p>
+				</div>
+				<div id="tab7" class="tab-pane">
+					<p>第7个</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="floor-2" class="floor">
+		<div class="py-container">
+			<div class="title floors">
+				<h3 class="fl">蔬菜水果</h3>
+			</div>
+			<div class="clearfix  tab-content floor-content">
+				<div id="tab8" class="tab-pane active">
+						<div class="yui3-u row-330 floorBanner">
+							<div id="floorCarousell" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
+								<ol class="carousel-indicators">
+									<li data-target="#floorCarousell" data-slide-to="0" class="active"></li>
+									<li data-target="#floorCarousell" data-slide-to="1"></li>
+									<li data-target="#floorCarousell" data-slide-to="2"></li>
+								</ol>
+								<div class="carousel-inner">
+									<div class="active item">
+										<img style="width:100%; height:100%; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg">
+									</div>
+									<div class="item">
+										<img style="width:100%; height:100%; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg">
+									</div>
+									<div class="item">
+										<img style="width:100%; height:100%; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg">
+									</div>
+								</div>
+								<a href="#floorCarousell" data-slide="prev" class="carousel-control left">‹</a>
+								<a href="#floorCarousell" data-slide="next" class="carousel-control right">›</a>
+							</div>
+						</div>
+						<div class="yui3-u row-220 split">
+							<span class="floor-x-line"></span>
+							<div class="floor-conver-pit">
+								<img style="width:100%; height:90%;" src="https://img.alicdn.com/bao/uploaded/i1/1646579318/O1CN01CaAWm82IhhB5mVKiz_!!0-item_pic.jpg_180x180.jpg" />
+							</div>
+							<div class="floor-conver-pit">
+								<img style="width:100%; height:90%;" src="https://img.alicdn.com/bao/uploaded/i1/1646579318/O1CN01CaAWm82IhhB5mVKiz_!!0-item_pic.jpg_180x180.jpg" />
+							</div>
+						</div>
+						<div class="yui3-u row-218 split">
+							<img style="width:100%; height:100%;" src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg" />
+						</div>
+						<div class="yui3-u row-220 split">
+							<span class="floor-x-line"></span>
+							<div class="floor-conver-pit">
+								<img style="width:100%; height:90%; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg" />
+							</div>
+							<div class="floor-conver-pit">
+								<img style="width:100%; height:90%; " src="https://img.alicdn.com/bao/uploaded/i1/2206744771611/O1CN011LAl161NlsdPP2iM0_!!2206744771611.jpg" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 底部栏位 -->
+	<!--页面底部，由js动态加载-->
+	<script type="text/javascript" src="plugins/jquery/jquery.min.js"></script>
+	<div class="clearfix footer"></div>
+	<script type="text/javascript">$(".footer").load("foot.html");</script>
+	<!--页面底部END-->
+	
+	<!--侧栏面板开始,由js动态加载-->
+	<div class="J-global-toolbar"></div>
+    <script type="text/javascript">$(".J-global-toolbar").load("side.html");</script>
+	
+<!--购物车单元格 模板-->
+<script type="text/template" id="tbar-cart-item-template">
+	<div class="tbar-cart-item" >
+		<div class="jtc-item-promo">
+			<em class="promo-tag promo-mz">满赠<i class="arrow"></i></em>
+			<div class="promo-text">已购满600元，您可领赠品</div>
+		</div>
+		<div class="jtc-item-goods">
+			<span class="p-img"><a href="#" target="_blank"><img src="{2}" alt="{1}" height="50" width="50" /></a></span>
+			<div class="p-name">
+				<a href="#">{1}</a>
+			</div>
+			<div class="p-price"><strong>¥{3}</strong>×{4} </div>
+			<a href="#none" class="p-del J-del">删除</a>
+		</div>
+	</div>
+</script>
+<!--侧栏面板结束-->
+<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="js/layer/2.4/layer.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#service").hover(function(){
+		$(".service").show();
+	},function(){
+		$(".service").hide();
+	});
+	$("#shopcar").hover(function(){
+		$("#shopcarlist").show();
+	},function(){
+		$("#shopcarlist").hide();
+	});
+
+})
+</script>
+<script type="text/javascript" src="js/model/cartModel.js"></script>
+<script type="text/javascript" src="js/czFunction.js"></script>
+<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
+<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
+<script type="text/javascript" src="js/pages/index.js"></script>
+<script type="text/javascript" src="js/widget/cartPanelView.js"></script>
+<script type="text/javascript" src="js/widget/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="js/widget/nav.js"></script>
+</body>
+
+
+</html>
