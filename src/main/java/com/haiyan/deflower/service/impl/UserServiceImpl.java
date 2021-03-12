@@ -1,5 +1,6 @@
 package com.haiyan.deflower.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.haiyan.deflower.dao.UserDao;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.UserMapper;
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
         session.setAttribute("token", loginUser);
         //session过期时间设置，以秒为单位，即在没有活动120分钟后，session将失效
         session.setMaxInactiveInterval(120 * 60);
-        CookieUtils.setCookie(ServletUtils.getSession(),);
+        CookieUtils.setCookie(ServletUtils.getRequest(),ServletUtils.getResponse(),"token", JSON.toJSONString(loginUser),1);
         return true;
     }
 

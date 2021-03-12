@@ -3,6 +3,7 @@ package com.haiyan.deflower.service;
 import com.haiyan.deflower.pojo.BackgroundUser;
 import com.haiyan.deflower.pojo.PageDomain;
 import com.haiyan.deflower.pojo.PageList;
+import com.haiyan.deflower.pojo.User;
 
 /**
  * @author haiyan
@@ -35,4 +36,10 @@ public interface BackgroundUserService {
      * @return 结果
      */
     PageList<BackgroundUser> ListUser(PageDomain pageDomain);
+
+    /**
+     * 获取当前用户登陆的信息
+     * @return 结果
+     */
+    BackgroundUser getUserInfo();
 }

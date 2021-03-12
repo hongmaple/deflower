@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.pojo.User;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 
 
 import javax.net.ssl.SSLSession;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * @author haiyan
