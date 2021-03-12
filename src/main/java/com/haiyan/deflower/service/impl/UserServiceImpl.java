@@ -5,6 +5,7 @@ import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.UserMapper;
 import com.haiyan.deflower.pojo.User;
 import com.haiyan.deflower.service.UserService;
+import com.haiyan.deflower.utils.CookieUtils;
 import com.haiyan.deflower.utils.ServletUtils;
 import com.haiyan.deflower.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,7 @@ public class UserServiceImpl implements UserService {
         session.setAttribute("token", loginUser);
         //session过期时间设置，以秒为单位，即在没有活动120分钟后，session将失效
         session.setMaxInactiveInterval(120 * 60);
+        CookieUtils.setCookie(ServletUtils.getSession(),);
         return true;
     }
 

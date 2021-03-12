@@ -1,6 +1,9 @@
 package com.haiyan.deflower.service;
 
 import com.haiyan.deflower.pojo.BackgroundUser;
+import com.haiyan.deflower.pojo.PageDomain;
+import com.haiyan.deflower.pojo.PageList;
+
 /**
  * @author haiyan
  */
@@ -25,4 +28,11 @@ public interface BackgroundUserService {
      * @return 结果
      */
     Boolean updateUser(BackgroundUser user);
+
+    /**
+     * 加载后台用户
+     * @param pageDomain 参数
+     * @return 结果
+     */
+    PageList<BackgroundUser> ListUser(PageDomain pageDomain);
 }

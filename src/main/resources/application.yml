@@ -19,7 +19,7 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
-  port: 8080
+  port: 9001
 #在线文档配置
 deflower-swagger:
   enable: true

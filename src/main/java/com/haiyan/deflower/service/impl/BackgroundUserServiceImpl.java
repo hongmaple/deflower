@@ -1,9 +1,12 @@
 package com.haiyan.deflower.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.haiyan.deflower.dao.BackgroundUserDao;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.BackgroundUserMapper;
 import com.haiyan.deflower.pojo.BackgroundUser;
+import com.haiyan.deflower.pojo.PageDomain;
+import com.haiyan.deflower.pojo.PageList;
 import com.haiyan.deflower.pojo.User;
 import com.haiyan.deflower.service.BackgroundUserService;
 import com.haiyan.deflower.utils.ServletUtils;
@@ -75,5 +78,11 @@ public class BackgroundUserServiceImpl implements BackgroundUserService {
             throw new ExceptionResult("user","false",null,"修改失败");
         }
         return true;
+    }
+
+    @Override
+    public PageList<BackgroundUser> ListUser(PageDomain pageDomain) {
+        Page<BackgroundUser> page = userDao.lambdaQuery().page(new Page<>(pageDomain.getPageNum(), pageDomain.getPageSize()));
+        return PageList.of(page.getRecords(),page);
     }
 }
