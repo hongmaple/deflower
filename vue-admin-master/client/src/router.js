@@ -26,13 +26,7 @@ const router = new Router({
           path: '/staff',
           name: 'staff',
           component: () => import('./views/Staff'),
-          meta: { title: '用户信息' }
-        },
-        {
-          path: '/listuser',
-          name: 'listuser',
-          component: () => import('./views/ListUser'),
-          meta: { title: '信息列表' }
+          meta: { title: '后台用户信息列表' }
         },
         {
           path: '/fundList',
@@ -94,6 +88,18 @@ const router = new Router({
           name: 'maplist',
           component: () => import('./views/MapList'),
           meta: { title: '地图展示' }
+        },
+        {
+          path: '/categoryList',
+          name: 'categoryList',
+          component: () => import('./views/flower/categoryList'),
+          meta: { title: '分类管理' }
+        },
+        {
+          path: '/flowerList',
+          name: 'flowerList',
+          component: () => import('./views/flower/flowerList'),
+          meta: { title: '鲜花列表' }
         }
       ]
     },

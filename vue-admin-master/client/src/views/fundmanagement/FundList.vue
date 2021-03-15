@@ -182,7 +182,7 @@ export default {
     },
     methods:{
       getProfiles() {
-        this.$axios.get('/api/profiles').then(res => {
+        this.$axios.get('/api/category').then(res => {
           this.allTableData = res.data;
 					this.filterTabDate = res.data; //过滤数据
 					this.setPaginations();

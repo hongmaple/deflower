@@ -6,20 +6,20 @@
                 <div class="box-card">
                     <div class="el-card mgb20 is-hover-shadow" style="height: 252px">
                         <div class="user-info">
-                            <img :src="users.avatar" alt="" class="avatar">
+                            <img :src="users.avatarImage" alt="" class="avatar">
                             <div class="user-info-cont">
-                                <span class="user-name">{{users.name}}</span>
-                                <span>{{users.identity == 'manager' ? '管理员' : '普通员工'}}</span>
+                                <span class="user-name">{{users.username}}</span>
+                                <span>管理员</span>
                             </div>
                         </div>
-                        <div class="user-info-list">
+                        <!-- <div class="user-info-list">
                             <span>登录地址:</span>
                             <span class="address">郑州</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <!-- 语言描述 -->
-                <div class="box-card" style="margin-top: 20px">
+                <!-- <div class="box-card" style="margin-top: 20px">
                     <div class="el-card is-hover-shadow" style="height: 252px">
                         <div class="el-card__header">
                             <span>语言描述</span>
@@ -47,10 +47,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </el-col>
             <el-col :span="16">
-                <el-row :gutter="20">
+                <!-- <el-row :gutter="20">
                     <el-col :span="8">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-1">
@@ -84,12 +84,11 @@
                             </div>
                         </el-card>
                     </el-col>
-                </el-row>
+                </el-row> -->
                 <!-- 2019年 -->
-                <el-card class="box-card">
+                <!-- <el-card class="box-card">
                   <div slot="header" class="clearfix">
                     <span>2019年目标</span>
-                    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
                   </div>
                   <el-table
                     :data="todoList"
@@ -105,9 +104,9 @@
                         </template>
                     </el-table-column> 
                   </el-table>
-                </el-card>
+                </el-card> -->
                 <!-- 日历 -->
-                <div class="box-card" style="margin-top: 20px">
+                <!-- <div class="box-card" style="margin-top: 20px">
                     <div class="el-card is-hover-shadow" style="height: 400px">
                         <div class="el-card__header">
                             <span>时钟</span>
@@ -116,7 +115,7 @@
                             <Clock/>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </el-col>
         </el-row>
     </div>

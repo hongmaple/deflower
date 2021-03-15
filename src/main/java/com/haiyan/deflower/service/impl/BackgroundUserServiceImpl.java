@@ -50,7 +50,7 @@ public class BackgroundUserServiceImpl implements BackgroundUserService {
     }
 
     @Override
-    public Boolean login(BackgroundUser user) {
+    public BackgroundUser login(BackgroundUser user) {
         if (userDao.lambdaQuery()
                 .eq(BackgroundUser::getPhone,user.getPhone())
                 .count()==0) {
@@ -67,17 +67,17 @@ public class BackgroundUserServiceImpl implements BackgroundUserService {
         session.setAttribute("token", JSON.toJSONString(loginUser));
         //session过期时间设置，以秒为单位，即在没有活动120分钟后，session将失效
         session.setMaxInactiveInterval(120 * 60);
-        CookieUtils.setCookie(ServletUtils.getRequest(),ServletUtils.getResponse(),"token", JSON.toJSONString(loginUser),1);
-        return true;
+        //CookieUtils.setCookie(ServletUtils.getRequest(),ServletUtils.getResponse(),"token", JSON.toJSONString(loginUser),1);
+        return loginUser;
     }
 
     @Override
     public Boolean updateUser(BackgroundUser user) {
         User loginUser = userUtils.getUser(ServletUtils.getRequest());
         if (userDao.lambdaQuery().eq(BackgroundUser::getId,loginUser.getId()).count()==0) {
-            throw new ExceptionResult("user","false",null,"该用户不存在");
+            throw new ExceptionResult("user","false",null,"当前用户不存在");
         }
-        if(!userDao.lambdaUpdate().update(user)) {
+        if(!userDao.lambdaUpdate().eq(BackgroundUser::getId,user.getId()).update(user)) {
             throw new ExceptionResult("user","false",null,"修改失败");
         }
         return true;
@@ -93,5 +93,17 @@ public class BackgroundUserServiceImpl implements BackgroundUserService {
     public BackgroundUser getUserInfo() {
         User loginUser = userUtils.getUser(ServletUtils.getRequest());
         return userDao.getById(loginUser.getId());
+    }
+
+    @Override
+    public Boolean deletedUser(Long id) {
+        User loginUser = userUtils.getUser(ServletUtils.getRequest());
+        if (userDao.lambdaQuery().eq(BackgroundUser::getId,loginUser.getId()).count()==0) {
+            throw new ExceptionResult("user","false",null,"当前用户不存在");
+        }
+        if(userMapper.deleteById(id)==0) {
+            throw new ExceptionResult("user","false",null,"删除失败");
+        }
+        return true;
     }
 }

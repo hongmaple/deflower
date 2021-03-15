@@ -37,10 +37,10 @@
 							<i class="el-icon-rank"></i>
 						</el-tooltip>
 					</div>
-					<img class="avatar" :src="users.avatar">
+					<img class="avatar" :src="users.avatarImage">
 					<div class="welcome">
 						<p class="name comename">欢迎</p>
-						<p class="name avatarname">{{users.name}}</p>
+						<p class="name avatarname">{{users.username}}</p>
 					</div>
 					<span class='username'>
 						<el-dropdown trigger="click" @command='setDialogInfo'>
@@ -75,6 +75,7 @@
 		},
 		computed: {
 			users() { //通过vuex获取用户信息
+			    console.log(this.$store.getters.user);
 				return this.$store.getters.user
 			},
 		},

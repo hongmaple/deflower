@@ -49,15 +49,14 @@ export default {
 				if (valid) {
 					this.$axios.post(config.url+'/background/user/login',this.loginUser).then(res => {
 						console.log(res)
-						const token   = res.data; 
+						const token   = JSON.stringify(res.data.data); 
 						localStorage.setItem('eleToken',token); //存储token
-
 						// 解析token
 						//const decode = jwt_decode(token)
 						
 						//存储token到vuex
 						this.$store.dispatch('setAuthenticated' , !this.isEmpty(token))
-						this.$store.dispatch('setUSER',token)
+						this.$store.dispatch('setUSER',res.data.data)
 
 						this.$router.push('/index')
 		 			})

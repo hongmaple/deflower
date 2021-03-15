@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 10/03/2021 18:26:28
+ Date: 15/03/2021 18:08:31
 */
 
 SET NAMES utf8mb4;
@@ -34,6 +34,30 @@ CREATE TABLE `tb_address`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地址' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for tb_background_user
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_background_user`;
+CREATE TABLE `tb_background_user`  (
+  `id` bigint(0) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `avatar_image` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png' COMMENT '头像',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_background_user
+-- ----------------------------
+INSERT INTO `tb_background_user` VALUES (1, 'maple', '123456', '18976618156', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-10 15:51:21');
+INSERT INTO `tb_background_user` VALUES (2, 'maple2', '123456', '17976618156', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-10 16:06:24');
+INSERT INTO `tb_background_user` VALUES (3, 'maple3', '123456', '16976618156', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-15 14:35:11');
+INSERT INTO `tb_background_user` VALUES (4, 'maple4', '123456', '15679876356', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-15 14:45:52');
+INSERT INTO `tb_background_user` VALUES (5, 'maple5', '123456', '16679876356', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-15 14:46:08');
+INSERT INTO `tb_background_user` VALUES (6, 'maple6', '123456', '15879876356', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-15 14:46:24');
+
+-- ----------------------------
 -- Table structure for tb_cart
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_cart`;
@@ -53,10 +77,15 @@ CREATE TABLE `tb_cart`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_category`;
 CREATE TABLE `tb_category`  (
-  `id` bigint(0) NOT NULL,
+  `id` bigint(0) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '分类' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_category
+-- ----------------------------
+INSERT INTO `tb_category` VALUES (1, '哈哈哈撒大苏打撒旦');
 
 -- ----------------------------
 -- Table structure for tb_flower
@@ -124,7 +153,7 @@ CREATE TABLE `tb_order_detail`  (
   `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品图片',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `key_order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 126 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单详情表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tb_order_status
@@ -163,15 +192,15 @@ CREATE TABLE `tb_user`  (
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
   `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `avatar_image` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png' COMMENT '头像',
+  `avatar_image` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png' COMMENT '头像',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_user
 -- ----------------------------
-INSERT INTO `tb_user` VALUES (1, 'maple', '123456', '19976618156', '/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-10 15:51:21');
-INSERT INTO `tb_user` VALUES (2, 'maple', '123456', '13976618156', '/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-10 16:06:24');
+INSERT INTO `tb_user` VALUES (1, 'maple', '123456', '19976618156', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-10 15:51:21');
+INSERT INTO `tb_user` VALUES (2, 'maple', '123456', '13976618156', 'http://localhost:9001/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png', '2021-03-10 16:06:24');
 
 SET FOREIGN_KEY_CHECKS = 1;

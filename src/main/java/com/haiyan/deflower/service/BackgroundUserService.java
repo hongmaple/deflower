@@ -21,7 +21,7 @@ public interface BackgroundUserService {
      * @param user 参数
      * @return 结果
      */
-    Boolean login(BackgroundUser user);
+    BackgroundUser login(BackgroundUser user);
 
     /**
      * 修改用户信息，密码，手机号，头像
@@ -42,4 +42,12 @@ public interface BackgroundUserService {
      * @return 结果
      */
     BackgroundUser getUserInfo();
+
+    /**
+     * 删除用户
+     * @param id 用户id
+     * @return 结果
+     */
+    Boolean deletedUser(Long id);
+
 }

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * 操作消息提醒
@@ -53,7 +54,7 @@ public class AjaxResult extends HashMap<String, Object>
     {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
-        if (StringUtils.isEmpty(data))
+        if (Objects.nonNull(data))
         {
             super.put(DATA_TAG, data);
         }

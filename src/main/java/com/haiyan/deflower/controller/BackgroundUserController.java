@@ -1,5 +1,6 @@
 package com.haiyan.deflower.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.haiyan.deflower.pojo.*;
 import com.haiyan.deflower.service.BackgroundUserService;
 import io.swagger.annotations.Api;
@@ -36,7 +37,7 @@ public class BackgroundUserController {
     @PostMapping("/login")
     @ApiOperation("登陆")
     public AjaxResult login(@Valid @RequestBody BackgroundUser user) {
-        AjaxResult ajaxResult = AjaxResult.success(backgroundUserService.login(user));
+        AjaxResult ajaxResult = AjaxResult.success(JSON.toJSON(backgroundUserService.login(user)));
         return ajaxResult;
     }
 
@@ -60,7 +61,7 @@ public class BackgroundUserController {
      * @return 结果
      */
     @PostMapping("/list")
-    @ApiOperation("修改用户信息")
+    @ApiOperation("加载后台用户")
     public AjaxResult ListUser(@RequestBody PageDomain pageDomain) {
         AjaxResult ajaxResult = AjaxResult.success(backgroundUserService.ListUser(pageDomain));
         return ajaxResult;
@@ -74,6 +75,18 @@ public class BackgroundUserController {
     @ApiOperation("获取当前用户登陆的信息")
     public AjaxResult getUserInfo() {
         AjaxResult ajaxResult = AjaxResult.success(backgroundUserService.getUserInfo());
+        return ajaxResult;
+    }
+
+    /**
+     * 删除用户
+     * @param id 用户id
+     * @return 结果
+     */
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除用户")
+    public AjaxResult deletedUser(@PathVariable Long id) {
+        AjaxResult ajaxResult = AjaxResult.success(backgroundUserService.deletedUser(id));
         return ajaxResult;
     }
 }

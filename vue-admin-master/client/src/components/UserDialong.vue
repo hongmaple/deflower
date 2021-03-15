@@ -10,27 +10,14 @@
       :visible.sync="dialong.show"
     >
       <el-form :model="form" ref="formdoalog" :rules="formdialog" label-width="80px">
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="form.name"></el-input>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="form.username"></el-input>
         </el-form-item>
-        <el-form-item label="性别" prop="sex">
-          <el-input v-model="form.sex"></el-input>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="form.phone"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="state">
-          <el-input v-model="form.state"></el-input>
-        </el-form-item>
-        <el-form-item label="爱好" prop="hobby">
-          <el-input v-model="form.hobby"></el-input>
-        </el-form-item>
-        <el-form-item label="是否已婚" prop="marriage">
-          <el-input v-model="form.marriage"></el-input>
-        </el-form-item>
-        <el-form-item label="生日" prop="birthday">
-          <!-- <el-input v-model="form.birthday"></el-input> -->
-          <el-date-picker v-model="form.birthday" type="date" placeholder="选择日期"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="联系地址" prop="address">
-          <el-input v-model="form.address"></el-input>
+        <el-form-item label="密码" prop="state">
+          <el-input v-model="form.password"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -43,38 +30,57 @@
 
 <script>
 // @ is an alias to /src
+import config from '../../../config/config'
 export default {
   name: "UserDialong",
   data() {
     return {
       formdialog: {
         name: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
-        sex: [{ required: true, message: "性别不能为空", trigger: "blur" }]
+        phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }]
       }
     };
   },
   props: {
     dialong: Object,
-    form: Object
+    form: {
+       password: "",
+       phone: "",
+       username: "",
+       id: 0
+    },
+    id: 0
   },
   methods: {
     addHandle(formdoalog) {
       this.$refs[formdoalog].validate(valid => {
         if (valid) {
-          // console.log(this.form)
-          let url =
-            this.dialong.option == "add" ? "add" : `/edit/${this.form.id}`;
-
-          this.$axios.post(`/api/staff/${url}`, this.form).then(res => {
-            this.$message({
-              type: "success",
-              message: "数据添加成功"
-            }),
-              (this.dialong.show = false);
-            this.$emit("UserData");
-            //清空内容
-            this.form = "";
-          });
+          if(this.dialong.option == "add") {
+            this.$axios.post(config.url+"/background/user/register", this.form).then(res => {
+                this.$message({
+                  type: "success",
+                  message: "数据添加成功"
+                });
+                (this.dialong.show = false);
+                this.$emit("UserData");
+                //清空内容
+                this.form = "";
+            });
+          }else {
+            const formData = this.form;
+            formData.id = this.id;
+            console.log(formData);
+             this.$axios.put(config.url+"/background/user", formData,{headers: {"token": localStorage.getItem("eleToken")}}).then(res => {
+                this.$message({
+                  type: "success",
+                  message: "数据修改成功"
+                });
+                (this.dialong.show = false);
+                this.$emit("UserData");
+                //清空内容
+                this.form = "";
+            });
+          }
         } else {
           console.log("error submit!!");
           return false;

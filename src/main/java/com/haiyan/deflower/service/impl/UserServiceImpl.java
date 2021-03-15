@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.haiyan.deflower.dao.UserDao;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.UserMapper;
+import com.haiyan.deflower.pojo.BackgroundUser;
 import com.haiyan.deflower.pojo.User;
 import com.haiyan.deflower.service.UserService;
 import com.haiyan.deflower.utils.CookieUtils;
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
         if (userDao.lambdaQuery().eq(User::getId,loginUser.getId()).count()==0) {
             throw new ExceptionResult("user","false",null,"该用户不存在");
         }
-        if(!userDao.lambdaUpdate().update(user)) {
+        if(!userDao.lambdaUpdate().eq(User::getId,user.getId()).update(user)) {
             throw new ExceptionResult("user","false",null,"修改失败");
         }
         return true;

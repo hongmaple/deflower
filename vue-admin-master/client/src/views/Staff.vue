@@ -9,16 +9,15 @@
     </div>
       <div class="tables">
            <el-table
-            :data="userData"
+            :data="userData.list"
             border
             style="width: 100%">
             <el-table-column
-                label="日期"
+                label="头像"
                 align="center"
-                width="250">
+                width="180">
                 <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">{{ scope.row.date | moment }}</span>
+                    <img alt="头像" style="margin-left: 10px" :src="scope.row.avatarImage"/>
                 </template>
             </el-table-column>
             <el-table-column
@@ -26,55 +25,23 @@
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.name }}</span>
+                    <span style="margin-left: 10px">{{ scope.row.username }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                label="性别"
+                label="手机号"
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.sex }}</span>
+                    <span style="margin-left: 10px">{{ scope.row.phone }}</span>
                 </template>
             </el-table-column>
-            <el-table-column
-                label="状态"
+                        <el-table-column
+                label="创建时间"
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.state }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                label="爱好"
-                align="center"
-                width="180">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.hobby }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                label="是否已婚"
-                align="center"
-                width="180">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.marriage }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                label="生日"
-                align="center"
-                width="180">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.birthday | moment }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                label="联系地址"
-                align="center"
-                width="180">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.address }}</span>
+                    <span style="margin-left: 10px">{{ scope.row.createTime | moment }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right">
@@ -90,7 +57,18 @@
             </el-table-column>
         </el-table>
       </div>
-      <UserDialong :dialong="dialong" :form="form" @UserData="userInfo"></UserDialong>
+      <UserDialong :dialong="dialong" :form="form" :id="id" @UserData="loadCurrentPageUserList"></UserDialong>
+      <div class="page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="userData.pageNum"
+          :page-sizes="userData.page_sizes"
+          :page-size="userData.pageSize"
+          :layout="userData.layout"
+          :total="userData.total">
+        </el-pagination>
+	 	  </div>
   </div>
 </template>
 
@@ -102,7 +80,16 @@ export default {
   name: "Staff",
   data() {
     return {
-      userData: [], //数据存储
+      allTableData:[],
+      userData: {
+        list: [],
+        pageNum: 1,
+        pageSize: 5,
+        pages: 0,
+        total: 0,
+        page_sizes:[5,10,15,20], //每页显示多少条
+				layout:'total, sizes, prev, pager, next, jumper'
+      }, //数据存储
       dialong: {
         //弹出框
         show: false,
@@ -110,41 +97,47 @@ export default {
         option: "edit"
       },
       form: {   //添加和删除需要传递的字段名
-        name: "",
-        sex: "",
-        state: "",
-        hobby: "",
-        marriage: "",
-        birthday: "",
-        address: ""
-      }
+        password: "",
+        phone: "",
+        username: "",
+        id: 0
+      },
+      id: 0
     };
   },
   methods: {
-    userInfo() {
+    userInfo(formData) {
       this.$axios
-        .post(config.url+"/background/user/info").then(res => {
-					// console.log(res)
-          this.userData = res.data;
+        .post(config.url+"/background/user/list",formData,{headers: {"token": localStorage.getItem("eleToken")}})
+        .then(res => {
+          this.userData = res.data.data;
         }).catch(err => console.log(err));
     },
+    loadCurrentPageUserList() {
+	      let pageSize = this.userData.pageSize;
+        let page = this.userData.pageNum;
+				const formData = {
+                "isAsc": null,
+                "orderBy": null,
+                "orderByColumn": null,
+                "pageNum": page,
+                "pageSize": pageSize
+        }
+        this.userInfo(formData);
+    },
     handleEdit(index, row) {
-			console.log(row)
       //编辑
       this.dialong = {
         title: "编辑信息",
         show: true,
         option:"edit"
       }
+      this.id = row.id;
       this.form = {
-          name: row.name,
-          sex: row.sex,
-          state: row.state,
-          hobby: row.hobby,
-          marriage: row.marriage,
-          birthday: row.birthday,
-          address: row.address,
-          id:row._id
+          password: row.password,
+          phone: row.phone,
+          username: row.username,
+          id: row.id
       }
     },
     handleDelete(index, row) {
@@ -155,13 +148,14 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$axios.delete(`/api/staff/delete/${row._id}`).then(res => {
+          this.$axios.delete(config.url+`/background/user/${row.id}`,{headers: {"token": localStorage.getItem("eleToken")}})
+          .then(res => {
             this.$message({
               type: "success",
               message: "删除成功!"
             });
+            this.loadCurrentPageUserList();
           });
-          this.userInfo();
         })
         .catch(() => {
           this.$message({
@@ -178,18 +172,51 @@ export default {
         option:"add"
       }
       this.form = {
-        name: "",
-        sex: "",
-        state: "",
-        hobby: "",
-        marriage: "",
-        birthday: "",
-        address: ""
+        password: "",
+        phone: "",
+        username: ""
       }
-    }
+    },
+    setPaginations(){
+				this.userData.total = this.allTableData.length; //数据的数量
+				this.userData.pageNum = 1; //默认显示第一页
+				this.userData.pageSize = 5; //每页显示多少数据
+				
+				//显示数据
+				this.tableData = this.allTableData.filter((item,index) => {
+					return index < this.paginations.page_size;
+				})
+			},
+		handleSizeChange(page_size) {
+				this.userData.pageNum = 1; //第一页
+				this.userData.pageSize = page_size; //每页先显示多少数据
+				this.userData.list = this.allTableData.filter((item,index) => {
+					return index < page_size
+				})
+		},
+		handleCurrentChange(page){
+				// 跳转页数
+				//获取每行数
+				let pageSize = this.userData.pageSize;
+				const formData = {
+                "isAsc": null,
+                "orderBy": null,
+                "orderByColumn": null,
+                "pageNum": page,
+                "pageSize": pageSize
+        }
+        this.userInfo(formData);
+		}
   },
   created() {
-    this.userInfo();
+     const formData = {
+                "isAsc": null,
+                "orderBy": null,
+                "orderByColumn": null,
+                "pageNum": 1,
+                "pageSize": 5
+    }
+    this.userInfo(formData);
   },
   components: {
     UserDialong

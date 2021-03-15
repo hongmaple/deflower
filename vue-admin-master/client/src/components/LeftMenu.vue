@@ -38,17 +38,12 @@ export default {
         },
         {
           icon: "el-icon-service",
-          name: "用户信息",
+          name: "管理员管理",
           path: "/staff"
         },
         {
-          icon: "el-icon-mobile-phone",
-          name: "信息列表",
-          path: "/listuser"
-        },
-        {
           icon: "el-icon-document",
-          name: "资金管理",
+          name: "账单管理",
           path: "fund",
           children: [
             {
@@ -69,45 +64,45 @@ export default {
             {
               path: "/infoshow",
               name: "个人信息"
-            },
-            {
-              path: "/editor",
-              name: "表单处理",
-              children: [
-                {
-                  path: "/editor",
-                  name: "富文本编辑器"
-                },
-                {
-                  path: "/markdown",
-                  name: "Markdown编辑器"
-                },
-                {
-                  path: "/markdown",
-                  name: "文章",
-                  children: [
-                    {
-                      path: "/showFundArticle",
-                      name: "文章列表"
-                    }
-                  ]
-                }
-              ]
             }
+            // {
+            //   path: "/editor",
+            //   name: "表单处理",
+            //   children: [
+            //     {
+            //       path: "/editor",
+            //       name: "富文本编辑器"
+            //     },
+            //     {
+            //       path: "/markdown",
+            //       name: "Markdown编辑器"
+            //     },
+            //     {
+            //       path: "/markdown",
+            //       name: "文章",
+            //       children: [
+            //         {
+            //           path: "/showFundArticle",
+            //           name: "文章列表"
+            //         }
+            //       ]
+            //     }
+            //   ]
+            // }
           ]
         },
         {
           icon: "el-icon-bell",
-          name: "投资管理",
+          name: "鲜花管理",
           path: "/list",
           children: [
             {
-              path: "/chinaTouziList",
-              name: "省份投资"
+              path: "/categoryList",
+              name: "分类管理"
             },
             {
-              path: "/chinaTabsList",
-              name: "区域投资"
+              path: "/flowerList",
+              name: "鲜花列表"
             }
           ]
         },
