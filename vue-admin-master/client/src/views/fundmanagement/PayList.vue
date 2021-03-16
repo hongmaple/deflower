@@ -181,9 +181,9 @@ export default {
 		onScreeoutMoney(){
 			if(this.search_data.payNumber === '') {
 				 this.$message({
-          message: '支付单号不能为空',
-          type: 'warning'
-        });
+					message: '支付单号不能为空',
+					type: 'warning'
+				});
 			}
 		}
 	},
