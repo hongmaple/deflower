@@ -103,20 +103,24 @@ export default {
             {
               path: "/flowerList",
               name: "鲜花列表"
-            }
-          ]
-        },
-        {
-          icon: "el-icon-tickets",
-          name: "资金数据",
-          path: "/position",
-          children: [
+            },
             {
-              path: "/fundPosition",
-              name: "投资分布"
+              path: "/SaysCommentaryList",
+              name: "花语解说"
             }
           ]
         },
+        // {
+        //   icon: "el-icon-tickets",
+        //   name: "资金数据",
+        //   path: "/position",
+        //   children: [
+        //     {
+        //       path: "/fundPosition",
+        //       name: "投资分布"
+        //     }
+        //   ]
+        // },
         {
           icon: "el-icon-location-outline",
           name: "地图展示",

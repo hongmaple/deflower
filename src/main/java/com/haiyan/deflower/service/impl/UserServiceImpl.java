@@ -74,6 +74,9 @@ public class UserServiceImpl implements UserService {
         if (userDao.lambdaQuery().eq(User::getId,loginUser.getId()).count()==0) {
             throw new ExceptionResult("user","false",null,"该用户不存在");
         }
+        if(userDao.lambdaQuery().eq(User::getPhone,user.getPhone()).ne(User::getId,loginUser.getId()).count()>0) {
+            throw new ExceptionResult("user","false",null,"修改失败，手机号码已存在");
+        }
         if(!userDao.lambdaUpdate().eq(User::getId,user.getId()).update(user)) {
             throw new ExceptionResult("user","false",null,"修改失败");
         }

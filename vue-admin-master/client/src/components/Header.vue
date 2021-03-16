@@ -21,7 +21,7 @@
 					</div>
 					<div class="btn-fullscreen icon-font">
 						<el-tooltip class="item" effect="dark" content="跳转到github" placement="bottom">
-							<a href="https://github.com/MrZHLF/vue-admin" target="_blank">
+							<a href="https://github.com/hongmaple/MapleQQ" target="_blank">
 								<i class="iconfont icon-github"></i>
 							</a>
 						</el-tooltip>
@@ -37,10 +37,10 @@
 							<i class="el-icon-rank"></i>
 						</el-tooltip>
 					</div>
-					<img class="avatar" :src="users.avatarImage">
+					<img class="avatar" :src="user.avatarImage">
 					<div class="welcome">
 						<p class="name comename">欢迎</p>
-						<p class="name avatarname">{{users.username}}</p>
+						<p class="name avatarname">{{user.username}}</p>
 					</div>
 					<span class='username'>
 						<el-dropdown trigger="click" @command='setDialogInfo'>
@@ -71,13 +71,13 @@
 				collapse: false, //菜单栏是否闭合
 				fullscreen: false,
 				showlrc:true,
+				user: {}
 			}
 		},
 		computed: {
-			users() { //通过vuex获取用户信息
-			    console.log(this.$store.getters.user);
-				return this.$store.getters.user
-			},
+			// users() { //通过vuex获取用户信息
+			// 	return this.$store.getters.user
+			// },
 		},
 		methods: {
 			setDialogInfo(cmditem) {
@@ -156,7 +156,16 @@
 					}
 				}
 				this.fullscreen = !this.fullscreen;
+			},userInfo() {
+				this.$axios
+					.post("/api/background/user/info",null,{headers: {"token": localStorage.getItem("eleToken")}})
+					.then(res => {
+							this.user  = res.data.data; 
+					}).catch(err => console.log(err));
 			}
+		},
+		 created() {
+			this.userInfo();
 		},
 		components:{
 			theme,

@@ -11,6 +11,8 @@ import com.haiyan.deflower.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * @author haiyan
  */
@@ -32,6 +34,9 @@ public class FlowerFavoriteServiceImpl implements FlowerFavoriteService {
     public Long addFlowerFavorite(FlowerFavorite flowerFavorite) {
         // 获取登录用户
         User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
         flowerFavorite.setUid(user.getId());
         if (!flowerFavoriteDao.save(flowerFavorite)) {
             throw new ExceptionResult("flowerFavorite","false",null,"收藏失败");
@@ -41,6 +46,11 @@ public class FlowerFavoriteServiceImpl implements FlowerFavoriteService {
 
     @Override
     public Boolean deletedFlowerFavorite(Long id) {
+        // 获取登录用户
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
         if (flowerFavoriteMapper.deleteById(id)==0) {
             throw new ExceptionResult("flowerFavorite","false",null,"取消收藏失败");
         }

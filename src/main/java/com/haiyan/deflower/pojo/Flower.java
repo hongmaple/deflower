@@ -31,7 +31,7 @@ public class Flower {
     /**
      * 价格
      */
-    private Long price;
+    private double price;
     /**
      * 花语
      */

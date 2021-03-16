@@ -6,48 +6,45 @@
                 <div class="box-card">
                     <div class="el-card mgb20 is-hover-shadow" style="height: 252px">
                         <div class="user-info">
-                            <img :src="users.avatarImage" alt="" class="avatar">
+                            <el-upload
+                                class="avatar-uploader"
+                                action="/api/common/upload"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess"
+                                :before-upload="beforeAvatarUpload">
+                                <img v-if="user.avatarImage" :src="user.avatarImage" class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
                             <div class="user-info-cont">
-                                <span class="user-name">{{users.username}}</span>
+                                <span class="user-name">{{user.username}}</span>
                                 <span>管理员</span>
                             </div>
                         </div>
-                        <!-- <div class="user-info-list">
-                            <span>登录地址:</span>
-                            <span class="address">郑州</span>
-                        </div> -->
                     </div>
                 </div>
-                <!-- 语言描述 -->
-                <!-- <div class="box-card" style="margin-top: 20px">
+                <!-- 详细信息 -->
+                <div class="box-card" style="margin-top: 20px">
                     <div class="el-card is-hover-shadow" style="height: 252px">
                         <div class="el-card__header">
                             <span>语言描述</span>
                         </div>
                         <div class="el-card__body">
                             <div class="card-body-list">
-                                <div class="title">JavaScript:</div>
-                                <div class="progress"><el-progress :percentage="70"></el-progress></div>
+                                <div class="title">手机号:</div>
+                                <!-- <div class="progress"><el-progress :percentage="70"></el-progress></div> -->
+                                <div class="progress"><span class="user-name">{{user.phone}}</span></div>
                             </div>
                             <div class="card-body-list">
-                                <div class="title">Html:</div>
-                                <el-progress class="progress" :percentage="80" color="#8e71c7"></el-progress>
+                                <div class="title">注册时间:</div>
+                                <div class="progress"><span style="margin-left: 10px">{{ user.createTime | moment }}</span></div>
                             </div>
                             <div class="card-body-list">
-                                <div class="title">Css:</div>
-                                <el-progress class="progress" :percentage="80" color="#8e71c7"></el-progress>
-                            </div>
-                            <div class="card-body-list">
-                                <div class="title">Vue:</div>
-                                <el-progress class="progress" :percentage="60" color="#67c23a"></el-progress>
-                            </div>
-                            <div class="card-body-list">
-                                <div class="title">Node.js:</div>
-                                <el-progress class="progress" :percentage="20" color="#f56c6c"></el-progress>
+                                 <UserDialong :dialong="dialong" :form="form" :id="id" @UserData="userInfo"></UserDialong>
+                                 <el-button size="mini" @click="handleEdit()">编辑信息</el-button>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </el-col>
             <el-col :span="16">
                 <!-- <el-row :gutter="20">
@@ -124,30 +121,88 @@
 
 <script>
 import Clock from './Clock'
+import UserDialong from "../../components/UserDialong";
 // @ is an alias to /src
 export default {
   name: 'infoshow',
     data(){
         return {
-            todoList:[
-                {
-                    status:true,
-                    title:"学会Vue"
-                },
-                {
-                    status:false,
-                    title:"2019要学会React"
-                }
-            ]
+           user: {},
+            dialong: {
+                //弹出框
+                show: false,
+                title: "",
+                option: "edit"
+            },
+            form: {   //添加和删除需要传递的字段名
+                password: "",
+                phone: "",
+                username: "",
+                id: 0
+            },
+            id: 0
         }
+    },
+    methods:{
+        userInfo() {
+			this.$axios
+				.post("/api/background/user/info",null,{headers: {"token": localStorage.getItem("eleToken")}})
+				.then(res => {
+					    this.user = res.data.data; 
+				}).catch(err => console.log(err));
+		},
+        updataUser() {
+            this.$axios.put("/api/background/user", this.user,{headers: {"token": localStorage.getItem("eleToken")}}).then(res => {
+                this.$message({
+                  type: "success",
+                  message: "数据修改成功"
+                });
+            });
+        },
+        handleAvatarSuccess(res, file) {
+            //URL.createObjectURL(file.raw);
+            this.user.avatarImage = res.url;
+            this.updataUser();
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' ||  file.type === 'image/svg' ||  file.type === 'image/gif';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+            this.$message.error('上传头像图片只能是 jpeg，JPG，png，svg，gif 格式!');
+            }
+            if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+         handleEdit() {
+            //编辑
+            this.dialong = {
+                title: "编辑信息",
+                show: true,
+                option:"edit"
+            }
+            this.id = this.user.id;
+            this.form = {
+                password: this.user.password,
+                phone: this.user.phone,
+                username: this.user.username,
+                id: this.user.id
+        }
+    },
     },
     computed:{
-        users() {
-          return this.$store.getters.user;
-        }
+        // users() {
+        //   return this.$store.getters.user;
+        // }
     },
+    created() {
+        this.userInfo();
+   },
     components: {
-        Clock
+        Clock,
+        UserDialong
     }
 }
 </script>
@@ -261,4 +316,27 @@ export default {
         width: 65%;
         margin-left: 1%;
     }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

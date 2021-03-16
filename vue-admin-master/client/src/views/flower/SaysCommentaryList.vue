@@ -9,39 +9,39 @@
     </div>
       <div class="tables">
            <el-table
-            :data="userData.list"
+            :data="flowerData.list"
             border
             style="width: 100%">
             <el-table-column
-                label="头像"
+                label="id"
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <img alt="头像" style="width:100px;height=80px;" :src="scope.row.avatarImage"/>
+                    <span style="margin-left: 10px">{{ scope.row.id }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                label="用户名"
+                label="花名"
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.username }}</span>
+                    <span style="margin-left: 10px">{{ scope.row.flowerName }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                label="手机号"
+                label="图片"
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.phone }}</span>
+                    <img style="width:100px;height=80px;" alt="图片" :src="scope.row.image"/>
                 </template>
             </el-table-column>
             <el-table-column
-                label="创建时间"
+                label="解说"
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.createTime | moment }}</span>
+                    <span style="margin-left: 10px">{{ scope.row.narrate }}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right">
@@ -57,16 +57,16 @@
             </el-table-column>
         </el-table>
       </div>
-      <UserDialong :dialong="dialong" :form="form" :id="id" @UserData="loadCurrentPageUserList"></UserDialong>
+      <SaysCommentaryDialong :dialong="dialong" :form="form" :id="id" @flowerData="loadCurrentPageflowerList"></SaysCommentaryDialong>
       <div class="page">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="userData.pageNum"
-          :page-sizes="userData.page_sizes"
-          :page-size="userData.pageSize"
-          :layout="userData.layout"
-          :total="userData.total">
+          :current-page="flowerData.pageNum"
+          :page-sizes="flowerData.page_sizes"
+          :page-size="flowerData.pageSize"
+          :layout="flowerData.layout"
+          :total="flowerData.total">
         </el-pagination>
 	 	  </div>
   </div>
@@ -74,19 +74,18 @@
 
 <script>
 // @ is an alias to /src
-import UserDialong from "../components/UserDialong";
-import config from '../../../config/config'
+import SaysCommentaryDialong from "../../components/SaysCommentaryDialong";
 export default {
-  name: "Staff",
+  name: "SaysCommentaryList",
   data() {
     return {
-      userData: {
+      flowerData: {
         list: [],
         pageNum: 1,
-        pageSize: 5,
+        pageSize: 3,
         pages: 0,
         total: 0,
-        page_sizes:[5,10,15,20], //每页显示多少条
+        page_sizes:[3,6,9,12], //每页显示多少条
 				layout:'total, sizes, prev, pager, next, jumper'
       }, //数据存储
       dialong: {
@@ -96,33 +95,33 @@ export default {
         option: "edit"
       },
       form: {   //添加和删除需要传递的字段名
-        password: "",
-        phone: "",
-        username: "",
-        id: 0
+        id: '',
+        flowerName: '',
+        image: '',
+        narrate: ''
       },
-      id: 0
+      id: 0,
     };
   },
   methods: {
-    userInfo(formData) {
+    flowerList(formData) {
       this.$axios
-        .post(config.url+"/background/user/list",formData,{headers: {"token": localStorage.getItem("eleToken")}})
+        .post("/api/SaysCommentary/list",formData,{headers: {"token": localStorage.getItem("eleToken")}})
         .then(res => {
-          this.userData = res.data.data;
+          this.flowerData = res.data.data;
         }).catch(err => console.log(err));
     },
-    loadCurrentPageUserList() {
-	      let pageSize = this.userData.pageSize;
-        let page = this.userData.pageNum;
-				const formData = {
-                "isAsc": null,
-                "orderBy": null,
-                "orderByColumn": null,
-                "pageNum": page,
-                "pageSize": pageSize
+     loadCurrentPageflowerList() {
+	    let pageSize = this.flowerData.pageSize;
+        let page = this.flowerData.pageNum;
+		const formData = {
+            "isAsc": null,
+            "orderBy": null,
+            "orderByColumn": null,
+            "pageNum": page,
+            "pageSize": pageSize
         }
-        this.userInfo(formData);
+        this.flowerList(formData);
     },
     handleEdit(index, row) {
       //编辑
@@ -132,12 +131,7 @@ export default {
         option:"edit"
       }
       this.id = row.id;
-      this.form = {
-          password: row.password,
-          phone: row.phone,
-          username: row.username,
-          id: row.id
-      }
+      this.form = row;
     },
     handleDelete(index, row) {
       //删除数据
@@ -145,15 +139,14 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
-          this.$axios.delete(config.url+`/background/user/${row.id}`,{headers: {"token": localStorage.getItem("eleToken")}})
+      }).then(() => {
+          this.$axios.delete(`/api/SaysCommentary/${row.id}`,{headers: {"token": localStorage.getItem("eleToken")}})
           .then(res => {
             this.$message({
               type: "success",
               message: "删除成功!"
             });
-            this.loadCurrentPageUserList();
+            this.loadCurrentPageflowerList();
           });
         })
         .catch(() => {
@@ -170,29 +163,29 @@ export default {
         show: true,
         option:"add"
       }
-      this.form = {
-        password: "",
-        phone: "",
-        username: ""
-      }
+       this.form = {
+         cid: '',
+         title: "",
+         images: null
+      };
     },
-		handleSizeChange(page_size) {
-				this.userData.pageNum = 1; //第一页
-				this.userData.pageSize = page_size; //每页先显示多少数据
-		},
-		handleCurrentChange(page){
-				// 跳转页数
-				//获取每行数
-				let pageSize = this.userData.pageSize;
-				const formData = {
-                "isAsc": null,
-                "orderBy": null,
-                "orderByColumn": null,
-                "pageNum": page,
-                "pageSize": pageSize
-        }
-        this.userInfo(formData);
-		}
+    handleSizeChange(page_size) {
+			this.flowerData.pageNum = 1; //第一页
+			this.flowerData.pageSize = page_size; //每页先显示多少数据
+	},
+	handleCurrentChange(page){
+			// 跳转页数
+			//获取每行数
+			let pageSize = this.flowerData.pageSize;
+			const formData = {
+             "isAsc": null,
+             "orderBy": null,
+             "orderByColumn": null,
+             "pageNum": page,
+             "pageSize": pageSize
+            }
+            this.flowerList(formData);
+   }
   },
   created() {
      const formData = {
@@ -200,12 +193,12 @@ export default {
                 "orderBy": null,
                 "orderByColumn": null,
                 "pageNum": 1,
-                "pageSize": 5
+                "pageSize": this.flowerData.pageSize
     }
-    this.userInfo(formData);
+    this.flowerList(formData);
   },
   components: {
-    UserDialong
+    SaysCommentaryDialong
   }
 };
 </script>

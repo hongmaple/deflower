@@ -4,14 +4,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.haiyan.deflower.dao.CartDao;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.CartMapper;
-import com.haiyan.deflower.pojo.Cart;
-import com.haiyan.deflower.pojo.Flower;
-import com.haiyan.deflower.pojo.PageDomain;
-import com.haiyan.deflower.pojo.PageList;
+import com.haiyan.deflower.pojo.*;
 import com.haiyan.deflower.service.CartService;
+import com.haiyan.deflower.utils.ServletUtils;
+import com.haiyan.deflower.utils.UserUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author haiyan
@@ -22,6 +23,9 @@ public class CartServiceImpl implements CartService {
     private final CartDao cartDao;
     private final CartMapper cartMapper;
 
+    @Autowired
+    private UserUtils userUtils;
+
     public CartServiceImpl(CartDao cartDao, CartMapper cartMapper) {
         this.cartDao = cartDao;
         this.cartMapper = cartMapper;
@@ -29,6 +33,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Long addCart(Cart cart) {
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
+        cart.setUserId(user.getId());
         if(cartDao.save(cart)) {
             throw new ExceptionResult("cart","false",null,"添加失败");
         }
@@ -37,7 +46,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Boolean updateCart(Cart cart) {
-        if (!cartDao.lambdaUpdate().update(cart)) {
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
+        if (!cartDao.lambdaUpdate().eq(Cart::getId,cart.getId()).update(cart)) {
             throw new ExceptionResult("cart","false",null,"修改失败");
         }
         return true;
@@ -45,6 +58,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Boolean deletedCart(Long id) {
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
         if(cartMapper.deleteById(id)==0) {
             throw new ExceptionResult("cart","false",null,"删除失败");
         }

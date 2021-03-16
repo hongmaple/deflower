@@ -1,6 +1,8 @@
 package com.haiyan.deflower.service;
 
+
 import com.haiyan.deflower.dto.request.FlowerQuery;
+import com.haiyan.deflower.dto.response.FlowerRowVo;
 import com.haiyan.deflower.pojo.Flower;
 import com.haiyan.deflower.pojo.PageList;
 
@@ -28,5 +30,5 @@ public interface FlowerService {
      * @param query 参数
      * @return 分页数据
      */
-    PageList<Flower> listFlower(FlowerQuery query);
+    PageList<FlowerRowVo> listFlower(FlowerQuery query);
 }

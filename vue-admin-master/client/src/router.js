@@ -7,7 +7,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: 'index'
+      redirect: 'login'
     },
     {
       path: '/index',
@@ -100,6 +100,12 @@ const router = new Router({
           name: 'flowerList',
           component: () => import('./views/flower/flowerList'),
           meta: { title: '鲜花列表' }
+        },
+        {
+          path: '/SaysCommentaryList',
+          name: 'SaysCommentaryList',
+          component: () => import('./views/flower/SaysCommentaryList'),
+          meta: { title: '花语解说' }
         }
       ]
     },

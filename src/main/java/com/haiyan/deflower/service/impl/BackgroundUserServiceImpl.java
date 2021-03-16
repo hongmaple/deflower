@@ -77,6 +77,9 @@ public class BackgroundUserServiceImpl implements BackgroundUserService {
         if (userDao.lambdaQuery().eq(BackgroundUser::getId,loginUser.getId()).count()==0) {
             throw new ExceptionResult("user","false",null,"当前用户不存在");
         }
+        if(userDao.lambdaQuery().eq(BackgroundUser::getPhone,user.getPhone()).ne(BackgroundUser::getId,loginUser.getId()).count()>0) {
+            throw new ExceptionResult("user","false",null,"修改失败，手机号码已存在");
+        }
         if(!userDao.lambdaUpdate().eq(BackgroundUser::getId,user.getId()).update(user)) {
             throw new ExceptionResult("user","false",null,"修改失败");
         }

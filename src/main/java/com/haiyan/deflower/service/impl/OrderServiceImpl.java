@@ -3,6 +3,7 @@ package com.haiyan.deflower.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.haiyan.deflower.dao.OrderDao;
 import com.haiyan.deflower.dao.OrderDetailDao;
+import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.OrderDetailMapper;
 import com.haiyan.deflower.mapper.OrderMapper;
 import com.haiyan.deflower.mapper.OrderStatusMapper;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author haiyan
@@ -46,10 +48,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Long createOrder(Order order) {
-        // 生成orderId
-        long orderId = idWorker.nextId();
         // 获取登录用户
         User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
+        // 生成orderId
+        long orderId = idWorker.nextId();
         // 初始化数据
         order.setBuyerNick(user.getUsername());
         order.setCreateTime(new Date());
@@ -81,6 +86,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order queryById(Long id) {
+        // 获取登录用户
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
         // 查询订单
         Order order = this.orderMapper.selectById(id);
 
@@ -101,6 +111,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public PageList<Order> queryUserOrderList(Integer page, Integer rows, Integer status) {
+        // 获取登录用户
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
         Page<Order> orderPage = orderDao.lambdaQuery()
                 .eq(Order::getUserId, userUtils.getUser(ServletUtils.getRequest()).getId())
                 .orderByDesc(Order::getCreateTime)
@@ -110,6 +125,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Boolean updateStatus(Long id, Integer status) {
+        // 获取登录用户
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
         OrderStatus record = new OrderStatus();
         record.setOrderId(id);
         record.setStatus(status);

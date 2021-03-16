@@ -5,7 +5,6 @@ import com.haiyan.deflower.pojo.User;
 import com.haiyan.deflower.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
