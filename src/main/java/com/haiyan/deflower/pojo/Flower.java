@@ -25,9 +25,13 @@ public class Flower {
      */
     private String title;
     /**
-     * 图片地址
+     * 花封面地址
      */
     private String images;
+    /**
+     * 图片列表
+     */
+    private String imagesList;
     /**
      * 价格
      */

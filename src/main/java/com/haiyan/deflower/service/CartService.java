@@ -37,4 +37,11 @@ public interface CartService {
      */
     PageList<Cart> listCart(PageDomain pageDomain);
 
+    /**
+     * 获取商品的购物详情
+     * @param skuId
+     * @return
+     */
+    Cart getCartDetail(Long skuId);
+
 }

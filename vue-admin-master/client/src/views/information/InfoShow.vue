@@ -12,7 +12,7 @@
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload">
-                                <img v-if="user.avatarImage" :src="user.avatarImage" class="avatar">
+                                <img v-if="user.avatarImage" :src="'api/'+user.avatarImage" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                             <div class="user-info-cont">
@@ -161,7 +161,7 @@ export default {
         },
         handleAvatarSuccess(res, file) {
             //URL.createObjectURL(file.raw);
-            this.user.avatarImage = res.url;
+            this.user.avatarImage = res.fileName;
             this.updataUser();
         },
         beforeAvatarUpload(file) {

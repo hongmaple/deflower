@@ -5,7 +5,7 @@
   <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :indicator-color="indicatorColor" :interval="interval" :duration="duration" :indicator-active-color="indicatorActiveColor">
     <block v-for="(item, index) in imgs" :key="index">
       <swiper-item>
-        <image :src="item"></image>
+        <image :src="serverUrl+item"></image>
       </swiper-item>
     </block>
   </swiper>
@@ -23,13 +23,9 @@
     </view>
     <view class="sales-p">{{brief}}</view>
     <view class="prod-price">
-      <text class="price">￥<text class="price-num">{{wxs.parsePrice(defaultSku.price)[0]}}</text>.{{wxs.parsePrice(defaultSku.price)[1]}}</text>
+      <text class="price">￥<text class="price-num">{{wxs.parsePrice(price)[0]}}</text>.{{wxs.parsePrice(price)[1]}}</text>
       <text class="sales"></text>
     </view>
-    <!-- <button class="share-icon" open-type="share">
-        <image src='../../images/icon/share.png'></image>
-        <view class="share-text">分享</view>
-      </button> -->
   </view>
   <!-- </block> -->
   <!-- end 商品信息 -->
@@ -45,11 +41,11 @@
   <!-- 已选规格 -->
   <view class="sku" @tap="showSku">
     <view class="sku-tit">已选</view>
-    <view class="sku-con">{{selectedProp.length>0?selectedProp+'，':selectedProp}}{{prodNum}}件</view>
+    <view class="sku-con">{{prodNum}}件</view>
     <view class="more">...</view>
   </view>
   <!-- 评价 -->
-  <view class="cmt-wrap">
+  <view class="cmt-wrap" style="display:none;">
     <view class="cmt-tit" @tap="showComment">
       <view class="cmt-t">
         评价
@@ -276,7 +272,8 @@ export default {
       },
       littleCommPage: [],
       evaluate: -1,
-      isCollection: false
+      isCollection: false,
+	  serverUrl: config.domain
     };
   },
 
@@ -295,11 +292,11 @@ export default {
 
     this.getProdInfo(); // 加载评论数据
 
-    this.getProdCommData(); // 加载评论项
+    //this.getProdCommData(); // 加载评论项
 
     this.getLittleProdComm(); // 查看用户是否关注
 
-    this.getCollection();
+    //this.getCollection();
   },
 
   /**
@@ -394,33 +391,29 @@ export default {
     // 获取商品信息
     getProdInfo() {
       uni.showLoading();
+	  console.log(this.prodId);
       var params = {
-        url: "/prod/prodInfo",
+        url: `/flower/prodInfo/${this.prodId}`,
         method: "GET",
-        data: {
-          prodId: this.prodId // userType: 0
-
-        },
         callBack: res => {
-          //console.log(res);
-          var imgStrs = res.imgs;
+          var imgStrs = res.imagesList;
           var imgs = imgStrs.split(",");
-          var content = util.formatHtml(res.content);
+          //var content = util.formatHtml(res.content);
           this.setData({
             imgs: imgs,
-            content: content,
+            content: null,
             price: res.price,
-            prodName: res.prodName,
-            prodId: res.prodId,
-            brief: res.brief,
+            prodName: res.title,
+            prodId: res.id,
+            brief: null,
             // skuId: res.skuId
-            skuList: res.skuList,
-            pic: res.pic
+            skuList: null,
+            pic: res.images
           }); // 获取优惠券
           //this.getCouponList();
           // 组装sku
 
-          this.groupSkuProp();
+          //this.groupSkuProp();
           uni.hideLoading();
         }
       };
@@ -448,11 +441,11 @@ export default {
         return;
       }
 
-      this.getProdCommPage();
+      //this.getProdCommPage();
     },
 
     getMoreCommPage(e) {
-      this.getProdCommPage();
+      //this.getProdCommPage();
     },
 
     // 获取分页获取评论

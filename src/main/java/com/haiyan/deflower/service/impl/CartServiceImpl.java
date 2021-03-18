@@ -74,4 +74,9 @@ public class CartServiceImpl implements CartService {
         List<Cart> carts = page.getRecords();
         return PageList.of(carts, page);
     }
+
+    @Override
+    public Cart getCartDetail(Long skuId) {
+        return cartDao.getById(skuId);
+    }
 }

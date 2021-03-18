@@ -56,7 +56,7 @@
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <img style="width:100px;height=80px;" alt="图片" :src="scope.row.images"/>
+                    <img style="width:100px;height=80px;" alt="图片" :src="'api/'+scope.row.images"/>
                 </template>
             </el-table-column>
             <el-table-column
@@ -150,6 +150,7 @@ export default {
         cid: 0,
         title: 0,
         images: '',
+        imagesList: '',
         price: '',
         flowerLanguage: '',
         appropriateCrowd: '',
@@ -163,6 +164,7 @@ export default {
                 name: null
         }],
         id: 0,
+        dialogImageUrls: []
       },
       search_data: {
          title: null
@@ -196,18 +198,33 @@ export default {
         this.flowerList(formData);
     },
     handleEdit(index, row) {
+      this.parameter.dialogImageUrls = [];
       //编辑
       this.dialong = {
         title: "编辑信息",
         show: true,
         option:"edit"
       }
+      console.log(row);
       this.parameter.id = row.id;
+      if(row.imagesList!=null) {
+        let urlArr = row.imagesList.split(",");
+        urlArr.forEach((item,value) => {
+            if(!item) {
+              return urlArr.splice(value,1);
+            }
+            if(typeof(item)=="undefined") {
+                  return urlArr.splice(value,1);
+            }
+            this.parameter.dialogImageUrls.push({name:value,url:'api'+item})
+        });
+      }
       this.form = {
          id: row.id,
          cid: row.cid,
          title: row.title,
          images: row.images,
+         imagesList: row.imagesList,
          price: row.price,
          flowerLanguage: row.flowerLanguage,
          appropriateCrowd: row.appropriateCrowd
@@ -215,6 +232,7 @@ export default {
       this.categoryList();
     },
     onAddMoney() {
+      this.parameter.dialogImageUrls = [];
       //添加内容
       this.dialong = {
         title: "添加信息",

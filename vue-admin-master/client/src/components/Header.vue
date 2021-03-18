@@ -37,7 +37,7 @@
 							<i class="el-icon-rank"></i>
 						</el-tooltip>
 					</div>
-					<img class="avatar" :src="user.avatarImage">
+					<img class="avatar" :src="'api/'+user.avatarImage">
 					<div class="welcome">
 						<p class="name comename">欢迎</p>
 						<p class="name avatarname">{{user.username}}</p>

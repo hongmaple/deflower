@@ -33,7 +33,7 @@
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <img style="width:100px;height=80px;" alt="图片" :src="scope.row.image"/>
+                    <img style="width:100px;height=80px;" alt="图片" :src="'api/'+scope.row.image"/>
                 </template>
             </el-table-column>
             <el-table-column

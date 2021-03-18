@@ -17,7 +17,7 @@
                 align="center"
                 width="180">
                 <template slot-scope="scope">
-                    <img alt="头像" style="width:100px;height=80px;" :src="scope.row.avatarImage"/>
+                    <img alt="头像" style="width:100px;height=80px;" :src="'api/'+scope.row.avatarImage"/>
                 </template>
             </el-table-column>
             <el-table-column

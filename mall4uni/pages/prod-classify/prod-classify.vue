@@ -26,7 +26,7 @@ export default {
       current: 1,
       size: 10,
       pages: 0,
-      tagid: 0
+      tagid: null
     };
   },
 
@@ -53,26 +53,16 @@ export default {
     }
 
     if (this.sts == 0) {
-      if (options.tagid == 1) {
-        uni.setNavigationBarTitle({
-          title: '每日上新'
-        });
-      } else if (options.tagid == 2) {
-        uni.setNavigationBarTitle({
-          title: '商城热卖'
-        });
-      } else if (options.tagid == 3) {
-        uni.setNavigationBarTitle({
-          title: '更多宝贝'
-        });
-      }
-    } else if (this.sts == 1) {
       uni.setNavigationBarTitle({
         title: '新品推荐'
       });
+    } else if (this.sts == 1) {
+      uni.setNavigationBarTitle({
+        title: '鲜花'
+      });
     } else if (this.sts == 2) {
       uni.setNavigationBarTitle({
-        title: '限时特惠'
+        title: '永生花'
       });
     } else if (this.sts == 3) {
       uni.setNavigationBarTitle({
@@ -91,7 +81,7 @@ export default {
         title: this.title
       });
     }
-
+    console.log(options.title);
     this.loadProdData(options);
   },
 
@@ -236,25 +226,28 @@ export default {
       var ths = this;
       uni.showLoading();
       var param = {
-        url: "/prod/prodListByTagId",
-        method: "GET",
+        url: "/flower/list",
+        method: "POST",
         data: {
-          tagId: ths.tagid,
-          current: ths.current,
-          size: ths.size
+          cid: ths.tagid,
+		  isAsc: null,
+		  orderBy: null,
+		  orderByColumn: null,
+		  pageNum: ths.current,
+		  pageSize: ths.size
         },
         callBack: res => {
           let list = [];
-
+          console.log(res);
           if (res.current == 1) {
-            list = res.records;
+            list = res.data.list;
           } else {
-            list = ths.prodList.concat(res.records);
+            list = ths.prodList.concat(res.data.list);
           }
 
           ths.setData({
             prodList: list,
-            pages: res.pages
+            pages: res.data.pages
           });
           uni.hideLoading();
         }

@@ -6,6 +6,7 @@ import com.haiyan.deflower.dao.CategoryDao;
 import com.haiyan.deflower.dao.FlowerDao;
 import com.haiyan.deflower.dto.request.FlowerQuery;
 import com.haiyan.deflower.dto.response.FlowerRowVo;
+import com.haiyan.deflower.dto.response.TagRowVo;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.pojo.Category;
 import com.haiyan.deflower.pojo.Flower;
@@ -93,5 +94,45 @@ public class FlowerServiceImpl implements FlowerService {
             flowerRowVos.add(flowerRowVo);
         });
         return PageList.of(flowerRowVos, page);
+    }
+
+    @Override
+    public List<TagRowVo> listTagRowVo() {
+        TagRowVo tagRowVo = new TagRowVo();
+        tagRowVo.setStyle(0);
+        tagRowVo.setTitle("新品推荐");
+        tagRowVo.setId(null);
+        Page<Flower> flowerPage = flowerDao.lambdaQuery()
+                .in(Flower::getCid, 3, 4)
+                .page(new Page<>(1, 3));
+        tagRowVo.setProds(flowerPage.getRecords());
+
+        TagRowVo tagRowVo2 = new TagRowVo();
+        tagRowVo2.setStyle(1);
+        tagRowVo2.setTitle("鲜花");
+        tagRowVo2.setId(1L);
+        Page<Flower> flowerPage2 = flowerDao.lambdaQuery()
+                .in(Flower::getCid, 3, 4)
+                .page(new Page<>(1, 2));
+        tagRowVo2.setProds(flowerPage2.getRecords());
+
+        TagRowVo tagRowVo3 = new TagRowVo();
+        tagRowVo3.setStyle(2);
+        tagRowVo3.setTitle("永生花");
+        tagRowVo3.setId(2L);
+        Page<Flower> flowerPage3 = flowerDao.lambdaQuery()
+                .in(Flower::getCid, 2)
+                .page(new Page<>(1, 2));
+        tagRowVo3.setProds(flowerPage3.getRecords());
+        List<TagRowVo> tagRowVos = new ArrayList<>();
+        tagRowVos.add(tagRowVo);
+        tagRowVos.add(tagRowVo2);
+        tagRowVos.add(tagRowVo3);
+        return tagRowVos;
+    }
+
+    @Override
+    public Flower getFlowerDetail(Long id) {
+        return flowerDao.getById(id);
     }
 }

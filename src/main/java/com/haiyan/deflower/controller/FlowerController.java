@@ -1,6 +1,7 @@
 package com.haiyan.deflower.controller;
 
 import com.haiyan.deflower.dto.request.FlowerQuery;
+import com.haiyan.deflower.dto.response.TagRowVo;
 import com.haiyan.deflower.pojo.AjaxResult;
 import com.haiyan.deflower.pojo.Flower;
 import com.haiyan.deflower.service.FlowerService;
@@ -8,6 +9,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 花请求处理
@@ -61,5 +64,26 @@ public class FlowerController {
     public AjaxResult listFlower(@RequestBody FlowerQuery query) {
         AjaxResult ajaxResult = AjaxResult.success(flowerService.listFlower(query));
         return ajaxResult;
+    }
+
+    /**
+     * 加载前台首页商品列表
+     * @return 商品列表
+     */
+    @ApiOperation("加载前台首页商品列表")
+    @GetMapping("/prodTagList")
+    public List<TagRowVo> listTagRowVo() {
+           return flowerService.listTagRowVo();
+    }
+
+    /**
+     * 查询商品详情
+     * @param id id
+     * @return 详情
+     */
+    @ApiOperation("查询商品详情")
+    @GetMapping("/prodInfo/{id}")
+    public Flower getFlowerDetail(@PathVariable Long id) {
+        return flowerService.getFlowerDetail(id);
     }
 }

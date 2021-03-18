@@ -46,9 +46,13 @@
     <view class="message-play" @tap="onNewsPage">
       <image src="/static/images/icon/horn.png" class="hornpng"></image>
       <swiper vertical="true" autoplay="true" duration="1000" class="swiper-cont">
-        <block v-for="(item, index) in news" :key="index">
+      <!--  <block v-for="(item, index) in news" :key="index">
           <swiper-item class="items">{{item.title}}</swiper-item>
-        </block>
+        </block> -->
+		<swiper-item class="items"><a href="//www.yinlinkrc.com">银领人才网专注于技能人才招聘</a></swiper-item>
+		<swiper-item class="items">樱花盛开，买花的好季节</swiper-item>
+		<swiper-item class="items">春季买花优惠多多，快来抢购</swiper-item>
+		<swiper-item class="items"><a href="//www.yinlinkrc.com">银领人才网</a></swiper-item>
       </swiper>
       <text class="arrow"></text>
     </view>
@@ -57,7 +61,7 @@
 	
 	<view class="updata" v-if="updata">
 		<block v-for="(item, index) in taglist" :key="index">
-		  <!-- 每日上新 -->
+		  <!-- 鲜花 -->
 		  <view class="up-to-date" v-if="item.style==2">
 		    <view class="title">
 		      <text>{{item.title}}</text>
@@ -71,9 +75,9 @@
 		        <view class="prod-item" @tap="toProdPage" :data-prodid="prod.prodId">
 		          <view>
 		            <view class="imagecont">
-		              <image :src="prod.pic" class="prodimg"></image>
+		              <image :src="serverUrl+prod.images" class="prodimg"></image>
 		            </view>
-		            <view class="prod-text">{{prod.prodName}}</view>
+		            <view class="prod-text">{{prod.title}}</view>
 		            <view class="price">
 		              <text class="symbol">￥</text>
 		              <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
@@ -99,11 +103,11 @@
 		      <block v-for="(prod, index2) in item.prods" :key="index2">
 		        <view class="prod-items" @tap="toProdPage" :data-prodid="prod.prodId">
 		          <view class="hot-imagecont">
-		            <image :src="prod.pic" class="hotsaleimg"></image>
+		            <image :src="serverUrl+prod.images" class="hotsaleimg"></image>
 		          </view>
 		          <view class="hot-text">
-		            <view class="hotprod-text">{{prod.prodName}}</view>
-		            <view class="prod-info">{{prod.brief}}</view>
+		            <view class="hotprod-text">{{prod.title}}</view>
+		            <view class="prod-info">{{prod.flowerLanguage}}</view>
 		            <view class="prod-text-info">
 		              <view class="price">
 		                <text class="symbol">￥</text>
@@ -122,18 +126,18 @@
 		    </view>
 		  </view>
 		
-		  <!-- 更多宝贝 -->
+		  <!-- 新品推荐 -->
 		  <view class="more-prod" v-if="item.style==0">
 		    <view class="title">{{item.title}}</view>
 		    <view class="prod-show">
 		      <block v-for="(prod, index2) in item.prods" :key="index2">
 		        <view class="show-item" @tap="toProdPage" :data-prodid="prod.prodId">
 		          <view class="more-prod-pic">
-		            <image :src="prod.pic" class="more-pic"></image>
+		            <image :src="serverUrl+prod.images" class="more-pic"></image>
 		          </view>
 		          <view class="prod-text-right">
-		            <view class="prod-text more">{{prod.prodName}}</view>
-		            <view class="prod-info">{{prod.brief}}</view>
+		            <view class="prod-text more">{{prod.title}}</view>
+		            <view class="prod-info">{{prod.flowerLanguage}}</view>
 		            <view class="b-cart">
 		              <view class="price">
 		                <text class="symbol">￥</text>
@@ -178,8 +182,9 @@ export default {
       taglist: [],
       sts: 0,
       scrollTop: "",
-			current: 0,
-			updata: true
+	  current: 0,
+	  updata: true,
+	  serverUrl: config.domain
     };
   },
 
@@ -250,10 +255,11 @@ export default {
         });
       }
     },
+	//优惠券
     toCouponCenter: function () {
       uni.showToast({
         icon: "none",
-        title: '该功能未开源'
+        title: '该功能未开发，敬请期待'
       });
     },
     // 跳转搜索页
@@ -278,9 +284,9 @@ export default {
     },
     //跳转公告列表页面
     onNewsPage: function () {
-      uni.navigateTo({
-        url: '/pages/recent-news/recent-news'
-      });
+      // uni.navigateTo({
+      //   url: '/pages/recent-news/recent-news'
+      // });
     },
 
     getAllData() {
@@ -350,50 +356,44 @@ export default {
           });
         }
       };
-      http.request(params);
+      //http.request(params);
     },
 
     // 加载商品标题分组列表
     getTag() {
       var params = {
-        url: "/prod/tag/prodTagList",
+        url: "/flower/prodTagList",
         method: "GET",
         data: {},
         callBack: res => {
           this.setData({
             taglist: res
           });
-
-          for (var i = 0; i < res.length; i++) {
-						this.updata = false
-						this.updata = true
-            this.getTagProd(res[i].id, i);
-          }
         }
       };
       http.request(params);
     },
 
-    getTagProd(id, index) {
-      var param = {
-        url: "/prod/prodListByTagId",
-        method: "GET",
-        data: {
-          tagId: id,
-          size: 6
-        },
-        callBack: res => {
-					this.updata = false
-					this.updata = true
-          var taglist = this.taglist;
-          taglist[index].prods = res.records;
-          this.setData({
-            taglist: taglist
-          });
-        }
-      };
-      http.request(param);
-    },
+    // getTagProd(id, index) {
+    //   var param = {
+    //     url: "/prod/prodListByTagId",
+    //     method: "GET",
+    //     data: {
+    //       tagId: id,
+    //       size: 6
+    //     },
+    //     callBack: res => {
+		  // this.updata = false
+		  // this.updata = true
+    //       var taglist = this.taglist;
+    //       taglist[index].prods = res.records;
+    //       this.setData({
+    //         taglist: taglist
+    //       });
+    //     }
+    //   };
+    //   http.request(param);
+    // },
 
     /**
      * 跳转至商品详情

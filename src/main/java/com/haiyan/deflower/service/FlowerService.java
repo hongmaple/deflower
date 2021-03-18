@@ -3,8 +3,11 @@ package com.haiyan.deflower.service;
 
 import com.haiyan.deflower.dto.request.FlowerQuery;
 import com.haiyan.deflower.dto.response.FlowerRowVo;
+import com.haiyan.deflower.dto.response.TagRowVo;
 import com.haiyan.deflower.pojo.Flower;
 import com.haiyan.deflower.pojo.PageList;
+
+import java.util.List;
 
 /**
  * @author haiyan
@@ -31,4 +34,17 @@ public interface FlowerService {
      * @return 分页数据
      */
     PageList<FlowerRowVo> listFlower(FlowerQuery query);
+
+    /**
+     * 加载前台首页商品列表
+     * @return 商品列表
+     */
+    List<TagRowVo> listTagRowVo();
+
+    /**
+     * 查询商品详情
+     * @param id id
+     * @return 详情
+     */
+    Flower getFlowerDetail(Long id);
 }

@@ -72,4 +72,15 @@ public class CartController {
         return ajaxResult;
     }
 
+    /**
+     * 获取商品的购物详情
+     * @param skuId
+     * @return
+     */
+    @ApiOperation("获取商品的购物详情")
+    @GetMapping("/{skuId}")
+    public Cart getCartDetail(@PathVariable Long skuId) {
+        return cartService.getCartDetail(skuId);
+    }
+
 }

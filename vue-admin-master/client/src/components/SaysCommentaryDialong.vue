@@ -25,7 +25,7 @@
                 :before-upload="beforeAvatarUpload"
                 v-model="form.image"
                 >
-                <img alt="图片" v-if="form.image" :src="form.image" class="avatar">
+                <img alt="图片" v-if="form.image" :src="'api/'+form.image" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -97,7 +97,7 @@ export default {
       });
     },handleAvatarSuccess(res, file) {
             //URL.createObjectURL(file.raw);
-            this.form.image = res.url;
+            this.form.image = res.fileName;
     },
     beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' ||  file.type === 'image/svg';

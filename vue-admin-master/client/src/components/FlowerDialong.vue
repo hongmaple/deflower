@@ -23,7 +23,7 @@
          <el-form-item label="标题" prop="title">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="图片" prop="images">
+        <el-form-item label="封面" prop="images">
            <el-upload
                 class="avatar-uploader"
                 action="/api/common/upload"
@@ -32,9 +32,24 @@
                 :before-upload="beforeAvatarUpload"
                 v-model="form.images"
                 >
-                <img alt="图片" v-if="form.images" :src="form.images" class="avatar">
+                <img alt="图片" v-if="form.images" :src="'api/'+form.images" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+        </el-form-item>
+        <el-form-item label="图片列表" prop="imagesList">
+            <el-upload
+              action="/api/common/upload"
+              list-type="picture-card"
+              :file-list="parameter.dialogImageUrls"
+              :on-preview="handlePictureCardPreview"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccessList"
+              :on-remove="handleRemove">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="'api'+dialogImageUrl" alt="">
+            </el-dialog>
         </el-form-item>
         <el-form-item label="价格" prop="price">
           <el-input v-model="form.price"></el-input>
@@ -67,7 +82,10 @@ export default {
         price: [{ required: true, message: "价格不能为空", trigger: "blur" }],
         flowerLanguage: [{ required: true, message: "花语不能为空", trigger: "blur" }],
         appropriateCrowd: [{ required: true, message: "适宜人群不能为空", trigger: "blur" }]
-      }
+      },
+      dialogImageUrl: '',
+      dialogVisible: false,
+      disabled: false
     };
   },
   props: {
@@ -77,6 +95,7 @@ export default {
         cid: 0,
         title: 0,
         images: '',
+        imagesList: '',
         price: '',
         flowerLanguage: '',
         appropriateCrowd: '',
@@ -90,6 +109,7 @@ export default {
                 name: null
         }],
         id: 0,
+        dialogImageUrls: []
     },
     value: ''
   },
@@ -99,6 +119,19 @@ export default {
         if (valid) {
           if(this.dialong.option == "add") {
             const formData = this.form;
+            let imagesList=formData.images+",";
+            let urlArr = this.parameter.dialogImageUrls;
+            urlArr.forEach((item,value) => {
+              if(!item) {
+                 return urlArr.splice(value,1);
+              }
+              if(typeof(item)=="undefined") {
+                return urlArr.splice(value,1);
+              }
+              item.url+=",";
+              imagesList+=item.url.replace("api","");
+            });
+            formData.imagesList=imagesList;
             this.$axios.post("api/flower", formData,{headers: {"token": localStorage.getItem("eleToken")}}).then(res => {
                 this.$message({
                   type: "success",
@@ -108,10 +141,24 @@ export default {
                 this.$emit("flowerData");
                 //清空内容
                 this.form = null;
+                this.parameter.dialogImageUrls = [];
             });
           }else {
             const formData = this.form;
             formData.id = this.parameter.id;
+            let imagesList="";
+            let urlArr = this.parameter.dialogImageUrls;
+            urlArr.forEach((item,value) => {
+              if(!item) {
+                 return urlArr.splice(value,1);
+              }
+              if(typeof(item)=="undefined") {
+                return urlArr.splice(value,1);
+              }
+              item.url+=",";
+              imagesList+=item.url.replace("api","");
+            });
+            formData.imagesList=imagesList;
              this.$axios.put("api/flower", formData,{headers: {"token": localStorage.getItem("eleToken")}}).then(res => {
                 this.$message({
                   type: "success",
@@ -121,6 +168,7 @@ export default {
                 this.$emit("flowerData");
                 //清空内容
                 this.form = null;
+                this.parameter.dialogImageUrls = [];
             });
           }
         } else {
@@ -128,9 +176,10 @@ export default {
           return false;
         }
       });
-    },handleAvatarSuccess(res, file) {
+    },
+    handleAvatarSuccess(res, file) {
             //URL.createObjectURL(file.raw);
-            this.form.images = res.url;
+            this.form.images = res.fileName;
     },
     beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' ||  file.type === 'image/svg';
@@ -143,6 +192,31 @@ export default {
             this.$message.error('上传图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
+    },
+    handleAvatarSuccessList(res,file) {
+        this.dialogImageUrl = res.fileName;
+        let urlArr = this.parameter.dialogImageUrls;
+        urlArr.push({name: urlArr.length+1,url: "api"+res.fileName});
+        this.parameter.dialogImageUrls=urlArr;
+        console.log(this.parameter.dialogImageUrls)
+    },
+    handleRemove(file) {
+      console.log(file.url);
+      let urlArr = this.parameter.dialogImageUrls;
+      urlArr.forEach((item,index,arr) => {
+        if(item.url === file.url){
+            arr.splice(index,1)
+        }
+      });
+      this.parameter.dialogImageUrls = urlArr;
+      console.log(this.parameter.dialogImageUrls)
+    },
+    handlePictureCardPreview(file) {
+        console.log(file.url);
+        this.dialogVisible = true;
+    },
+    handleDownload(file) {
+        console.log(file);
     },
     categoryList() {
       this.$axios
