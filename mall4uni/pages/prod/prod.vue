@@ -366,7 +366,10 @@ export default {
         method: "GET",
         callBack: res => {
           var imgStrs = res.imagesList;
-          var imgs = imgStrs.split(",");
+		  var imgs;
+		  if(imgStrs!=null) {
+			  imgs = imgStrs.split(",");
+		  }
           //var content = util.formatHtml(res.content);
           this.setData({
             imgs: imgs,

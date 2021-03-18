@@ -72,7 +72,7 @@
 		    </view>
 		    <view class="item-cont">
 		      <block v-for="(prod, index2) in item.prods" :key="index2">
-		        <view class="prod-item" @tap="toProdPage" :data-prodid="prod.prodId">
+		        <view class="prod-item" @tap="toProdPage" :data-prodid="prod.id">
 		          <view>
 		            <view class="imagecont">
 		              <image :src="serverUrl+prod.images" class="prodimg"></image>
@@ -101,7 +101,7 @@
 		    </view>
 		    <view class="hotsale-item-cont">
 		      <block v-for="(prod, index2) in item.prods" :key="index2">
-		        <view class="prod-items" @tap="toProdPage" :data-prodid="prod.prodId">
+		        <view class="prod-items" @tap="toProdPage" :data-prodid="prod.id">
 		          <view class="hot-imagecont">
 		            <image :src="serverUrl+prod.images" class="hotsaleimg"></image>
 		          </view>
@@ -131,7 +131,7 @@
 		    <view class="title">{{item.title}}</view>
 		    <view class="prod-show">
 		      <block v-for="(prod, index2) in item.prods" :key="index2">
-		        <view class="show-item" @tap="toProdPage" :data-prodid="prod.prodId">
+		        <view class="show-item" @tap="toProdPage" :data-prodid="prod.id">
 		          <view class="more-prod-pic">
 		            <image :src="serverUrl+prod.images" class="more-pic"></image>
 		          </view>
@@ -316,29 +316,29 @@ export default {
 	    indexImgs: [
 			{
 				imgUrl: "/static/images/index/banner/21_birthday_banner_m.jpg",
-				relation: ""
+				relation: 1
 			},
 			{
 				imgUrl: "/static/images/index/banner/flower.png",
-				relation: ""
+				relation: 2
 			},
 			{
 				imgUrl: "/static/images/index/banner/hot.png",
-				relation: ""
+				relation: 3
 			}
 		],
 	    seq: [
 			{
 				imgUrl: "/static/images/index/banner/21_birthday_banner_m.jpg",
-				relation: ""
+				relation: 4
 			},
 			{
 				imgUrl: "/static/images/index/banner/flower.png",
-				relation: ""
+				relation: 5
 			},
 			{
 				imgUrl: "/static/images/index/banner/hot.png",
-				relation: ""
+				relation: 6
 			}
 		]
 	  });
