@@ -132,27 +132,17 @@
   <view class="pup-sku" v-if="skuShow">
     <view class="pup-sku-main">
       <view class="pup-sku-header">
-        <image class="pup-sku-img" :src="defaultSku.pic?defaultSku.pic:pic"></image>
+        <image class="pup-sku-img" :src="images"></image>
         <view class="pup-sku-price">
           ￥
-          <text class="pup-sku-price-int">{{wxs.parsePrice(defaultSku.price)[0]}}</text> .{{wxs.parsePrice(defaultSku.price)[1]}}
+          <text class="pup-sku-price-int">{{wxs.parsePrice(price)[0]}}</text> .{{wxs.parsePrice(price)[1]}}
         </view>
         <view class="pup-sku-prop">
-          <text>已选</text> {{selectedProp.length>0?selectedProp+'，':selectedProp}}{{prodNum}}件
+          <text>已选</text>{{prodNum}}件
         </view>
         <view class="close" @tap="closePopup"></view>
       </view>
       <view class="pup-sku-body">
-        <view class="pup-sku-area">
-          <block v-for="(value, key) in skuGroup" :key="key">
-            <view class="sku-kind">{{key}}</view>
-            <view class="sku-choose">
-              <block v-for="(item, index) in value" :key="index">
-                <text :class="'sku-choose-item ' + (wxs.array_contain(selectedProp,item)?'active':'') + ' ' + (wxs.props_contain(allProperties,selectedPropObj,key,item,propKeys)?'':'gray')" :data-ok="wxs.props_contain(allProperties,selectedPropObj,key,item,propKeys)" @tap="toChooseItem" :data-key="key" :data-val="item">{{item}}</text>
-              </block>
-            </view>
-          </block>
-        </view>
         <view class="pup-sku-count">
           <view class="num-wrap">
             <view class="minus" @tap="onCountMinus">
@@ -288,13 +278,13 @@ export default {
   onLoad: function (options) {
     this.setData({
       prodId: options.prodid
-    }); // 加载商品信息
+    }); 
+	// 加载商品信息
 
-    this.getProdInfo(); // 加载评论数据
+    this.getProdInfo(); 
+	// 加载评论数据
 
     //this.getProdCommData(); // 加载评论项
-
-    this.getLittleProdComm(); // 查看用户是否关注
 
     //this.getCollection();
   },
@@ -348,27 +338,6 @@ export default {
     };
   },
   methods: {
-    /**
-     * 获取是否关注信息
-     */
-    getCollection() {
-      uni.showLoading();
-      var params = {
-        url: "/p/user/collection/isCollection",
-        method: "GET",
-        data: {
-          prodId: this.prodId
-        },
-        callBack: res => {
-          this.setData({
-            isCollection: res
-          });
-          uni.hideLoading();
-        }
-      };
-      http.request(params);
-    },
-
     /**
      * 添加或者取消收藏商品 
      */
@@ -666,29 +635,29 @@ export default {
       uni.showLoading({
         mask: true
       });
-      var params = {
-        url: "/p/shopCart/changeItem",
-        method: "POST",
-        data: {
-          basketId: 0,
-          count: this.prodNum,
-          prodId: this.prodId,
-          shopId: this.shopId,
-          skuId: this.defaultSku.skuId
-        },
-        callBack: res => {
-          //console.log(res);
-          this.setData({
-            totalCartNum: this.totalCartNum + this.prodNum
-          });
-          uni.hideLoading();
-          uni.showToast({
-            title: "加入购物车成功",
-            icon: "none"
-          });
-        }
-      };
-      http.request(params);
+      // var params = {
+      //   url: "/p/shopCart/changeItem",
+      //   method: "POST",
+      //   data: {
+      //     basketId: 0,
+      //     count: this.prodNum,
+      //     prodId: this.prodId,
+      //     shopId: this.shopId,
+      //     skuId: this.defaultSku.skuId
+      //   },
+      //   callBack: res => {
+      //     //console.log(res);
+      //     this.setData({
+      //       totalCartNum: this.totalCartNum + this.prodNum
+      //     });
+      //     uni.hideLoading();
+      //     uni.showToast({
+      //       title: "加入购物车成功",
+      //       icon: "none"
+      //     });
+      //   }
+      // };
+      // http.request(params);
     },
 
     /**
