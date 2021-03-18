@@ -72,7 +72,7 @@
     },
     "h5" : {
         "title" : "H5商城",
-        "domain" : "",
+        "domain" : "www.hongmaple.xyz",
         "devServer" : {
             "disableHostCheck" : true,
             "proxy" : {
