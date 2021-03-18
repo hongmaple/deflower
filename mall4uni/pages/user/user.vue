@@ -20,7 +20,7 @@
 			<view class="userinfo-con">
 				<view class="userinfo-avatar">
 					<!-- <open-data type="userAvatarUrl"></open-data> -->
-					<image :src="loginResult.pic?loginResult.pic:'../../static/images/icon/head04.png'"></image>
+					<image :src="loginResult.avatarImage?loginResult.pic:'../../static/images/icon/head04.png'"></image>
 				</view>
 				<view class="userinfo-name">
 					<view>{{loginResult.nickName ? loginResult.nickName : "用户昵称"}}</view>

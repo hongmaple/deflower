@@ -231,7 +231,7 @@ export default {
       autoplay: true,
       interval: 3000,
       duration: 1000,
-      prodNum: 1,
+      prodNum: 0,
       totalCartNum: 0,
       pic: "",
       imgs: '',
@@ -282,11 +282,12 @@ export default {
 	// 加载商品信息
 
     this.getProdInfo(); 
+	this.getCartInfo();
 	// 加载评论数据
 
     //this.getProdCommData(); // 加载评论项
 
-    //this.getCollection();
+    this.getCollection();
   },
 
   /**
@@ -356,7 +357,6 @@ export default {
       };
       http.request(params);
     },
-
     // 获取商品信息
     getProdInfo() {
       uni.showLoading();
@@ -391,7 +391,37 @@ export default {
       };
       http.request(params);
     },
-
+    getCartInfo() {
+		uni.showLoading();
+		var params = {
+		  url: `/cart/${this.prodId}`,
+		  method: "GET",
+		  callBack: res => {
+			  if(res) {
+				  this.setData({
+				    prodNum: res.num,
+				  }); 
+			  }
+		    uni.hideLoading();
+		  }
+		};
+		http.request(params);
+	},
+	getCollection() {
+		var params = {
+		  url: `/flower/favorite/${this.prodId}`,
+		  method: "GET",
+		  callBack: res => {
+			  if(res) {
+				  this.setData({
+				    isCollection: res.data.data,
+				  }); 
+			  }
+		    uni.hideLoading();
+		  }
+		};
+		http.request(params);
+	},
     getProdCommData() {
       http.request({
         url: "/prodComm/prodCommData",

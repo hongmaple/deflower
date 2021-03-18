@@ -19,7 +19,7 @@ public interface UserService {
      * @param user 参数
      * @return 结果
      */
-    Boolean login(User user);
+    User login(User user);
 
     /**
      * 修改用户信息，密码，手机号，头像

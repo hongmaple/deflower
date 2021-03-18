@@ -122,24 +122,6 @@
 			 * 登录
 			 */
 			login() {
-				// // #ifdef H5
-				// var ua = navigator.userAgent.toLowerCase();
-				// var data = {
-				// 	appType: ua.search(/MicroMessenger/i) > -1 ? AppType.MP : AppType.H5,
-				// 	principal: ua.search(/MicroMessenger/i) > -1 ? this.principal + ':' + util.getUrlKey('code') : this.principal,
-				// 	credentials: this.credentials,
-				// 	loginType: 0, //账号登录
-				// }
-				// // #endif
-				// // #ifdef APP-PLUS
-				// var data = {
-				// 	appType: uni.getStorageSync('appType'),
-				// 	principal: this.principal,
-				// 	credentials: this.credentials,
-				// 	loginType: 0, //账号登录
-				// }
-				// // #endif				
-
 				if (this.principal.length == 0) {
 					this.setData({
 						errorTips: 1
@@ -156,17 +138,17 @@
 					})
 					// #ifdef H5 || APP-PLUS
 					var params = {
-						url: "/webLogin",
+						url: "/user/login",
 						method: "post",
 						data: {
-							"principal": this.principal,
-							"credentials": this.credentials
+							"phone": this.principal,
+							"password": this.credentials
 						},
 						callBack: res => {
-							console.log("login",res)
 							var loginResult = '';
-							uni.setStorageSync("loginResult",res);
-							uni.setStorageSync('token', 'bearer' + res.access_token);
+							console.log(res.data);
+							uni.setStorageSync('token',res.data);
+							uni.setStorageSync("loginResult",res.data);
 							// return
 							http.loginSuccess(res, () => {
 								uni.showToast({

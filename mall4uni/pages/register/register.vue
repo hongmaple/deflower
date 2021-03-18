@@ -143,11 +143,10 @@
 						data: {
 							// appType: 1,
 							// 应用类型 1小程序 2微信公众号 3 PC 4 H5
-							userMail: this.principal,
+							phone: this.principal,
 							password: this.credentials,
 						},
 						callBack: res => {
-							console.log("1111",res)
 							uni.hideLoading();
 							uni.showToast({
 								title: "注册成功，请登录",

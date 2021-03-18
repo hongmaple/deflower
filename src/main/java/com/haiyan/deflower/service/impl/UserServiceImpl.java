@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean login(User user) {
+    public User login(User user) {
         if (userDao.lambdaQuery()
                 .eq(User::getPhone,user.getPhone())
                 .count()==0) {
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         //session过期时间设置，以秒为单位，即在没有活动120分钟后，session将失效
         session.setMaxInactiveInterval(120 * 60);
         CookieUtils.setCookie(ServletUtils.getRequest(),ServletUtils.getResponse(),"token", JSON.toJSONString(loginUser),1);
-        return true;
+        return loginUser;
     }
 
     @Override

@@ -55,7 +55,7 @@ public class FlowerFavoriteController {
     @ApiOperation("验证是否收藏")
     @GetMapping("/{favoriteId}")
     public AjaxResult verify(@PathVariable Long favoriteId) {
-        AjaxResult ajaxResult = AjaxResult.success("删除收藏成功",flowerFavoriteService.verify(favoriteId));
+        AjaxResult ajaxResult = AjaxResult.success("验证是否收藏成功",flowerFavoriteService.verify(favoriteId));
         return ajaxResult;
     }
 }

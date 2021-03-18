@@ -1,5 +1,6 @@
 package com.haiyan.deflower.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.haiyan.deflower.pojo.AjaxResult;
 import com.haiyan.deflower.pojo.User;
 import com.haiyan.deflower.service.UserService;
@@ -38,7 +39,7 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("登陆")
     public AjaxResult login(@Valid @RequestBody User user) {
-        AjaxResult ajaxResult = AjaxResult.success(userService.login(user));
+        AjaxResult ajaxResult = AjaxResult.success(JSON.toJSON(userService.login(user)));
         return ajaxResult;
     }
 

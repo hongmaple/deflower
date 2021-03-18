@@ -41,4 +41,8 @@ public class Cart {
      * 购买数量
      */
     private Integer num;
+
+    public Cart() {
+        this.num=0;
+    }
 }
