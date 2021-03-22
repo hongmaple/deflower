@@ -75,4 +75,13 @@ public class AddressServiceImpl implements AddressService {
         }
         return addressDao.lambdaQuery().eq(Address::getUid, userUtils.getUser(ServletUtils.getRequest()).getId()).list();
     }
+
+    @Override
+    public Address getDetail(Long id) {
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("Address","false",null,"请先登陆");
+        }
+        return addressDao.lambdaQuery().eq(Address::getId,id).one();
+    }
 }

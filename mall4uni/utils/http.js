@@ -19,8 +19,8 @@ function request(params, isGetTonken) {
 		params.data = params.data + '';
 	}
 	var needToken = false
-	if (params.url.indexOf("/p/") == 0 || params.url.indexOf("/user/registerOrBindUser") == 0) {
-		needToken = true
+	if (params.needToken) {
+		needToken = params.needToken;
 	}
 
   wx.request({
@@ -31,7 +31,7 @@ function request(params, isGetTonken) {
     header: {
       // 'content-type': params.method == "GET" ? 'application/x-www-form-urlencoded' : 'application/json;charset=utf-8',
       // 'Authorization': params.login ? undefined : uni.getStorageSync('token')
-			'Authorization': !needToken ? undefined : uni.getStorageSync('token') || uni.getStorageSync('tempToken'),
+			'token': !needToken ? undefined : uni.getStorageSync('token') || uni.getStorageSync('tempToken'),
     },
     method: params.method == undefined ? "POST" : params.method,
     dataType: 'json',
@@ -44,7 +44,7 @@ function request(params, isGetTonken) {
         }
       } else if (res.statusCode == 500) {
         uni.showToast({
-          title: "服务器出了点小差",
+          title: res.data.message,
           icon: "none"
         });
       } else if (res.statusCode == 401) {
@@ -178,6 +178,7 @@ function request(params, isGetTonken) {
 
 
 var getToken = function () {
+	uni.setStorageSync('token', 'bearer' + result.access_token); //把token存入缓存，请求接口数据时要用
   // uni.login({
   //   success: res => {
   //     // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -255,19 +256,21 @@ function loginSuccess (result, fn) {
 	// if (!result.pic) {
 	// 	updateUserInfo();
 	// }
-	if (!result.enabled) {
-		uni.showModal({
-			showCancel: false,
-			title: "提示",
-			content: "您已被禁用，不能购买，请联系客服",
-			cancelText: "取消",
-			confirmText: "确定"
-		})
-		wx.setStorageSync('token', '');
-	} else {
-		wx.setStorageSync('token', 'bearer' + result.access_token); //把token存入缓存，请求接口数据时要用
-	}
-	if (result.userId) {
+	// if (!result.enabled) {
+	// 	uni.showModal({
+	// 		showCancel: false,
+	// 		title: "提示",
+	// 		content: "您已被禁用，不能购买，请联系客服",
+	// 		cancelText: "取消",
+	// 		confirmText: "确定"
+	// 	})
+	// 	wx.setStorageSync('token', '');
+	// } else {
+		
+	// }
+	console.log(result)
+	wx.setStorageSync('token', JSON.stringify(result.data)); //把token存入缓存，请求接口数据时要用
+	if (result.data.id) {
 		wx.setStorageSync('hadBindUser', true);
 		getCartCount()
 	} else {
@@ -352,9 +355,10 @@ function getCartCount () {
 		return
 	}
 	var params = {
-		url: "/p/shopCart/prodCount",
+		url: "/cart/count",
 		method: "GET",
 		dontTrunLogin: true,
+		needToken: true,
 		data: {},
 		callBack: function (res) {
 			if (res > 0) {

@@ -157,4 +157,14 @@ public class OrderServiceImpl implements OrderService {
         int count = this.orderStatusMapper.updateById(record);
         return count == 1;
     }
+
+    @Override
+    public Integer getOrderCount() {
+        // 获取登录用户
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
+        return orderDao.lambdaQuery().eq(Order::getUserId,user.getId()).count();
+    }
 }

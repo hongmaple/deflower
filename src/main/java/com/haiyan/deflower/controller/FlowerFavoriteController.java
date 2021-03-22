@@ -2,10 +2,13 @@ package com.haiyan.deflower.controller;
 
 import com.haiyan.deflower.pojo.AjaxResult;
 import com.haiyan.deflower.pojo.FlowerFavorite;
+import com.haiyan.deflower.pojo.PageDomain;
 import com.haiyan.deflower.service.FlowerFavoriteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 收藏夹
@@ -57,5 +60,26 @@ public class FlowerFavoriteController {
     public AjaxResult verify(@PathVariable Long favoriteId) {
         AjaxResult ajaxResult = AjaxResult.success("验证是否收藏成功",flowerFavoriteService.verify(favoriteId));
         return ajaxResult;
+    }
+
+    /**
+     * 加载所有收藏
+     * @return 收藏
+     */
+    @ApiOperation("加载所有收藏")
+    @PostMapping("/list")
+    public AjaxResult listCollection(@RequestBody PageDomain pageDomain) {
+        AjaxResult ajaxResult = AjaxResult.success("加载所有收藏",flowerFavoriteService.listCollection(pageDomain));
+        return ajaxResult;
+    }
+
+    /**
+     * 获取收藏数
+     * @return 结果
+     */
+    @ApiOperation("获取收藏数")
+    @GetMapping("/count")
+    public Integer getFlowerFavoriteCunt() {
+       return flowerFavoriteService.getFlowerFavoriteCunt();
     }
 }

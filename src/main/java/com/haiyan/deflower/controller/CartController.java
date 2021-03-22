@@ -83,4 +83,10 @@ public class CartController {
         return cartService.getCartDetail(skuId);
     }
 
+    @ApiOperation("获取商品的购物数量")
+    @GetMapping("/count")
+    public Integer count() {
+        return cartService.count();
+    }
+
 }

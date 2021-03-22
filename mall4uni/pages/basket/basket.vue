@@ -4,72 +4,35 @@
   <view class="prod-list">
     <block v-for="(item, scIndex) in shopCartItemDiscounts" :key="scIndex">
       <view class="prod-block">
-        <view class="discount-tips" v-if="item.chooseDiscountItemDto">
-          <text class="text-block">{{wxs.parseDiscount(item.chooseDiscountItemDto.discountRule)}}</text>
-          <text class="text-list">{{wxs.parseDiscountMsg(item.chooseDiscountItemDto.discountRule,item.chooseDiscountItemDto.needAmount,item.chooseDiscountItemDto.discount)}}</text>
-        </view>
-        <block v-for="(prod, index) in item.shopCartItems" :key="index">
-          <view class="item">
-            <view class="btn">
-              <label>
-                <checkbox @tap="onSelectedItem" :data-scindex="scIndex" :data-index="index" :value="prod.prodId" :checked="prod.checked" color="#105c3e"></checkbox>
-              </label>
-            </view>
-            <view class="prodinfo">
-              <view class="pic">
-                <image :src="prod.pic"></image>
-              </view>
-              <view class="opt">
-                <view class="prod-name">{{prod.prodName}}</view>
-                <text :class="'prod-info-text ' + (prod.skuName?'':'empty-n')">{{prod.skuName}}</text>
-                <view class="price-count">
-                  <view class="price">
-                    <text class="symbol">￥</text>
-                    <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
-                    <text class="small-num">.{{wxs.parsePrice(prod.price)[1]}}</text>
-                  </view>
-                  <view class="m-numSelector">
-                    <view @tap="onCountMinus" class="minus" :data-scindex="scIndex" :data-index="index"></view>
-                    <input type="number" :value="prod.prodCount" disabled></input>
-                    <view @tap="onCountPlus" class="plus" :data-scindex="scIndex" :data-index="index"></view>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
-        </block>
-
+       <view class="item">
+         <view class="btn">
+           <label>
+             <checkbox @tap="onSelectedItem" :data-scindex="scIndex" :data-index="1" :value="item.skuId" :checked="item.checked" color="#105c3e"></checkbox>
+           </label>
+         </view>
+         <view class="prodinfo">
+           <view class="pic">
+             <image :src="item.image"></image>
+           </view>
+           <view class="opt">
+             <view class="prod-name">{{item.title}}</view>
+             <view class="price-count">
+               <view class="price">
+                 <text class="symbol">￥</text>
+                 <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text>
+                 <text class="small-num">.{{wxs.parsePrice(item.price)[1]}}</text>
+               </view>
+               <view class="m-numSelector">
+                 <view @tap="onCountMinus" class="minus" :data-scindex="scIndex" :data-index="index"></view>
+                 <input type="number" :value="item.num" disabled></input>
+                 <view @tap="onCountPlus" class="plus" :data-scindex="scIndex" :data-index="index"></view>
+               </view>
+             </view>
+           </view>
+         </view>
+       </view>
       </view>
     </block>
-
-    <!-- <view class='lose-efficacy'>
-      <view class='discount-tips'>
-        
-        <text class='text-list'>失效商品</text>
-        <text class='empty-prod'>清空失效商品</text>
-      </view>
-      <view class='item'>
-        <view class="staus">
-          <text>失效</text>
-        </view>
-        <view class='prodinfo'>
-          <view class="pic">
-            <image src='../../images/prod/pic11.jpg' />
-          </view>
-          <view class="opt">
-            <view class='prod-name'>宠物用品洗澡香波沐浴除臭留</view>
-            <view class='prod-info-text'>60克</view>
-            <view class='price-count'>
-              <view class='price'>
-                <text class='symbol'>￥</text>
-                <text class='big-num'>{{wxs.parsePrice(10.00)[0]}}</text>
-                <text class='small-num'>.{{wxs.parsePrice(10.00)[1]}}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view> -->
 
   </view>
 
@@ -153,17 +116,18 @@ export default {
     uni.showLoading(); //加载购物车
 
     var params = {
-      url: "/p/shopCart/info",
+      url: "/cart/list",
       method: "POST",
-      data: {},
+      data: {
+		  "pageNum": 1,
+		  "pageSize": 10
+	  },
       callBack: res => {
         if (res.length > 0) {
           // 默认全选
-          var shopCartItemDiscounts = res[0].shopCartItemDiscounts;
+          var shopCartItemDiscounts = res.data;
           shopCartItemDiscounts.forEach(shopCartItemDiscount => {
-            shopCartItemDiscount.shopCartItems.forEach(shopCartItem => {
-              shopCartItem.checked = true;
-            });
+                 shopCartItemDiscount.checked = true;
           });
           this.setData({
             shopCartItemDiscounts: shopCartItemDiscounts,
@@ -305,6 +269,11 @@ export default {
 
       var ths = this;
       uni.showLoading();
+	  ths.setData({
+	    finalMoney: 100,
+	    totalMoney: 1000,
+	    subtractMoney: 699
+	  });
       var params = {
         url: "/p/shopCart/totalPay",
         method: "POST",
@@ -318,7 +287,7 @@ export default {
           uni.hideLoading();
         }
       };
-      http.request(params);
+      //http.request(params);
     },
 
     /**

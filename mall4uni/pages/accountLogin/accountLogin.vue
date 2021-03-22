@@ -146,8 +146,7 @@
 						},
 						callBack: res => {
 							var loginResult = '';
-							console.log(res.data);
-							uni.setStorageSync('token',res.data);
+							uni.setStorageSync('token',res.data.data);
 							uni.setStorageSync("loginResult",res.data);
 							// return
 							http.loginSuccess(res, () => {

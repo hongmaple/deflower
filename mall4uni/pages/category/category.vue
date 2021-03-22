@@ -17,8 +17,8 @@
     <!-- 左侧菜单start -->
     <scroll-view scroll-y="true" class="leftmenu">
       <block v-for="(item, index) in categoryList" :key="index">
-        <view :class="'menu-item ' + (selIndex==index?'active':'') + ' '" :data-index="index" :data-id="item.categoryId" @tap="onMenuTab">
-          {{item.categoryName}}
+        <view :class="'menu-item ' + (selIndex==index?'active':'') + ' '" :data-index="index" :data-id="item.id" @tap="onMenuTab">
+          {{item.name}}
         </view>
       </block>
     </scroll-view>
@@ -29,18 +29,18 @@
     <!-- <block wx:for='{{ productList}}' wx:key=''> -->
       <view class="adver-map">
         <view class="item-a">
-            <image :src="categoryImg" mode="widthFix"></image>
+            <image src="../../static/images/index/banner/21_birthday_banner_m.jpg" mode="widthFix"></image>
         </view>
       </view>
       <view class="cont-item">
         <block v-for="(item, index) in productList" :key="index">
-          <view class="show-item" @tap="toProdPage" :data-prodid="item.prodId">
+          <view class="show-item" @tap="toProdPage" :data-prodid="item.id">
             <view class="more-prod-pic">
-              <image :src="item.pic" class="more-pic" mode="widthFix"></image>
+              <image :src="serverUrl + item.images" class="more-pic" mode="widthFix"></image>
             </view>
             <view class="prod-text-right">
-              <view class="prod-text more">{{item.prodName}}</view>
-              <view class="cate-prod-info">{{item.brief}}</view>
+              <view class="prod-text more">{{item.title}}</view>
+              <view class="cate-prod-info">{{item.title}}</view>
               <view class="prod-price more">
                 <text class="symbol">￥</text> <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text><text class="small-num">.{{wxs.parsePrice(item.price)[1]}}</text> 
               </view>
@@ -72,7 +72,8 @@ export default {
       categoryList: [],
       productList: [],
       categoryImg: '',
-      prodid: ''
+      prodid: '',
+	  serverUrl: config.domain
     };
   },
 
@@ -86,18 +87,16 @@ export default {
     var ths = this; //加载分类列表
 
     var params = {
-      url: "/category/categoryInfo",
+      url: "/category",
       method: "GET",
       data: {
-        parentId: ''
       },
       callBack: function (res) {
         // console.log(res);
         ths.setData({
-          categoryImg: res[0].pic,
-          categoryList: res
+          categoryList: res.data
         });
-        ths.getProdList(res[0].categoryId);
+        ths.getProdList(res.data[0].id);
       }
     };
     http.request(params);
@@ -162,15 +161,17 @@ export default {
     getProdList(categoryId) {
       //加载分类列表
       var params = {
-        url: "/prod/pageProd",
-        method: "GET",
+        url: "/flower/list",
+        method: "POST",
         data: {
-          categoryId: categoryId
+          cid: categoryId,
+		  pageNum: 1,
+		  pageSize: 10
         },
         callBack: res => {
           // console.log(res);
           this.setData({
-            productList: res.records
+            productList: res.data.list
           });
         }
       };

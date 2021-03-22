@@ -44,4 +44,10 @@ public interface CartService {
      */
     Cart getCartDetail(Long skuId);
 
+    /**
+     * 获取购物车数量
+     * @return 数量
+     */
+    Integer count();
+
 }

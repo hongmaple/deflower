@@ -193,20 +193,21 @@ export default {
       var ths = this;
       uni.showLoading();
       var params = {
-        url: "/p/user/collection/prods",
+        url: "/flower/favorite/list",
         method: "GET",
+		needToken: true,
         data: {
-          current: ths.current,
-          size: ths.size
+           pageNum: ths.current,
+           pageSize: ths.size
         },
         callBack: function (res) {
           let list = [];
 
           if (res.current == 1) {
-            list = res.records;
+            list = res.data.list;
           } else {
             list = ths.prodList;
-            list = list.concat(res.records);
+            list = list.concat(res.data.list);
           }
 
           ths.setData({
@@ -253,41 +254,7 @@ export default {
         }
       };
       http.request(param);
-    },
-
-    /**
-     * 获取优惠券商品列表
-     */
-    getProdByCouponId(id) {
-      var ths = this;
-      uni.showLoading();
-      var param = {
-        url: "/coupon/prodListByCouponId",
-        method: "GET",
-        data: {
-          couponId: id,
-          current: this.current,
-          size: this.size
-        },
-        callBack: res => {
-          let list = [];
-
-          if (res.current == 1) {
-            list = res.records;
-          } else {
-            list = ths.prodList.concat(res.records);
-          }
-
-          ths.setData({
-            prodList: list,
-            pages: res.pages
-          });
-          uni.hideLoading();
-        }
-      };
-      http.request(param);
     }
-
   }
 };
 </script>

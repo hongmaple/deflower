@@ -36,4 +36,11 @@ public interface AddressService {
      */
     List<Address> listAddress();
 
+    /**
+     * 获取地址详情
+     * @param id 地址id
+     * @return 详情
+     */
+    Address getDetail(Long id);
+
 }

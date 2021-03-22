@@ -20,10 +20,10 @@
 			<view class="userinfo-con">
 				<view class="userinfo-avatar">
 					<!-- <open-data type="userAvatarUrl"></open-data> -->
-					<image :src="loginResult.avatarImage?loginResult.pic:'../../static/images/icon/head04.png'"></image>
+					<image :src="loginResult.data.avatarImage?serverUrl+loginResult.data.avatarImage:'../../static/images/icon/head04.png'"></image>
 				</view>
 				<view class="userinfo-name">
-					<view>{{loginResult.nickName ? loginResult.nickName : "用户昵称"}}</view>
+					<view>{{loginResult.data.username ? loginResult.data.username : "用户昵称"}}</view>
 					<!-- <open-data type="userNickName"></open-data> -->
 				</view>
 			</view>
@@ -81,12 +81,8 @@
 					<view class="tit">我的收藏</view>
 				</view>
 				<view class="col-item">
-					<view class="num">5</view>
-					<view class="tit">我的消息</view>
-				</view>
-				<view class="col-item">
-					<view class="num">3</view>
-					<view class="tit">我的足迹</view>
+					<view class="num">{{orderAmount}}</view>
+					<view class="tit">我的订单</view>
 				</view>
 			</view>
 
@@ -136,6 +132,7 @@
 	// pages/user/user.js
 	var http = require("../../utils/http.js");
 	var util = require("../../utils/util.js");
+	var config = require("../../utils/config.js");
 
 	export default {
 		data() {
@@ -144,10 +141,24 @@
 				sts: '',
 				collectionCount: 0,
 				isAuthInfo: false,
-				loginResult: '',
+				loginResult: {
+					    data: {
+							code: 0,
+							data: {
+								avatarImage: "",
+								createTime: '',
+								id: '',
+								password: "",
+								phone: "",
+								username: "",
+							},
+							msg: ""
+						},
+					    type: ""
+				},
+				serverUrl: config.domain
 			};
 		},
-
 		components: {},
 		props: {},
 
@@ -167,7 +178,7 @@
 		onShow: function() {
 			//加载订单数字
 			var ths = this; // var status = ths.data.status
-
+            console.log(uni.getStorageSync("loginResult"));
 			ths.setData({
 				loginResult: uni.getStorageSync("loginResult"),
 				// isAuthInfo: Boolean(wx.getStorageSync('loginResult').userId),
@@ -184,8 +195,9 @@
 			if (ths.isAuthInfo) {
 				uni.showLoading();
 				var params = {
-					url: "/p/myOrder/orderCount",
+					url: "/order/count",
 					method: "GET",
+					needToken: true,
 					data: {},
 					callBack: function(res) {
 						uni.hideLoading();
@@ -227,19 +239,19 @@
 			toDistCenter: function() {
 				uni.showToast({
 					icon: "none",
-					title: '该功能未开源'
+					title: '该功能未开发'
 				});
 			},
 			toCouponCenter: function() {
 				uni.showToast({
 					icon: "none",
-					title: '该功能未开源'
+					title: '该功能未开发'
 				});
 			},
 			toMyCouponPage: function() {
 				uni.showToast({
 					icon: "none",
-					title: '该功能未开源'
+					title: '该功能未开发'
 				});
 			},
 			toAddressList: function() {
@@ -267,8 +279,9 @@
 				var ths = this;
 				uni.showLoading();
 				var params = {
-					url: "/p/user/collection/count",
+					url: "/flower/favorite/count",
 					method: "GET",
+					needToken: true,
 					data: {},
 					callBack: function(res) {
 						uni.hideLoading();
@@ -311,31 +324,32 @@
 			 */
 			logout: function() {
 				// 请求退出登陆接口
-				http.request({
-					url: '/p/user/logout',
-					method: 'GET',
-					callBack: res => {
-						util.removeTabBadge()
-
-						uni.removeStorageSync('loginResult');
-						uni.removeStorageSync('token');
-
-						// this.$Router.pushTab('/pages/index/index')
-						uni.showToast({
-							title: "退出成功",
-							icon: "none"
-						})
+				// http.request({
+				// 	url: '/p/user/logout',
+				// 	method: 'GET',
+				// 	callBack: res => {
 						
-						this.setData({
-							orderAmount: ''
-						});
-						setTimeout(() => {
-							uni.switchTab({
-								url: "/pages/index/index"
-							})
-						}, 1000)
-					}
+				// 	}
+				// })
+				
+				util.removeTabBadge()
+				uni.removeStorageSync('loginResult');
+				uni.removeStorageSync('token');
+				
+				// this.$Router.pushTab('/pages/index/index')
+				uni.showToast({
+					title: "退出成功",
+					icon: "none"
 				})
+				
+				this.setData({
+					orderAmount: ''
+				});
+				setTimeout(() => {
+					uni.switchTab({
+						url: "/pages/index/index"
+					})
+				}, 1000)
 			},
 		}
 	};

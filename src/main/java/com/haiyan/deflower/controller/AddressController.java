@@ -65,4 +65,14 @@ public class AddressController {
         return ajaxResult;
     }
 
+    /**
+     * 获取地址详情
+     * @param id 地址id
+     * @return 详情
+     */
+    @ApiOperation("获取地址详情")
+    @GetMapping("/{id}")
+    public Address getDetail(@PathVariable Long id) {
+        return addressService.getDetail(id);
+    }
 }

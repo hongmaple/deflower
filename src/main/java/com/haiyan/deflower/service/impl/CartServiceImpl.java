@@ -79,4 +79,13 @@ public class CartServiceImpl implements CartService {
     public Cart getCartDetail(Long skuId) {
         return cartDao.getById(skuId);
     }
+
+    @Override
+    public Integer count() {
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
+        return cartDao.lambdaQuery().eq(Cart::getUserId,user.getId()).count();
+    }
 }

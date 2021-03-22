@@ -13,19 +13,13 @@
         <view class="address">
           <view class="personal" @tap="selAddrToOrder" :data-item="item">
             <view class="info-tit">
-              <text class="name">{{item.receiver}}</text>
-              <text class="tel">{{item.mobile}}</text>
-              <image src="/static/images/icon/revise.png" @tap.stop="toEditAddress" :data-addrid="item.addrId"></image>
+              <text class="name">{{item.consignee}}</text>
+              <text class="tel">{{item.consigneePhone}}</text>
+              <image src="/static/images/icon/revise.png" @tap.stop="toEditAddress" :data-addrid="item.id"></image>
             </view>
             <view class="addr">
 
-              <text class="addr-get"> {{item.province}}{{item.city}}{{item.area}}{{item.addr}}</text>
-            </view>
-          </view>
-          <view class="select-btn">
-            <view class="box">
-              <label @tap="onDefaultAddr" :data-addrid="item.addrId">
-                <radio :value="item.prodId" :checked="item.commonAddr==1" color="#eb2444"></radio>设为默认地址</label>
+              <text class="addr-get"> {{item.province}}{{item.city}}{{item.district}}{{item.detail}}</text>
             </view>
           </view>
         </view>
@@ -71,13 +65,14 @@ export default {
     var ths = this;
     uni.showLoading();
     var params = {
-      url: "/p/address/list",
+      url: "/address",
       method: "GET",
+	  needToken: true,
       data: {},
       callBack: function (res) {
         //console.log(res)
         ths.setData({
-          addressList: res
+          addressList: res.data
         });
         uni.hideLoading();
       }

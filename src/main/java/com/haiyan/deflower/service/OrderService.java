@@ -43,4 +43,10 @@ public interface OrderService {
      */
     Boolean updateStatus(Long id, Integer status);
 
+    /**
+     * 获取订单数
+     * @return 订单数
+     */
+    Integer getOrderCount();
+
 }

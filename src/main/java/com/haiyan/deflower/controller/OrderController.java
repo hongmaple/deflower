@@ -104,4 +104,9 @@ public class OrderController {
         // 返回204
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @GetMapping("count")
+    @ApiOperation(value = "获取订单数")
+    public Integer getOrderCount() {
+        return orderService.getOrderCount();
+    }
 }

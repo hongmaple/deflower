@@ -345,9 +345,12 @@ export default {
     addOrCannelCollection() {
       uni.showLoading();
       var params = {
-        url: "/p/user/collection/addOrCancel",
+        url: "/flower/favorite",
+		needToken: true,
         method: "POST",
-        data: this.prodId,
+        data: {
+			favoriteId: this.prodid
+		},
         callBack: res => {
           this.setData({
             isCollection: !this.isCollection
@@ -411,6 +414,7 @@ export default {
 		var params = {
 		  url: `/flower/favorite/${this.prodId}`,
 		  method: "GET",
+		  needToken: true,
 		  callBack: res => {
 			  if(res) {
 				  this.setData({

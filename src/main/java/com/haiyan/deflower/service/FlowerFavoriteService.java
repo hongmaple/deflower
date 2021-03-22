@@ -1,6 +1,11 @@
 package com.haiyan.deflower.service;
 
+import com.haiyan.deflower.dto.response.FlowerRowVo;
 import com.haiyan.deflower.pojo.FlowerFavorite;
+import com.haiyan.deflower.pojo.PageDomain;
+import com.haiyan.deflower.pojo.PageList;
+
+import java.util.List;
 
 /**
  * @author haiyan
@@ -27,5 +32,17 @@ public interface FlowerFavoriteService {
      * @return 结果
      */
     Boolean verify(Long favoriteId);
+
+    /**
+     * 加载所有收藏
+     * @return 收藏
+     */
+    PageList<FlowerRowVo> listCollection(PageDomain pageDomain);
+
+    /**
+     * 获取收藏数
+     * @return 收藏数
+     */
+    Integer getFlowerFavoriteCunt();
 
 }
