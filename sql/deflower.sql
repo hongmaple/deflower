@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 23/03/2021 11:18:06
+ Date: 23/03/2021 18:21:21
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `tb_address`  (
   `district` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '区',
   `detail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地址' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地址' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_address
@@ -51,7 +51,7 @@ CREATE TABLE `tb_background_user`  (
   `avatar_image` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png' COMMENT '头像',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_background_user
@@ -76,7 +76,14 @@ CREATE TABLE `tb_cart`  (
   `price` double NULL DEFAULT NULL COMMENT '价格 单位元',
   `num` int(0) NULL DEFAULT NULL COMMENT '数量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_cart
+-- ----------------------------
+INSERT INTO `tb_cart` VALUES (2, 3, 5, '一往情深', '/profile/upload/2021/03/16/5601f330-1006-4bfb-a748-6212b95705b8.jpg', 328, 10);
+INSERT INTO `tb_cart` VALUES (3, 3, 2, '你是唯一 [11枝新品 一心一意的爱] 卡罗拉红玫瑰11枝', '/profile/upload/2021/03/16/2e691a23-9678-4bd4-bdbd-23bfeff3f5b8.jpg', 168, 2);
+INSERT INTO `tb_cart` VALUES (5, 3, 4, '吉祥如意', '/profile/upload/2021/03/16/d4832824-a70e-4704-8261-09b748868102.jpg', 218, 1);
 
 -- ----------------------------
 -- Table structure for tb_category
@@ -86,7 +93,7 @@ CREATE TABLE `tb_category`  (
   `id` bigint(0) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '分类' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_category
@@ -137,22 +144,27 @@ CREATE TABLE `tb_flower_favorite`  (
   `favorite_id` bigint(0) NULL DEFAULT NULL COMMENT '花id',
   `create_time` bigint(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收藏' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收藏' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_flower_favorite
 -- ----------------------------
 INSERT INTO `tb_flower_favorite` VALUES (6, 3, 3, NULL);
+INSERT INTO `tb_flower_favorite` VALUES (7, 3, 5, NULL);
+INSERT INTO `tb_flower_favorite` VALUES (8, 3, 1, NULL);
+INSERT INTO `tb_flower_favorite` VALUES (9, 3, 1, NULL);
+INSERT INTO `tb_flower_favorite` VALUES (10, 3, 1, NULL);
+INSERT INTO `tb_flower_favorite` VALUES (11, 3, 1, NULL);
 
 -- ----------------------------
 -- Table structure for tb_order
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_order`;
 CREATE TABLE `tb_order`  (
-  `orderId` bigint(0) NOT NULL COMMENT '订单id',
+  `order_id` bigint(0) NOT NULL COMMENT '订单id',
   `total_pay` bigint(0) NULL DEFAULT NULL COMMENT '总金额 单位分',
   `actual_pay` bigint(0) NULL DEFAULT NULL COMMENT '实付金额 单位分',
-  `create_time` bigint(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `user_id` bigint(0) NULL DEFAULT NULL COMMENT '用户id',
   `buyer_nick` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '买家昵称',
   `receiver` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '买家全称',
@@ -163,8 +175,14 @@ CREATE TABLE `tb_order`  (
   `receiver_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货地址，如：xx路xx号',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '留言',
   `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`orderId`) USING BTREE
+  PRIMARY KEY (`order_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_order
+-- ----------------------------
+INSERT INTO `tb_order` VALUES (1374292737267879936, 3844, 3844, '2021-03-23 17:31:36', 3, 'maple', 'maple', '17986897562', '湖南省', '长沙市', '岳麓区', '科教新村709', '', NULL);
+INSERT INTO `tb_order` VALUES (1374299887356727296, 398, 398, '2021-03-23 18:00:01', 3, 'maple', 'maple', '17986897562', '湖南省', '长沙市', '岳麓区', '科教新村709', '', NULL);
 
 -- ----------------------------
 -- Table structure for tb_order_detail
@@ -181,7 +199,15 @@ CREATE TABLE `tb_order_detail`  (
   `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品图片',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `key_order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 143 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单详情表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_order_detail
+-- ----------------------------
+INSERT INTO `tb_order_detail` VALUES (146, 1374292737267879936, 5, 10, '一往情深', '', 328, '/profile/upload/2021/03/16/5601f330-1006-4bfb-a748-6212b95705b8.jpg');
+INSERT INTO `tb_order_detail` VALUES (147, 1374292737267879936, 2, 2, '你是唯一 [11枝新品 一心一意的爱] 卡罗拉红玫瑰11枝', '', 168, '/profile/upload/2021/03/16/2e691a23-9678-4bd4-bdbd-23bfeff3f5b8.jpg');
+INSERT INTO `tb_order_detail` VALUES (148, 1374292737267879936, 4, 1, '吉祥如意', '', 218, '/profile/upload/2021/03/16/d4832824-a70e-4704-8261-09b748868102.jpg');
+INSERT INTO `tb_order_detail` VALUES (149, 1374299887356727296, 3, 1, '蝴蝶兰4株', '', 388, '/profile/upload/2021/03/16/aefb92ae-6dd4-4510-baa3-a09144f794be.jpg');
 
 -- ----------------------------
 -- Table structure for tb_order_status
@@ -200,6 +226,12 @@ CREATE TABLE `tb_order_status`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单状态表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of tb_order_status
+-- ----------------------------
+INSERT INTO `tb_order_status` VALUES (1374292737267879936, 1, '2021-03-23 17:31:36', NULL, NULL, NULL, NULL);
+INSERT INTO `tb_order_status` VALUES (1374299887356727296, 1, '2021-03-23 18:00:01', NULL, NULL, NULL, NULL);
+
+-- ----------------------------
 -- Table structure for tb_says_commentary
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_says_commentary`;
@@ -209,7 +241,7 @@ CREATE TABLE `tb_says_commentary`  (
   `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
   `narrate` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '解说',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '解说' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '解说' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_says_commentary
