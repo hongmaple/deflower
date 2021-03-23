@@ -1,5 +1,7 @@
 package com.haiyan.deflower.controller;
 
+import com.haiyan.deflower.dto.request.OrderBody;
+import com.haiyan.deflower.pojo.AjaxResult;
 import com.haiyan.deflower.pojo.Order;
 import com.haiyan.deflower.pojo.PageList;
 import com.haiyan.deflower.service.OrderService;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * @author haiyan
+ */
 @RestController
 @Api("订单服务接口")
 @RequestMapping("/order")
@@ -28,9 +33,10 @@ public class OrderController {
     @PostMapping
     @ApiOperation(value = "创建订单接口，返回订单编号", notes = "创建订单")
     @ApiImplicitParam(name = "order", required = true, value = "订单的json对象,包含订单条目和物流信息")
-    public ResponseEntity<Long> createOrder(@RequestBody @Valid Order order) {
+    public AjaxResult createOrder(@RequestBody @Valid OrderBody order) {
         Long id = this.orderService.createOrder(order);
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        AjaxResult ajaxResult = AjaxResult.success("创建订单成功",id);
+        return ajaxResult;
     }
 
     /**
@@ -39,12 +45,13 @@ public class OrderController {
      * @param id
      * @return
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     @ApiOperation(value = "根据订单编号查询订单，返回订单对象", notes = "查询订单")
     @ApiImplicitParam(name = "id", required = true, value = "订单的编号")
-    public ResponseEntity<Order> queryOrderById(@PathVariable("id") Long id) {
+    public AjaxResult queryOrderById(@PathVariable("id") Long id) {
         Order order = this.orderService.queryById(id);
-        return ResponseEntity.ok(order);
+        AjaxResult ajaxResult = AjaxResult.success("查询订单成功",order);
+        return ajaxResult;
     }
 
     /**
@@ -65,15 +72,13 @@ public class OrderController {
             @ApiResponse(code = 404, message = "没有查询到结果"),
             @ApiResponse(code = 500, message = "查询失败"),
     })
-    public ResponseEntity<PageList<Order>> queryUserOrderList(
+    public AjaxResult queryUserOrderList(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "rows", defaultValue = "5") Integer rows,
             @RequestParam(value = "status", required = false) Integer status) {
         PageList<Order> result = this.orderService.queryUserOrderList(page, rows, status);
-        if (result == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(result);
+        AjaxResult ajaxResult = AjaxResult.success("查询订单成功",result);
+        return ajaxResult;
     }
 
     /**
@@ -95,14 +100,10 @@ public class OrderController {
             @ApiResponse(code = 400, message = "请求参数有误"),
             @ApiResponse(code = 500, message = "查询失败")
     })
-    public ResponseEntity<Boolean> updateStatus(@PathVariable("id") Long id, @PathVariable("status") Integer status) {
+    public AjaxResult updateStatus(@PathVariable("id") Long id, @PathVariable("status") Integer status) {
         Boolean boo = this.orderService.updateStatus(id, status);
-        if (boo == null) {
-            // 返回400
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        // 返回204
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        AjaxResult ajaxResult = AjaxResult.success("查询订单成功",boo);
+        return ajaxResult;
     }
     @GetMapping("count")
     @ApiOperation(value = "获取订单数")

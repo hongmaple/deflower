@@ -37,7 +37,7 @@ function request(params, isGetTonken) {
     dataType: 'json',
     responseType: params.responseType == undefined ? 'text' : params.responseType,
     success: function (res) {
-      if (res.statusCode == 200) {
+      if (res.statusCode == 200 || res.statusCode == 201 || res.statusCode == 204) {
         //如果有定义了params.callBack，则调用 params.callBack(res.data)
         if (params.callBack) {
           params.callBack(res.data);
@@ -156,7 +156,7 @@ function request(params, isGetTonken) {
       // }
     },
     fail: function (err) {
-      uni.hideLoading();
+            uni.hideLoading();
 			if (err.errMsg == 'request:fail abort') {
 				console.log('请求被取消啦~')
 				return
@@ -168,10 +168,6 @@ function request(params, isGetTonken) {
 					icon: "none"
 				});
 			}, 1);
-      // uni.showToast({
-      //   title: "服务器出了点小差",
-      //   icon: "none"
-      // });
     }
   });
 } //通过code获取token,并保存到缓存
@@ -179,42 +175,6 @@ function request(params, isGetTonken) {
 
 var getToken = function () {
 	uni.setStorageSync('token', 'bearer' + result.access_token); //把token存入缓存，请求接口数据时要用
-  // uni.login({
-  //   success: res => {
-  //     // 发送 res.code 到后台换取 openId, sessionKey, unionId
-  //     request({
-  //       login: true,
-  //       url: '/login?grant_type=mini_app',
-  //       data: {
-  //         principal: res.code
-  //       },
-  //       callBack: result => {
-  //         // 没有获取到用户昵称，说明服务器没有保存用户的昵称，也就是用户授权的信息并没有传到服务器
-  //         if (!result.nickName) {
-  //           updateUserInfo();
-  //         }
-
-  //         if (result.userStutas == 0) {
-  //           uni.showModal({
-  //             showCancel: false,
-  //             title: '提示',
-  //             content: '您已被禁用，不能购买，请联系客服'
-  //           });
-  //           uni.setStorageSync('token', '');
-  //         } else {
-  //           uni.setStorageSync('token', 'bearer' + result.access_token); //把token存入缓存，请求接口数据时要用
-  //         }
-
-  //         var globalData = getApp().globalData;
-  //         globalData.isLanding = false;
-
-  //         while (globalData.requestQueue.length) {
-  //           request(globalData.requestQueue.pop());
-  //         }
-  //       }
-  //     }, true);
-  //   }
-  // });
 }; // 更新用户头像昵称
 
 /**
@@ -368,6 +328,7 @@ function getCartCount () {
 				});
 				var app = getApp().globalData;
 				getApp().globalData.totalCartCount = res;
+				return res;
 			} else {
 				wx.removeTabBarBadge({
 					index: 2

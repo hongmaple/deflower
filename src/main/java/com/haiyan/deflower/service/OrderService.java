@@ -1,5 +1,7 @@
 package com.haiyan.deflower.service;
 
+import com.haiyan.deflower.dto.request.OrderBody;
+import com.haiyan.deflower.dto.response.OrderDetailsVo;
 import com.haiyan.deflower.pojo.Order;
 import com.haiyan.deflower.pojo.PageList;
 
@@ -14,7 +16,7 @@ public interface OrderService {
      * @param order
      * @return
      */
-    Long createOrder(Order order);
+    Long createOrder(OrderBody order);
 
     /**
      * 根据订单id查询订单
@@ -22,7 +24,7 @@ public interface OrderService {
      * @param id
      * @return
      */
-    Order queryById(Long id);
+    OrderDetailsVo queryById(Long id);
 
     /**
      * 分页查询登录用户订单

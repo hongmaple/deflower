@@ -19,10 +19,10 @@
           <image src="/static/images/icon/addr.png"></image>
         </view>
         <view class="user-info">
-          <text class="item">{{userAddr.receiver}}</text>
-          <text class="item">{{userAddr.mobile}}</text>
+          <text class="item">{{userAddr.consignee}}</text>
+          <text class="item">{{userAddr.consigneePhone}}</text>
         </view>
-        <view class="addr">{{userAddr.province}}{{userAddr.city}}{{userAddr.area}}{{userAddr.addr}}</view>
+        <view class="addr">{{userAddr.province}}{{userAddr.city}}{{userAddr.district}}{{userAddr.detail}}</view>
         <view class="arrow"></view>
       </view>
     </view>
@@ -30,15 +30,14 @@
     <!-- 商品详情 -->
     <view class="prod-item">
       <block v-for="(item, index) in orderItems" :key="index">
-        <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.primaryOrderNo">
+        <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.prodCount">
           <view class="prod-pic">
-            <image :src="item.pic"></image>
+            <image :src="serverUrl+item.pic"></image>
           </view>
           <view class="prod-info">
             <view class="prodname">
-              {{item.prodName}}
+              {{item.title}}
             </view>
-            <view class="prod-info-cont">{{item.skuName}}</view>
             <view class="price-nums">
               <text class="prodprice"><text class="symbol">￥</text>
               <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text>
@@ -79,44 +78,21 @@
     <!-- 订单详情 -->
     <view class="order-msg">
       <view class="msg-item">
-        <view class="item coupon" @tap="showCouponPopup">
-          <text class="item-tit">优惠券：</text>
-          <text class="item-txt" v-if="!coupons.canUseCoupons">暂无可用</text>
-          <text class="coupon-btn">{{coupons.totalLength? coupons.totalLength: 0}}张</text>
-          <text class="arrow"></text>
-        </view>
         <view class="item">
           <text>买家留言：</text>
-          <input placeholder="给卖家留言"></input>
+          <input placeholder="给卖家留言" @input="onDistrictInput"></input>
         </view>
       </view>
-
     </view>
 
     <view class="order-msg">
       <view class="msg-item">
-        <view class="item">
-          <view class="item-tit">订单总额：</view>
-          <view class="item-txt price">
-            <text class="symbol">￥</text>
-            <text class="big-num">{{wxs.parsePrice(total)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(total)[1]}}</text>
-          </view>
-        </view>
         <view class="item">
           <view class="item-tit">运费：</view>
           <view class="item-txt price">
             <text class="symbol">￥</text>
             <text class="big-num">{{wxs.parsePrice(transfee)[0]}}</text>
             <text class="small-num">.{{wxs.parsePrice(transfee)[1]}}</text>
-          </view>
-        </view>
-        <view class="item">
-          <view class="item-tit">优惠金额：</view>
-          <view class="item-txt price">
-            <text class="symbol">-￥</text>
-            <text class="big-num">{{wxs.parsePrice(shopReduce)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(shopReduce)[1]}}</text>
           </view>
         </view>
         <view class="item payment">
@@ -149,32 +125,6 @@
     </view>
   </view>
 </view>
-
-<!-- 选择优惠券弹窗 -->
-<view class="popup-hide" v-if="popupShow">
-  <view class="popup-box">
-    <view class="popup-tit">
-      <text>优惠券</text>
-      <text class="close" @tap="closePopup"></text>
-    </view>
-    <view class="coupon-tabs">
-      <view :class="'coupon-tab ' + (couponSts==1?'on':'')" @tap="changeCouponSts" data-sts="1">可用优惠券({{coupons.canUseCoupons.length?coupons.canUseCoupons.length:0}})</view>
-      <view :class="'coupon-tab ' + (couponSts==2?'on':'')" @tap="changeCouponSts" data-sts="2">不可用优惠券({{coupons.unCanUseCoupons.length?coupons.unCanUseCoupons.length:0}})</view>
-    </view>
-    <view class="popup-cnt">
-      <block v-for="(item, index) in coupons.canUseCoupons" :key="index" v-if="couponSts == 1">
-        <coupon :item="item" order="true" @checkCoupon="checkCoupon" canUse="true"></coupon>
-      </block>
-      <block v-for="(item, index) in coupons.unCanUseCoupons" :key="index" v-if="couponSts == 2">
-        <coupon :item="item" order="true" canUse="false"></coupon>
-      </block>
-      <view class="botm-empty"></view>
-    </view>
-    <view class="coupon-ok" v-if="couponSts==1">
-      <text @tap="choosedCoupon">确定</text>
-    </view>
-  </view>
-</view>
 </view>
 </template>
 
@@ -183,37 +133,35 @@
 <script>
 // pages/submit-order/submit-order.js
 var http = require("../../utils/http.js");
-import coupon from "../../components/coupon/coupon";
+var config = require("../../utils/config.js");
 
 export default {
   data() {
     return {
-      popupShow: false,
-      couponSts: 1,
-      couponList: [],
       // 订单入口 0购物车 1立即购买
       orderEntry: "0",
       userAddr: null,
-      orderItems: [],
-      coupon: {
-        totalLength: 0,
-        canUseCoupons: [],
-        noCanUseCoupons: []
-      },
+      orderItems: [
+		  {
+			  skuId: 0,
+			  title: '',
+			  price: 0,
+			  prodCount: 0,
+			  pic: ''
+		  }
+	  ],
+	  total: 0,
       actualTotal: 0,
-      total: 0,
+      price: 0,
       totalCount: 0,
-      transfee: 0,
+      transfee: 10,
       reduceAmount: 0,
       remark: "",
-      couponIds: [],
-      coupons: {},
-      shopReduce: ""
+	  serverUrl: config.domain
     };
   },
 
   components: {
-    coupon
   },
   props: {},
 
@@ -235,17 +183,6 @@ export default {
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    var pages = getCurrentPages();
-    var currPage = pages[pages.length - 1];
-
-    // if (currPage.data.selAddress == "yes") {
-    //   this.setData({
-    //     //将携带的参数赋值
-    //     userAddr: currPage.data.item
-    //   });
-    // } //获取订单数据
-
-
     this.loadOrderData();
   },
 
@@ -277,90 +214,49 @@ export default {
     //加载订单数据
     loadOrderData: function () {
       var addrId = 0;
-
       if (this.userAddr != null) {
         addrId = this.userAddr.addrId;
       }
-
       uni.showLoading({
         mask: true
       });
-      var params = {
-        url: "/p/order/confirm",
-        method: "POST",
-        data: {
-          addrId: addrId,
-          orderItem: this.orderEntry === "1" ? JSON.parse(uni.getStorageSync("orderItem")) : undefined,
-          basketIds: this.orderEntry === "0" ? JSON.parse(uni.getStorageSync("basketIds")) : undefined,
-          couponIds: this.couponIds,
-          userChangeCoupon: 1
-        },
-        callBack: res => {
-          uni.hideLoading();
-          let orderItems = [];
-          res.shopCartOrders[0].shopCartItemDiscounts.forEach(itemDiscount => {
-            orderItems = orderItems.concat(itemDiscount.shopCartItems);
-          });
-
-          if (res.shopCartOrders[0].coupons) {
-            let canUseCoupons = [];
-            let unCanUseCoupons = [];
-            res.shopCartOrders[0].coupons.forEach(coupon => {
-              if (coupon.canUse) {
-                canUseCoupons.push(coupon);
-              } else {
-                unCanUseCoupons.push(coupon);
-              }
-            });
-            this.setData({
-              coupons: {
-                totalLength: res.shopCartOrders[0].coupons.length,
-                canUseCoupons: canUseCoupons,
-                unCanUseCoupons: unCanUseCoupons
-              }
-            });
-          }
-
-          this.setData({
-            orderItems: orderItems,
-            actualTotal: res.actualTotal,
-            total: res.total,
-            totalCount: res.totalCount,
-            userAddr: res.userAddr,
-            transfee: res.shopCartOrders[0].transfee,
-            shopReduce: res.shopCartOrders[0].shopReduce
-          });
-        },
-        errCallBack: res => {
-          uni.hideLoading();
-          this.chooseCouponErrHandle(res);
-        }
-      };
-      http.request(params);
+	  if(this.orderEntry === "1") {
+		  var item =  JSON.parse(uni.getStorageSync("orderItem"));
+		  var orderItems = [];
+		  orderItems[0] = item;
+		  this.setData({
+		    "orderItems": orderItems
+		  });
+	  }else {
+		  var basketList = uni.getStorageSync("basketIds");
+		  var orderItems = [];
+		  basketList.forEach(item => {
+			  var orderItem = {
+				  skuId: item.skuId,
+				  title: item.title,
+				  price: item.price,
+				  prodCount: item.num,
+				  pic: item.image
+			  }
+			  orderItems.push(orderItem);
+		  });
+		   this.setData({
+		    	"orderItems": orderItems
+		   });
+	  }
+	  var total = 0;
+	  var totalCount = 0;
+	  this.orderItems.forEach(item=> {
+		  total += item.prodCount*item.price;
+		  totalCount += item.prodCount;
+		  this.setData({
+		    "totalCount": totalCount,
+			"total": total,
+			"actualTotal": total+this.transfee
+		  });
+	  });
+	  uni.hideLoading();
     },
-
-    /**
-     * 优惠券选择出错处理方法
-     */
-    chooseCouponErrHandle(res) {
-      // 优惠券不能共用处理方法
-      if (res.statusCode == 601) {
-        uni.showToast({
-          title: res.data,
-          icon: "none",
-          duration: 3000,
-          success: res => {
-            this.setData({
-              couponIds: []
-            });
-          }
-        });
-        setTimeout(() => {
-          this.loadOrderData();
-        }, 2500);
-      }
-    },
-
     /**
      * 提交订单
      */
@@ -379,37 +275,55 @@ export default {
       uni.showLoading({
         mask: true
       });
+	  var orderDetails = [];
+	  this.orderItems.forEach(item=> {
+			   var orderDetail = {
+				   id: 0,
+				   orderId: 0,
+				   skuId: item.skuId,
+				   num: item.prodCount,
+				   title: item.title,
+				   price: item.price,
+				   image: item.pic
+			   }
+			   orderDetails.push(orderDetail);
+	  });
+	  var data = {
+		  totalPay: this.actualTotal,
+		  actualPay: this.actualTotal,
+		  receiver: this.userAddr.consignee,
+		  receiverMobile: this.userAddr.consigneePhone,
+		  receiverState: this.userAddr.province,
+		  receiverCity: this.userAddr.city,
+		  receiverDistrict: this.userAddr.district,
+		  receiverAddress: this.userAddr.detail,
+		  remark: this.remark,
+		  orderDetails: orderDetails
+	  }
+	  var ths = this;
       var params = {
-        url: "/p/order/submit",
+        url: "/order",
         method: "POST",
-        data: {
-          orderShopParam: [{
-            remarks: this.remark,
-            shopId: 1
-          }]
-        },
-        callBack: res => {
-					console.log("res",res)
-          uni.hideLoading();
-          // this.calWeixinPay(res.orderNumbers);
-					this.normalPay(res.orderNumbers)
-					
-        }
+		needToken: true,
+        data: data,
+		callBack: function(res) {
+			uni.hideLoading();
+			console.log(res.data);
+			ths.simulationPay(res.data);
+		}
       };
       http.request(params);
-    },
-		
-		//模拟支付，直接提交成功
-		normalPay: function(orderNumbers){
+    },	
+	//模拟支付，直接提交成功
+	simulationPay: function(orderNumbers){
+		    console.log(orderNumbers);
 			uni.showLoading({
 			  mask: true
 			});
 			var params = {
-			  url: "/p/order/normalPay",
-			  method: "POST",
-			  data: {
-			    orderNumbers: orderNumbers
-			  },
+			  url: "/order/"+orderNumbers+"/2",
+			  method: "PUT",
+			  needToken: true,
 			  callBack: res => {
 					console.log("res",res)
 					uni.hideLoading();
@@ -432,62 +346,7 @@ export default {
 			  }
 			};
 			http.request(params);
-		},
-		
-    /**
-     * 唤起微信支付
-     */
-    calWeixinPay: function (orderNumbers) {
-      uni.showLoading({
-        mask: true
-      });
-      var params = {
-        url: "/p/order/pay",
-        method: "POST",
-        data: {
-          payType: 1,
-          orderNumbers: orderNumbers
-        },
-        callBack: function (res) {
-          uni.hideLoading();
-          uni.requestPayment({
-            timeStamp: res.timeStamp,
-            nonceStr: res.nonceStr,
-            package: res.packageValue,
-            signType: res.signType,
-            paySign: res.paySign,
-            success: e => {
-              // console.log("支付成功");
-              uni.navigateTo({
-                url: '/pages/pay-result/pay-result?sts=1&orderNumbers=' + orderNumbers + "&orderType=" + this.orderType
-              });
-            },
-            fail: err => {
-              uni.navigateTo({
-                url: '/pages/pay-result/pay-result?sts=0&orderNumbers=' + orderNumbers + "&orderType=" + this.orderType
-              });
-            }
-          });
-        }
-      };
-      http.request(params);
-    },
-    changeCouponSts: function (e) {
-      this.setData({
-        couponSts: e.currentTarget.dataset.sts
-      });
-    },
-    showCouponPopup: function () {
-      this.setData({
-        popupShow: true
-      });
-    },
-    closePopup: function () {
-      this.setData({
-        popupShow: false
-      });
-    },
-
+	},
     /**
      * 去地址页面
      */
@@ -496,30 +355,11 @@ export default {
         url: '/pages/delivery-address/delivery-address?order=0'
       });
     },
-
-    /**
-     * 确定选择好的优惠券
-     */
-    choosedCoupon: function () {
-      this.loadOrderData();
-      this.setData({
-        popupShow: false
-      });
-    },
-
-    /**
-     * 优惠券子组件发过来
-     */
-    checkCoupon: function (e) {
-      var ths = this;
-      let index = ths.couponIds.indexOf(e.detail.couponId);
-
-      if (index === -1) {
-        ths.couponIds.push(e.detail.couponId);
-      } else {
-        ths.couponIds.splice(index, 1);
-      }
-    }
+	onDistrictInput: function(e) {
+		this.setData({
+		  remark: e.detail.value
+		});
+	},
   }
 };
 </script>

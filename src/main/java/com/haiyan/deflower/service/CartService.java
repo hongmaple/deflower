@@ -39,10 +39,17 @@ public interface CartService {
 
     /**
      * 获取商品的购物详情
+     * @param id
+     * @return
+     */
+    Cart getCartDetail(Long id);
+
+    /**
+     * 获取商品的购物详情
      * @param skuId
      * @return
      */
-    Cart getCartDetail(Long skuId);
+    Cart getCartDetailBySkuId(Long skuId);
 
     /**
      * 获取购物车数量

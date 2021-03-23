@@ -3,6 +3,8 @@ package com.haiyan.deflower.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.haiyan.deflower.dao.OrderDao;
 import com.haiyan.deflower.dao.OrderDetailDao;
+import com.haiyan.deflower.dto.request.OrderBody;
+import com.haiyan.deflower.dto.response.OrderDetailsVo;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.OrderDetailMapper;
 import com.haiyan.deflower.mapper.OrderMapper;
@@ -13,6 +15,7 @@ import com.haiyan.deflower.utils.IdWorker;
 import com.haiyan.deflower.utils.ServletUtils;
 import com.haiyan.deflower.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,21 +36,23 @@ public class OrderServiceImpl implements OrderService {
     private final OrderDetailMapper orderDetailMapper;
     private final OrderDetailDao orderDetailDao;
     private final IdWorker idWorker;
+    private final ModelMapper modelMapper;
 
     @Autowired
     private UserUtils userUtils;
 
-    public OrderServiceImpl(OrderMapper orderMapper, OrderDao orderDao, OrderStatusMapper orderStatusMapper, OrderDetailMapper orderDetailMapper, OrderDetailDao orderDetailDao, IdWorker idWorker) {
+    public OrderServiceImpl(OrderMapper orderMapper, OrderDao orderDao, OrderStatusMapper orderStatusMapper, OrderDetailMapper orderDetailMapper, OrderDetailDao orderDetailDao, IdWorker idWorker, ModelMapper modelMapper) {
         this.orderMapper = orderMapper;
         this.orderDao = orderDao;
         this.orderStatusMapper = orderStatusMapper;
         this.orderDetailMapper = orderDetailMapper;
         this.orderDetailDao = orderDetailDao;
         this.idWorker = idWorker;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Long createOrder(Order order) {
+    public Long createOrder(OrderBody orderBody) {
         // 获取登录用户
         User user = userUtils.getUser(ServletUtils.getRequest());
         if (Objects.isNull(user)) {
@@ -56,9 +61,10 @@ public class OrderServiceImpl implements OrderService {
         // 生成orderId
         long orderId = idWorker.nextId();
         // 初始化数据
+        Order order = modelMapper.map(orderBody,Order.class);
         order.setBuyerNick(user.getUsername());
         order.setCreateTime(new Date());
-        order.setOrderId(orderId);
+        order.setOrderId(String.valueOf(orderId));
         order.setUserId(user.getId());
         // 保存数据
         this.orderMapper.insert(order);
@@ -73,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
         this.orderStatusMapper.insert(orderStatus);
 
         // 订单详情中添加orderId
-        order.getOrderDetails().forEach(od -> {
+        orderBody.getOrderDetails().forEach(od -> {
             od.setOrderId(orderId);
             this.orderDetailMapper.insert(od);
         });
@@ -85,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order queryById(Long id) {
+    public OrderDetailsVo queryById(Long id) {
         // 获取登录用户
         User user = userUtils.getUser(ServletUtils.getRequest());
         if (Objects.isNull(user)) {
@@ -93,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
         }
         // 查询订单
         Order order = this.orderMapper.selectById(id);
-
+        OrderDetailsVo orderDetailsVo = modelMapper.map(order,OrderDetailsVo.class);
         // 查询订单详情
         OrderDetail detail = new OrderDetail();
         detail.setOrderId(id);
@@ -101,12 +107,12 @@ public class OrderServiceImpl implements OrderService {
                 .lambdaQuery()
                 .eq(OrderDetail::getOrderId,id)
                 .list();
-        order.setOrderDetails(details);
+        orderDetailsVo.setOrderDetails(details);
 
         // 查询订单状态
         OrderStatus status = this.orderStatusMapper.selectById(order.getOrderId());
-        order.setStatus(status.getStatus());
-        return order;
+        orderDetailsVo.setStatus(status.getStatus());
+        return orderDetailsVo;
     }
 
     @Override
@@ -120,6 +126,10 @@ public class OrderServiceImpl implements OrderService {
                 .eq(Order::getUserId, userUtils.getUser(ServletUtils.getRequest()).getId())
                 .orderByDesc(Order::getCreateTime)
                 .page(new Page<>(page, rows));
+        orderPage.getRecords().forEach(order -> {
+            // 查询订单状态
+            order.setStatus(status);
+        });
         return PageList.of(orderPage.getRecords(), orderPage);
     }
 

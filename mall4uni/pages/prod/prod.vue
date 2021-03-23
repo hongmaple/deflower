@@ -27,17 +27,6 @@
       <text class="sales"></text>
     </view>
   </view>
-  <!-- </block> -->
-  <!-- end 商品信息 -->
-  <!-- 领券 -->
-  <!-- <view class="coupon" bindtap='showPopup' wx:if="{{couponList.length}}">
-    <view class="coupon-tit">领券</view>
-    <view class="coupon-con">
-      <text class="item" wx:for="{{couponList}}" wx:key="item.couponId">满{{item.cashCondition}}<block wx:if="{{item.couponType == 1}}">减{{item.reduceAmount}}</block><block wx:if="{{item.couponType == 2}}">打{{item.couponDiscount}}折</block></text>
-    </view>
-    <view class="num">共{{couponList.length}}张</view>
-    <view class="more">...</view>
-  </view> -->
   <!-- 已选规格 -->
   <view class="sku" @tap="showSku">
     <view class="sku-tit">已选</view>
@@ -112,27 +101,12 @@
     </view>
   </view>
 
-  <!-- end 底部按钮 -->
 
-  <!-- 优惠券 -->
-  <!-- <view class="popup-hide" wx:if="{{popupShow}}">
-    <view class="popup-box">
-      <view class="popup-tit">
-        <text>优惠券</text>
-        <text class="close" bindtap='closePopup'></text>
-      </view>
-      <view class='popup-cnt'>
-        <block wx:for="{{couponList}}" wx:key='couponId'>
-          <coupon showTimeType="{{1}}" canUse="{{true}}" item="{{item}}"></coupon>
-        </block>
-      </view>
-    </view>
-  </view> -->
   <!-- 规格弹窗 -->
   <view class="pup-sku" v-if="skuShow">
     <view class="pup-sku-main">
       <view class="pup-sku-header">
-        <image class="pup-sku-img" :src="images"></image>
+        <image class="pup-sku-img" :src="serverUrl+pic"></image>
         <view class="pup-sku-price">
           ￥
           <text class="pup-sku-price-int">{{wxs.parsePrice(price)[0]}}</text> .{{wxs.parsePrice(price)[1]}}
@@ -160,7 +134,7 @@
         </view>
       </view>
       <view class="pup-sku-footer">
-        <view class="btn cart" @tap="addToCart">加入购物车</view>
+        <view class="btn cart" @tap="addCartRequest">加入购物车</view>
         <view class="btn buy" @tap="buyNow">立即购买</view>
       </view>
     </view>
@@ -217,13 +191,11 @@ const app = getApp();
 var http = require("../../utils/http.js");
 var config = require("../../utils/config.js");
 var util = require("../../utils/util.js");
-import coupon from "../../components/coupon/coupon";
 // import vanRate from "../../vant/rate/index";
 
 export default {
   data() {
     return {
-      shopId: 1,
       // picDomain: config.picDomain,
       indicatorDots: true,
       indicatorColor: '#f2f2f2',
@@ -246,7 +218,6 @@ export default {
       loadCouponIds: false,
       skuShow: false,
       commentShow: false,
-      couponList: [],
       skuList: [],
       skuGroup: {},
       defaultSku: undefined,
@@ -268,7 +239,7 @@ export default {
   },
 
   components: {
-    coupon
+    
   },
   props: {},
 
@@ -344,13 +315,16 @@ export default {
      */
     addOrCannelCollection() {
       uni.showLoading();
+	  var favoriteId =this.prodId;
       var params = {
         url: "/flower/favorite",
 		needToken: true,
         method: "POST",
         data: {
-			favoriteId: this.prodid
-		},
+         id: 0,
+         createTime: null,
+         favoriteId: favoriteId
+        },
         callBack: res => {
           this.setData({
             isCollection: !this.isCollection
@@ -376,19 +350,15 @@ export default {
           //var content = util.formatHtml(res.content);
           this.setData({
             imgs: imgs,
-            content: null,
+            content: "花语："+res.flowerLanguage,
             price: res.price,
             prodName: res.title,
             prodId: res.id,
-            brief: null,
+            brief: "适宜人群："+res.appropriateCrowd,
             // skuId: res.skuId
             skuList: null,
             pic: res.images
-          }); // 获取优惠券
-          //this.getCouponList();
-          // 组装sku
-
-          //this.groupSkuProp();
+          }); 
           uni.hideLoading();
         }
       };
@@ -397,7 +367,7 @@ export default {
     getCartInfo() {
 		uni.showLoading();
 		var params = {
-		  url: `/cart/${this.prodId}`,
+		  url: `/cart/bySkuId/${this.prodId}`,
 		  method: "GET",
 		  callBack: res => {
 			  if(res) {
@@ -418,7 +388,7 @@ export default {
 		  callBack: res => {
 			  if(res) {
 				  this.setData({
-				    isCollection: res.data.data,
+				    isCollection: res.data,
 				  }); 
 			  }
 		    uni.hideLoading();
@@ -504,148 +474,6 @@ export default {
         }
       });
     },
-
-    getCouponList() {
-      http.request({
-        url: "/coupon/listByProdId",
-        method: "GET",
-        data: {
-          prodId: this.prodId,
-          shopId: this.shopId
-        },
-        callBack: res => {
-          this.setData({
-            couponList: res
-          });
-        }
-      });
-    },
-
-    //根据sku的属性 分组
-    groupSkuProp: function () {
-      var skuList = this.skuList;
-
-      if (skuList.length == 1 && skuList[0].properties == "") {
-        this.setData({
-          defaultSku: skuList[0]
-        });
-        return;
-      }
-
-      var skuGroup = {};
-      var allProperties = [];
-      var propKeys = [];
-
-      for (var i = 0; i < skuList.length; i++) {
-        var defaultSku = this.defaultSku;
-        var isDefault = false;
-
-        if (!defaultSku && skuList[i].price == this.price) {
-          //找到和商品价格一样的那个SKU，作为默认选中的SKU
-          defaultSku = skuList[i];
-          isDefault = true;
-          this.setData({
-            defaultSku: defaultSku
-          });
-        }
-
-        var properties = skuList[i].properties; //版本:公开版;颜色:金色;内存:64GB
-
-        allProperties.push(properties);
-        var propList = properties.split(";"); // ["版本:公开版","颜色:金色","内存:64GB"]
-
-        var selectedPropObj = this.selectedPropObj;
-
-        for (var j = 0; j < propList.length; j++) {
-          var propval = propList[j].split(":"); //["版本","公开版"]
-
-          var props = skuGroup[propval[0]]; //先取出 版本对应的值数组
-          //如果当前是默认选中的sku，把对应的属性值 组装到selectedProp
-
-          if (isDefault) {
-            propKeys.push(propval[0]);
-            selectedPropObj[propval[0]] = propval[1];
-          }
-
-          if (props == undefined) {
-            props = []; //假设还没有版本，新建个新的空数组
-
-            props.push(propval[1]); //把 "公开版" 放进空数组
-          } else {
-            if (!this.array_contain(props, propval[1])) {
-              //如果数组里面没有"公开版"
-              props.push(propval[1]); //把 "公开版" 放进数组
-            }
-          }
-
-          skuGroup[propval[0]] = props; //最后把数据 放回版本对应的值
-        }
-
-        this.setData({
-          selectedPropObj: selectedPropObj,
-          propKeys: propKeys
-        });
-      }
-
-      this.parseSelectedObjToVals();
-      this.setData({
-        skuGroup: skuGroup,
-        allProperties: allProperties
-      });
-    },
-    //将已选的 {key:val,key2:val2}转换成 [val,val2]
-    parseSelectedObjToVals: function () {
-      var selectedPropObj = this.selectedPropObj;
-      var selectedProperties = "";
-      var selectedProp = [];
-
-      for (var key in selectedPropObj) {
-        selectedProp.push(selectedPropObj[key]);
-        selectedProperties += key + ":" + selectedPropObj[key] + ";";
-      }
-
-      selectedProperties = selectedProperties.substring(0, selectedProperties.length - 1); // console.log(selectedProperties);
-
-      this.setData({
-        selectedProp: selectedProp
-      });
-
-      for (var i = 0; i < this.skuList.length; i++) {
-        if (this.skuList[i].properties == selectedProperties) {
-          this.setData({
-            defaultSku: this.skuList[i]
-          });
-          break;
-        }
-      }
-    },
-    //点击选择规格
-    toChooseItem: function (e) {
-      var ok = e.currentTarget.dataset.ok;
-
-      if (!ok) {
-        return;
-      }
-
-      var val = e.currentTarget.dataset.val;
-      var key = e.currentTarget.dataset.key;
-      var selectedPropObj = this.selectedPropObj;
-      selectedPropObj[key] = val;
-      this.setData({
-        selectedPropObj: selectedPropObj
-      });
-      this.parseSelectedObjToVals();
-    },
-    //判断数组是否包含某对象
-    array_contain: function (array, obj) {
-      for (var i = 0; i < array.length; i++) {
-        if (array[i] == obj) //如果要求数据类型也一致，这里可使用恒等号===
-          return true;
-      }
-
-      return false;
-    },
-
     /**
      * 跳转到首页
      */
@@ -667,46 +495,56 @@ export default {
     /**
      * 加入购物车
      */
-    addToCart: function (event) {
-      // var ths = this;
-      uni.showLoading({
-        mask: true
-      });
-      // var params = {
-      //   url: "/p/shopCart/changeItem",
-      //   method: "POST",
-      //   data: {
-      //     basketId: 0,
-      //     count: this.prodNum,
-      //     prodId: this.prodId,
-      //     shopId: this.shopId,
-      //     skuId: this.defaultSku.skuId
-      //   },
-      //   callBack: res => {
-      //     //console.log(res);
-      //     this.setData({
-      //       totalCartNum: this.totalCartNum + this.prodNum
-      //     });
-      //     uni.hideLoading();
-      //     uni.showToast({
-      //       title: "加入购物车成功",
-      //       icon: "none"
-      //     });
-      //   }
-      // };
-      // http.request(params);
+    addToCart: function () {
+		this.setData({
+		  skuShow: true
+		});
     },
+	addCartRequest: function() {
+		uni.showLoading({
+		  mask: true
+		});
+		var params = {
+		  url: "/cart",
+		  method: "POST",
+		  needToken: true,
+		  data: {
+		    skuId: this.prodId,
+		    title: this.prodName,
+		    image: this.pic,
+		    price: this.price,
+			num: this.prodNum
+		  },
+		  callBack: res => {
+			var totalCartNum = http.getCartCount();
+		    this.setData({
+		      totalCartNum: totalCartNum
+		    });
+		    uni.hideLoading();
+		    uni.showToast({
+		      title: "加入购物车成功",
+		      icon: "none"
+		    });
+			this.setData({
+			  skuShow: false
+			});
+		  }
+		};
+		http.request(params);
+	},
 
     /**
      * 立即购买
      */
     buyNow: function () {
-      uni.setStorageSync("orderItem", JSON.stringify({
-        prodId: this.prodId,
-        skuId: this.defaultSku.skuId,
-        prodCount: this.prodNum,
-        shopId: this.shopId
-      }));
+		var item = {
+			skuId: this.prodId,
+			title: this.prodName,
+			price: this.price,
+			prodCount: 1,
+			pic: this.pic
+      };
+      uni.setStorageSync("orderItem", JSON.stringify(item));
       uni.navigateTo({
         url: '/pages/submit-order/submit-order?orderEntry=1'
       });
@@ -736,53 +574,6 @@ export default {
           prodNum: prodNum + 1
         });
       }
-    },
-    showPopup: function () {
-      if (this.loadCouponIds) {
-        this.setData({
-          popupShow: true
-        });
-        return;
-      }
-
-      http.request({
-        url: "/p/myCoupon/listCouponIds",
-        method: "GET",
-        data: {},
-        callBack: couponIds => {
-          var couponList = this.couponList;
-          console.log(couponList);
-          couponList.forEach(coupon => {
-            if (couponIds && couponIds.length) {
-              // 领取该优惠券数量
-              var couponLimit = 0;
-              couponIds.forEach(couponId => {
-                if (couponId == coupon.couponId) {
-                  couponLimit++;
-                }
-              }); // 小于用户领取优惠券上限，可以领取优惠券
-
-              if (couponLimit < coupon.limitNum) {
-                coupon.canReceive = true;
-              } else {
-                coupon.canReceive = false;
-              }
-            } else {
-              coupon.canReceive = true;
-            }
-          });
-          this.setData({
-            couponList: couponList,
-            popupShow: true,
-            loadCouponIds: true
-          });
-        }
-      });
-    },
-    showSku: function () {
-      this.setData({
-        skuShow: true
-      });
     },
     showComment: function () {
       this.setData({

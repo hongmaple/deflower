@@ -86,24 +86,6 @@ export default {
         url: '/pages/editAddress/editAddress'
       });
     },
-    //设置为默认地址
-    onDefaultAddr: function (e) {
-      var addrId = e.currentTarget.dataset.addrid;
-      console.log(addrId);
-      var ths = this;
-      uni.showLoading();
-      var params = {
-        url: "/p/address/defaultAddr/" + addrId,
-        method: "PUT",
-        data: {
-          addrId: addrId
-        },
-        callBack: function (res) {
-          uni.hideLoading();
-        }
-      };
-      http.request(params);
-    },
     // 修改地址 
     toEditAddress: function (e) {
       var addrId = e.currentTarget.dataset.addrid;
@@ -120,10 +102,10 @@ export default {
         var pages = getCurrentPages(); //当前页面
 
         var prevPage = pages[pages.length - 2]; //上一页面
-
+        console.log(prevPage);
         prevPage.setData({
           //直接给上移页面赋值
-          item: e.currentTarget.dataset.item,
+          userAddr: e.currentTarget.dataset.item,
           selAddress: 'yes'
         });
         uni.navigateBack({

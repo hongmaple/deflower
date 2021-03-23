@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.beans.Transient;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 订单
@@ -19,7 +17,7 @@ import java.util.List;
 public class Order {
 
     @TableId(type = IdType.INPUT)
-    private Long orderId;
+    private String orderId;
 
     /**
      * 总金额
@@ -78,7 +76,10 @@ public class Order {
      */
     private String receiverAddress;
 
-    private List<OrderDetail> orderDetails;
+    /**
+     * 留言
+     */
+    private String remark;
 
     private Integer status;
 }

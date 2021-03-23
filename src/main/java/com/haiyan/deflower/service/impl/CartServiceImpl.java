@@ -38,8 +38,15 @@ public class CartServiceImpl implements CartService {
             throw new ExceptionResult("user","false",null,"请先登陆");
         }
         cart.setUserId(user.getId());
-        if(cartDao.save(cart)) {
-            throw new ExceptionResult("cart","false",null,"添加失败");
+        Integer count = cartDao.lambdaQuery().eq(Cart::getSkuId, cart.getSkuId()).count();
+        if (count==0) {
+            if(!cartDao.save(cart)) {
+                throw new ExceptionResult("cart","false",null,"添加失败");
+            }
+        }else {
+            if(!cartDao.lambdaUpdate().eq(Cart::getSkuId,cart.getSkuId()).update(cart)) {
+                throw new ExceptionResult("cart","false",null,"添加失败");
+            }
         }
         return cart.getId();
     }
@@ -76,8 +83,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartDetail(Long skuId) {
-        return cartDao.getById(skuId);
+    public Cart getCartDetail(Long id) {
+        return cartDao.getById(id);
+    }
+
+    @Override
+    public Cart getCartDetailBySkuId(Long skuId) {
+        return cartDao.lambdaQuery().eq(Cart::getSkuId,skuId).one();
     }
 
     @Override

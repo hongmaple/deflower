@@ -2,17 +2,17 @@
 <!--pages/basket/basket.wxml-->
 <view class="container">
   <view class="prod-list">
-    <block v-for="(item, scIndex) in shopCartItemDiscounts" :key="scIndex">
+    <block v-for="(item, index) in shopCartItemDiscounts" :key="index">
       <view class="prod-block">
        <view class="item">
          <view class="btn">
            <label>
-             <checkbox @tap="onSelectedItem" :data-scindex="scIndex" :data-index="1" :value="item.skuId" :checked="item.checked" color="#105c3e"></checkbox>
+             <checkbox @tap="onSelectedItem" :data-index="index" :value="''+item.id" :checked="item.checked" color="#105c3e"></checkbox>
            </label>
          </view>
          <view class="prodinfo">
            <view class="pic">
-             <image :src="item.image"></image>
+             <image :src="serverUrl+item.image"></image>
            </view>
            <view class="opt">
              <view class="prod-name">{{item.title}}</view>
@@ -23,9 +23,9 @@
                  <text class="small-num">.{{wxs.parsePrice(item.price)[1]}}</text>
                </view>
                <view class="m-numSelector">
-                 <view @tap="onCountMinus" class="minus" :data-scindex="scIndex" :data-index="index"></view>
+                 <view @tap="onCountMinus" class="minus"  :data-index="index"></view>
                  <input type="number" :value="item.num" disabled></input>
-                 <view @tap="onCountPlus" class="plus" :data-scindex="scIndex" :data-index="index"></view>
+                 <view @tap="onCountPlus" class="plus" :data-index="index"></view>
                </view>
              </view>
            </view>
@@ -80,19 +80,31 @@
 
 <script>
 // pages/basket/basket.js
-var http = require("../../utils/http.js"); // var config = require("../../utils/config.js");
-// var config = require("../../utils/config.js");
+var http = require("../../utils/http.js"); 
+var config = require("../../utils/config.js");
 const Big = require("../../utils/big.min.js");
 
 export default {
   data() {
     return {
       // picDomain: config.picDomain,
-      shopCartItemDiscounts: [],
+      shopCartItemDiscounts: [
+		  {
+			  id: 0,
+			  image: "",
+			  num: 0,
+			  price: 0,
+			  skuId: 0,
+			  title: "",
+			  userId: 0
+		  }
+	  ],
       finalMoney: 0,
       totalMoney: 0,
       subtractMoney: 0,
-      allChecked: true
+      allChecked: true,
+	  serverUrl: config.domain,
+	  shopCartItem: [],
     };
   },
 
@@ -123,9 +135,9 @@ export default {
 		  "pageSize": 10
 	  },
       callBack: res => {
-        if (res.length > 0) {
+        if (res.data.total > 0) {
           // 默认全选
-          var shopCartItemDiscounts = res.data;
+          var shopCartItemDiscounts = res.data.list;
           shopCartItemDiscounts.forEach(shopCartItemDiscount => {
                  shopCartItemDiscount.checked = true;
           });
@@ -154,12 +166,10 @@ export default {
     toFirmOrder: function () {
       var shopCartItemDiscounts = this.shopCartItemDiscounts;
       var basketIds = [];
-      shopCartItemDiscounts.forEach(shopCartItemDiscount => {
-        shopCartItemDiscount.shopCartItems.forEach(shopCartItem => {
-          if (shopCartItem.checked) {
-            basketIds.push(shopCartItem.basketId);
-          }
-        });
+      shopCartItemDiscounts.forEach(shopCartItem => {
+		   if (shopCartItem.checked) {
+			 basketIds.push(shopCartItem);
+		   }
       });
 
       if (!basketIds.length) {
@@ -170,7 +180,7 @@ export default {
         return;
       }
 
-      uni.setStorageSync("basketIds", JSON.stringify(basketIds));
+      uni.setStorageSync("basketIds", basketIds);
       uni.navigateTo({
         url: '/pages/submit-order/submit-order?orderEntry=0'
       });
@@ -186,11 +196,8 @@ export default {
       var shopCartItemDiscounts = this.shopCartItemDiscounts;
 
       for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
-
-        for (var j = 0; j < cItems.length; j++) {
-          cItems[j].checked = allChecked;
-        }
+        var cItems = shopCartItemDiscounts[i];
+        cItems.checked = allChecked;
       }
 
       this.setData({
@@ -206,12 +213,11 @@ export default {
     onSelectedItem: function (e) {
       var index = e.currentTarget.dataset.index; // 获取data- 传进来的index
 
-      var scindex = e.currentTarget.dataset.scindex;
       var shopCartItemDiscounts = this.shopCartItemDiscounts; // 获取购物车列表
 
-      var checked = shopCartItemDiscounts[scindex].shopCartItems[index].checked; // 获取当前商品的选中状态
+      var checked = shopCartItemDiscounts[index].checked; // 获取当前商品的选中状态
 
-      shopCartItemDiscounts[scindex].shopCartItems[index].checked = !checked; // 改变状态
+      shopCartItemDiscounts[index].checked = !checked; // 改变状态
 
       this.setData({
         shopCartItemDiscounts: shopCartItemDiscounts
@@ -230,21 +236,16 @@ export default {
       var flag = false;
 
       for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
-
-        for (var j = 0; j < cItems.length; j++) {
-          if (!cItems[j].checked) {
-            allChecked = !allChecked;
-            flag = true;
-            break;
-          }
-        }
-
+        var cItems = shopCartItemDiscounts;
+       if (!cItems.checked) {
+         allChecked = !allChecked;
+         flag = true;
+         break;
+       }
         if (flag) {
           break;
         }
       }
-
       this.setData({
         allChecked: allChecked
       });
@@ -255,53 +256,39 @@ export default {
      */
     calTotalPrice: function () {
       var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      var shopCartIds = [];
-
+	  var shopCartItem = [];
+      var finalMoney = 0;
       for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
-
-        for (var j = 0; j < cItems.length; j++) {
-          if (cItems[j].checked) {
-            shopCartIds.push(cItems[j].basketId);
+        var cItems = shopCartItemDiscounts[i];
+          if (cItems.checked) {
+            shopCartItem.push(cItems);
+			finalMoney+= cItems.price*cItems.num;
           }
-        }
-      }
-
-      var ths = this;
-      uni.showLoading();
-	  ths.setData({
-	    finalMoney: 100,
-	    totalMoney: 1000,
-	    subtractMoney: 699
-	  });
-      var params = {
-        url: "/p/shopCart/totalPay",
-        method: "POST",
-        data: shopCartIds,
-        callBack: function (res) {
-          ths.setData({
-            finalMoney: res.finalMoney,
-            totalMoney: res.totalMoney,
-            subtractMoney: res.subtractMoney
-          });
-          uni.hideLoading();
-        }
-      };
-      //http.request(params);
+       }
+      this.setData({
+            finalMoney: finalMoney,
+            totalMoney: finalMoney,
+            subtractMoney: 0,
+			shopCartItem: shopCartItem
+      });
     },
 
     /**
      * 减少数量
      */
     onCountMinus: function (e) {
-      var index = e.currentTarget.dataset.index;
-      var scindex = e.currentTarget.dataset.scindex;
-      var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      var prodCount = shopCartItemDiscounts[scindex].shopCartItems[index].prodCount;
-
+     var index = e.currentTarget.dataset.index;
+     var shopCartItemDiscounts = this.shopCartItemDiscounts;
+	 var prodCount = shopCartItemDiscounts[index].num;
       if (prodCount > 1) {
-        this.updateCount(shopCartItemDiscounts, scindex, index, -1);
-      }
+        this.updateCount(shopCartItemDiscounts,index, prodCount-1);
+		return;
+      }else {
+		  uni.showToast({
+		    title: '已经最少了',
+		    icon: "none"
+		  });
+	  }
     },
 
     /**
@@ -309,30 +296,29 @@ export default {
      */
     onCountPlus: function (e) {
       var index = e.currentTarget.dataset.index;
-      var scindex = e.currentTarget.dataset.scindex;
       var shopCartItemDiscounts = this.shopCartItemDiscounts;
-      this.updateCount(shopCartItemDiscounts, scindex, index, 1);
+	  console.log(shopCartItemDiscounts[index]);
+      this.updateCount(shopCartItemDiscounts, index, shopCartItemDiscounts[index].num+1);
     },
 
     /**
      * 改变购物车数量接口
      */
-    updateCount: function (shopCartItemDiscounts, scindex, index, prodCount) {
+    updateCount: function (shopCartItemDiscounts, index, prodCount) {
       var ths = this;
       uni.showLoading({
         mask: true
       });
       var params = {
-        url: "/p/shopCart/changeItem",
-        method: "POST",
+        url: "/cart",
+        method: "PUT",
+		needToken: true,
         data: {
-          count: prodCount,
-          prodId: shopCartItemDiscounts[scindex].shopCartItems[index].prodId,
-          skuId: shopCartItemDiscounts[scindex].shopCartItems[index].skuId,
-          shopId: 1
+          num: prodCount,
+          id: shopCartItemDiscounts[index].id
         },
         callBack: function (res) {
-          shopCartItemDiscounts[scindex].shopCartItems[index].prodCount += prodCount;
+          shopCartItemDiscounts[index].num = prodCount;
           ths.setData({
             shopCartItemDiscounts: shopCartItemDiscounts
           });

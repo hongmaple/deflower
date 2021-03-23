@@ -12,19 +12,19 @@
   </view>
   <!-- end 头部菜单 -->
   <view class="main">
-    <view class="empty" v-if="list.length==0">
+    <view class="empty" v-if="orderList.length==0">
       还没有任何相关订单
     </view>
     <!-- 订单列表 -->
-    <block v-for="(item, index) in list" :key="index">
+    <block v-for="(item, index) in orderList" :key="index">
       <view class="prod-item">
         <view class="order-num">
-          <text>订单编号：{{item.orderNumber}}</text>
+          <text>订单编号：{{item.orderId}}</text>
           <view class="order-state">
             <text :class="'order-sts  ' + (item.status==1?'red':'') + '  ' + ((item.status==5||item.status==6)?'gray':'')">{{item.status==1?'待支付':(item.status==2?'待发货':(item.status==3?'待收货':(item.status==5?'已完成':'已取消')))}}</text>
 
             <view class="clear-btn" v-if="item.status==5 || item.status==6">
-              <image src="/static/images/icon/clear-his.png" class="clear-list-btn" @tap="delOrderList" :data-ordernum="item.orderNumber"></image>
+              <image src="/static/images/icon/clear-his.png" class="clear-list-btn" @tap="delOrderList" :data-ordernum="item.orderId"></image>
             </view>
           </view>
         </view>
@@ -34,20 +34,20 @@
         <block v-if="item.orderItemDtos.length==1">
           <block v-for="(prod, index2) in item.orderItemDtos" :key="index2">
             <view>
-              <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderNumber">
+              <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderId">
                 <view class="prod-pic">
-                  <image :src="prod.pic"></image>
+                  <image :src="prod.image"></image>
                 </view>
                 <view class="prod-info">
                   <view class="prodname">
-                    {{prod.prodName}}
+                    {{prod.image}}
                   </view>
-                  <view class="prod-info-cont">{{prod.skuName}}</view>
+                  <view class="prod-info-cont">{{prod.num}}</view>
                   <view class="price-nums">
                     <text class="prodprice"><text class="symbol">￥</text>
                     <text class="big-num">{{wxs.parsePrice(prod.price)[0]}}</text>
                     <text class="small-num">.{{wxs.parsePrice(prod.price)[1]}}</text></text>
-                    <text class="prodcount">x{{prod.prodCount}}</text>
+                    <text class="prodcount">x{{prod.num}}</text>
                   </view>
                 </view>
               </view>
@@ -56,11 +56,11 @@
         </block>
         <!-- 一个订单多个商品时的显示 -->
         <block v-else>
-          <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderNumber">
+          <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderId">
             <scroll-view scroll-x="true" scroll-left="0" scroll-with-animation="false" class="categories">
               <block v-for="(prod, index2) in item.orderItemDtos" :key="index2">
                 <view class="prod-pic">
-                  <image :src="prod.pic"></image>
+                  <image :src="prod.image"></image>
                 </view>
               </block>
             </scroll-view>
@@ -106,7 +106,11 @@ var config = require("../../utils/config.js");
 export default {
   data() {
     return {
-      list: [],
+      orderList: [
+		  {
+			  orderItemDtos: []
+		  }
+	  ],
       current: 1,
       pages: 0,
       sts: 0
@@ -177,29 +181,42 @@ export default {
       uni.showLoading(); //加载订单列表
 
       var params = {
-        url: "/p/myOrder/myOrder",
+        url: "/order/list",
         method: "GET",
+		needToken: true,
         data: {
-          current: current,
-          size: 10,
+          page: current,
+          rows: 10,
           status: sts
         },
         callBack: function (res) {
           //console.log(res);
           var list = [];
-
-          if (res.current == 1) {
-            list = res.records;
+          if (res.data.pageNum == 1) {
+            list = res.data.list;
           } else {
             list = ths.list;
-            Array.prototype.push.apply(list, res.records);
+            Array.prototype.push.apply(list, res.data.list);
           }
-
+          list.forEach(item=> {
+			  var orderItemDtos = [];
+			  var params = {
+			    url: "/order/"+item.orderId,
+			    method: "GET",
+			  	needToken: true,
+			    callBack: function (res) {
+					item.orderItemDtos=res.data.orderDetails;
+				}
+			}
+			http.request(params);
+		  });
+		  console.log(list);
           ths.setData({
-            list: list,
-            pages: res.pages,
-            current: res.current
+            orderList: list,
+            pages: res.data.pages,
+            current: res.data.pageNum
           });
+		  console.log(ths.orderList);
           uni.hideLoading();
         }
       };

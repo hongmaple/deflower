@@ -74,13 +74,24 @@ public class CartController {
 
     /**
      * 获取商品的购物详情
-     * @param skuId
+     * @param id
      * @return
      */
     @ApiOperation("获取商品的购物详情")
     @GetMapping("/{skuId}")
-    public Cart getCartDetail(@PathVariable Long skuId) {
-        return cartService.getCartDetail(skuId);
+    public Cart getCartDetail(@PathVariable Long id) {
+        return cartService.getCartDetail(id);
+    }
+
+    /**
+     * 获取商品的购物详情bySkuId
+     * @param skuId
+     * @return
+     */
+    @ApiOperation("获取商品的购物详情")
+    @GetMapping("/bySkuId/{skuId}")
+    public Cart getCartDetailBySkuId(@PathVariable Long skuId) {
+        return cartService.getCartDetailBySkuId(skuId);
     }
 
     @ApiOperation("获取商品的购物数量")
