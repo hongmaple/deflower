@@ -390,6 +390,7 @@ export default {
             var params = {
               url: "/order/" + ordernum,
               method: "DELETE",
+			  needToken: true,
               callBack: function (res) {
                 ths.loadOrderData(ths.sts, 1);
                 uni.hideLoading();
