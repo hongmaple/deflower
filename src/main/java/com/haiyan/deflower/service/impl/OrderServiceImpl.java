@@ -1,10 +1,12 @@
 package com.haiyan.deflower.service.impl;
 
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.haiyan.deflower.dao.OrderDao;
 import com.haiyan.deflower.dao.OrderDetailDao;
 import com.haiyan.deflower.dto.request.OrderBody;
 import com.haiyan.deflower.dto.response.OrderDetailsVo;
+import com.haiyan.deflower.dto.response.OrderRowVo;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.OrderDetailMapper;
 import com.haiyan.deflower.mapper.OrderMapper;
@@ -19,6 +21,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -66,12 +69,13 @@ public class OrderServiceImpl implements OrderService {
         order.setCreateTime(new Date());
         order.setOrderId(String.valueOf(orderId));
         order.setUserId(user.getId());
+        order.setStatus(1);
         // 保存数据
         this.orderMapper.insert(order);
 
         // 保存订单状态
         OrderStatus orderStatus = new OrderStatus();
-        orderStatus.setOrderId(orderId);
+        orderStatus.setOrderId(String.valueOf(orderId));
         orderStatus.setCreateTime(order.getCreateTime());
         // 初始状态为未付款
         orderStatus.setStatus(1);
@@ -80,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 订单详情中添加orderId
         orderBody.getOrderDetails().forEach(od -> {
-            od.setOrderId(orderId);
+            od.setOrderId(String.valueOf(orderId));
             this.orderDetailMapper.insert(od);
         });
         // 保存订单详情,使用批量插入功能
@@ -91,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDetailsVo queryById(Long id) {
+    public OrderDetailsVo queryById(String id) {
         // 获取登录用户
         User user = userUtils.getUser(ServletUtils.getRequest());
         if (Objects.isNull(user)) {
@@ -116,25 +120,36 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageList<Order> queryUserOrderList(Integer page, Integer rows, Integer status) {
+    public PageList<OrderRowVo> queryUserOrderList(Integer page, Integer rows, Integer status) {
         // 获取登录用户
         User user = userUtils.getUser(ServletUtils.getRequest());
         if (Objects.isNull(user)) {
             throw new ExceptionResult("user","false",null,"请先登陆");
         }
-        Page<Order> orderPage = orderDao.lambdaQuery()
+        LambdaQueryChainWrapper<Order> lambdaQuery = orderDao.lambdaQuery();
+        if (status>0) {
+            lambdaQuery.eq(Order::getStatus,status);
+        }
+        Page<Order> orderPage = lambdaQuery
                 .eq(Order::getUserId, userUtils.getUser(ServletUtils.getRequest()).getId())
                 .orderByDesc(Order::getCreateTime)
                 .page(new Page<>(page, rows));
+        List<OrderRowVo> orderRowVos = new ArrayList<>();
         orderPage.getRecords().forEach(order -> {
             // 查询订单状态
-            order.setStatus(status);
+            OrderRowVo orderRowVo = modelMapper.map(order,OrderRowVo.class);
+            List<OrderDetail> details = this.orderDetailDao
+                    .lambdaQuery()
+                    .eq(OrderDetail::getOrderId,order.getOrderId())
+                    .list();
+            orderRowVo.setOrderDetails(details);
+            orderRowVos.add(orderRowVo);
         });
-        return PageList.of(orderPage.getRecords(), orderPage);
+        return PageList.of(orderRowVos, orderPage);
     }
 
     @Override
-    public Boolean updateStatus(Long id, Integer status) {
+    public Boolean updateStatus(String id, Integer status) {
         // 获取登录用户
         User user = userUtils.getUser(ServletUtils.getRequest());
         if (Objects.isNull(user)) {
@@ -165,6 +180,10 @@ public class OrderServiceImpl implements OrderService {
                 return null;
         }
         int count = this.orderStatusMapper.updateById(record);
+        Order Order = new Order();
+        Order.setOrderId(id);
+        Order.setStatus(status);
+        orderMapper.updateById(Order);
         return count == 1;
     }
 
@@ -176,5 +195,15 @@ public class OrderServiceImpl implements OrderService {
             throw new ExceptionResult("user","false",null,"请先登陆");
         }
         return orderDao.lambdaQuery().eq(Order::getUserId,user.getId()).count();
+    }
+
+    @Override
+    public Boolean deletedOrder(String id) {
+        // 获取登录用户
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
+        return orderDao.removeById(id);
     }
 }

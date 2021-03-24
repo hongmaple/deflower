@@ -81,7 +81,6 @@ export default {
         title: this.title
       });
     }
-    console.log(options.title);
     this.loadProdData(options);
   },
 
@@ -194,7 +193,7 @@ export default {
       uni.showLoading();
       var params = {
         url: "/flower/favorite/list",
-        method: "GET",
+        method: "POST",
 		needToken: true,
         data: {
            pageNum: ths.current,

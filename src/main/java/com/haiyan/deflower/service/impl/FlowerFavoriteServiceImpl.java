@@ -68,7 +68,12 @@ public class FlowerFavoriteServiceImpl implements FlowerFavoriteService {
 
     @Override
     public Boolean verify(Long favoriteId) {
-        if(flowerFavoriteDao.lambdaQuery().eq(FlowerFavorite::getFavoriteId,favoriteId).count()==0) {
+        // 获取登录用户
+        User user = userUtils.getUser(ServletUtils.getRequest());
+        if (Objects.isNull(user)) {
+            throw new ExceptionResult("user","false",null,"请先登陆");
+        }
+        if(flowerFavoriteDao.lambdaQuery().eq(FlowerFavorite::getUid,user.getId()).eq(FlowerFavorite::getFavoriteId,favoriteId).count()==0) {
             return false;
         }
         return true;
@@ -88,10 +93,12 @@ public class FlowerFavoriteServiceImpl implements FlowerFavoriteService {
                 .page(new Page<>(pageDomain.getPageNum(), pageDomain.getPageSize()));
         List<FlowerRowVo> flowerRowVos = new ArrayList<>();
         page.getRecords().forEach(flowerFavorite -> {
-            Flower flower = flowerDao.getById(flowerFavorite.getId());
-            FlowerRowVo flowerRowVo = modelMapper.map(flower,FlowerRowVo.class);
-            flowerRowVo.setCategoryName("");
-            flowerRowVos.add(flowerRowVo);
+            Flower flower = flowerDao.getById(flowerFavorite.getFavoriteId());
+            if (!Objects.isNull(flower)) {
+                FlowerRowVo flowerRowVo = modelMapper.map(flower,FlowerRowVo.class);
+                flowerRowVo.setCategoryName("");
+                flowerRowVos.add(flowerRowVo);
+            }
         });
         return PageList.of(flowerRowVos, page);
     }

@@ -4,70 +4,42 @@
 <view class="container">
 
   <view class="order-detail">
-    <view class="delivery-addr" v-if="userAddrDto">
+    <view class="delivery-addr" v-if="OrderDetailsVo">
       <view class="user-info">
-        <text class="item">{{userAddrDto.receiver}}</text>
-        <text class="item">{{userAddrDto.mobile}}</text>
+        <text class="item">{{OrderDetailsVo.receiver}}</text>
+        <text class="item">{{OrderDetailsVo.mobile}}</text>
       </view>
-      <view class="addr">{{userAddrDto.province}}{{userAddrDto.city}}{{userAddrDto.area}}{{userAddrDto.area}}{{userAddrDto.addr}}</view>
+      <view class="addr">{{OrderDetailsVo.receiverState}}{{OrderDetailsVo.receiverCity}}{{OrderDetailsVo.receiverDistrict}}{{OrderDetailsVo.receiverAddress}}</view>
     </view>
 
 
 
     <!-- 商品信息 -->
-    <view class="prod-item" v-if="orderItemDtos">
+    <view class="prod-item" v-if="OrderDetailsVo.orderDetails">
       
-      <block v-for="(item, index) in orderItemDtos" :key="index">
-        <view class="item-cont" @tap="toProdPage" :data-prodid="item.prodId">
+      <block v-for="(item, index) in OrderDetailsVo.orderDetails" :key="index">
+        <view class="item-cont" @tap="toProdPage" :data-prodid="item.skuId">
           <view class="prod-pic">
-            <image :src="item.pic"></image>
+            <image :src="serverUrl+item.image"></image>
           </view>
           <view class="prod-info">
             <view class="prodname">
-              {{item.prodName}}
+              {{item.title}}
             </view>
             <view class="prod-info-cont">
-              <text class="number">数量：{{item.prodCount}}</text>
-              <text class="info-item">{{item.skuName}}</text>
+              <text class="number">数量：{{item.num}}</text>
             </view>
             <view class="price-nums clearfix">
               <text class="prodprice"><text class="symbol">￥</text>
               <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text>
               <text class="small-num">.{{wxs.parsePrice(item.price)[1]}}</text></text>
-              <view class="btn-box">
-                <text class="btn" v-if="item.status!=1">申请售后</text>
-                <text class="btn">加购物车</text>
-              </view>
             </view>
           </view>
         </view>
       </block>
-      <!-- <view class='item-cont' bindtap='toOrderDetailPage' data-ordernum="{{item.primaryOrderNo}}">
-        <view class='prod-pic'>
-          <image src='../../images/prod/pic10.jpg'></image>
-        </view>
-        <view class='prod-info'>
-          <view class='prodname'>
-            THE BEAST/野兽派 雪花发财狗
-          </view>
-          <view class='prod-info-cont'>
-            <text class='number'>数量：1</text>
-            <text class='info-item'>发财狗</text>
-          </view>
-          <view class='price-nums clearfix'>
-            <text class='prodprice'><text class='symbol'>￥</text>
-            <text class='big-num'>{{wxs.parsePrice(40.00)[0]}}</text>
-            <text class='small-num'>.{{wxs.parsePrice(40.00)[1]}}</text></text>
-            <view class='btn-box'>
-              <text class='btn'>申请售后</text>
-              <text class='btn'>加购物车</text>
-            </view>
-          </view>
-        </view>
-      </view> -->
       <view class="prod-foot">
         <view class="btn">
-          <button v-if="status==1" class="button" @tap="onCancelOrder" :data-ordernum="orderNumber" hover-class="none">取消订单</button>
+          <button v-if="status==1" class="button" @tap="cancelOrder" :data-ordernum="orderNumber" hover-class="none">取消订单</button>
           <button v-if="status==1" class="button warn" @tap="onConfirmReceive" :data-ordernum="orderNumber" hover-class="none">再次购买</button>
           <button v-if="status==1" class="button warn" @tap="onPayAgain" :data-ordernum="orderNumber" hover-class="none">付款</button>
           <button v-if="status==3 || status==5" class="button" @tap="toDeliveryPage" :data-ordernum="orderNumber" hover-class="none">查看物流</button>
@@ -123,14 +95,6 @@
             <text class="small-num">.{{wxs.parsePrice(transfee)[1]}}</text>
           </view>
         </view>
-        <view class="item">
-          <view class="item-tit">优惠券：</view>
-          <view class="item-txt price">
-            <text class="symbol">-￥</text>
-            <text class="big-num">{{wxs.parsePrice(reduceAmount)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(reduceAmount)[1]}}</text>
-          </view>
-        </view>
         <view class="item payment">
           <view class="item-txt price">
             实付款：
@@ -160,6 +124,7 @@
 <script>
 // pages/order-detail/order-detail.js
 var http = require("../../utils/http.js");
+var config = require("../../utils/config.js");
 
 export default {
   data() {
@@ -167,18 +132,17 @@ export default {
       orderItemDtos: [],
       remarks: "",
       actualTotal: 0,
-      userAddrDto: null,
       orderNumber: "",
       createTime: "",
       status: 0,
       productTotalAmount: '',
       transfee: '',
-      reduceAmount: '',
       actualTotal: '',
-      prodid: ''
+      prodid: '',
+	  OrderDetailsVo: {},
+	  serverUrl: config.domain
     };
   },
-
   components: {},
   props: {},
 
@@ -239,27 +203,21 @@ export default {
       uni.showLoading(); //加载订单详情
 
       var params = {
-        url: "/p/myOrder/orderDetail",
+        url: "/order/"+orderNum,
         method: "GET",
-        data: {
-          orderNumber: orderNum
-        },
+		needToken: true,
         callBack: res => {
           this.setData({
             orderNumber: orderNum,
-            actualTotal: res.actualTotal,
-            userAddrDto: res.userAddrDto,
-            remarks: res.remarks,
-            orderItemDtos: res.orderItemDtos,
-            createTime: res.createTime,
-            status: res.status,
-            productTotalAmount: res.orderItemDtos[0].productTotalAmount,
-            transfee: res.transfee,
-            reduceAmount: res.reduceAmount,
-            actualTotal: res.actualTotal
+            actualTotal: res.data.actualPay,
+            remarks: res.data.remarks,
+            createTime: res.data.createTime,
+            status: res.data.status,
+            productTotalAmount: res.data.totalPay,
+            transfee: res.data.transfee,
+			OrderDetailsVo: res.data
           });
           uni.hideLoading();
-					console.log("orderDetail",this.userAddrDto)
         }
       };
       http.request(params);
@@ -276,7 +234,70 @@ export default {
           });
         }
       });
-    }
+    },
+	onPayAgain: function () {
+		uni.showLoading({
+		  mask: true
+		});
+		 var ths = this;
+		var params = {
+		  url: "/order/"+ths.orderNumber+"/2",
+		  method: "PUT",
+		  needToken: true,
+		  callBack: res => {
+				console.log("res",res)
+				uni.hideLoading();
+				if(res){
+					uni.showToast({
+						title: "模拟支付成功",
+						icon:"none"
+					})
+					ths.loadOrderDetail(ths.sts, 1);
+				}else{
+					uni.showToast({
+						title: "支付失败！",
+						icon:"none"
+					})
+				}
+		  }
+		};
+		http.request(params);
+	},
+	/**
+	 * 取消订单
+	 */
+	cancelOrder: function (e) {
+	  var ordernum = e.currentTarget.dataset.ordernum;
+	  var ths = this;
+	  uni.showModal({
+	    title: '',
+	    content: '要取消此订单？',
+	    confirmColor: "#3e62ad",
+	    cancelColor: "#3e62ad",
+	    cancelText: '否',
+	    confirmText: '是',
+	    success(res) {
+	      if (res.confirm) {
+	        uni.showLoading({
+	          mask: true
+	        });
+	        var params = {
+	          url: "/order/"+ths.orderNumber+"/5",
+	          method: "PUT",
+			   needToken: true,
+	          callBack: function (res) {
+	            //console.log(res);
+	            ths.loadOrderDetail(ths.sts, 1);
+	            uni.hideLoading();
+	          }
+	        };
+	        http.request(params);
+	      } else if (res.cancel) {//console.log('用户点击取消')
+	      }
+	    }
+	
+	  });
+	}
   }
 };
 </script>

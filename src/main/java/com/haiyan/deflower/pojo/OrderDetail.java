@@ -19,7 +19,7 @@ public class OrderDetail {
     /**
      * 订单id
      */
-    private Long orderId;
+    private String orderId;
 
     /**
      * 商品id

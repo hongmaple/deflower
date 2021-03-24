@@ -21,7 +21,7 @@
         <view class="order-num">
           <text>订单编号：{{item.orderId}}</text>
           <view class="order-state">
-            <text :class="'order-sts  ' + (item.status==1?'red':'') + '  ' + ((item.status==5||item.status==6)?'gray':'')">{{item.status==1?'待支付':(item.status==2?'待发货':(item.status==3?'待收货':(item.status==5?'已完成':'已取消')))}}</text>
+            <text :class="'order-sts  ' + (item.status==1?'red':'') + '  ' + ((item.status==5||item.status==6)?'gray':'')">{{item.status==1?'待支付':(item.status==2?'待发货':(item.status==3?'待收货':(item.status==5?'已取消':'已完成')))}}</text>
 
             <view class="clear-btn" v-if="item.status==5 || item.status==6">
               <image src="/static/images/icon/clear-his.png" class="clear-list-btn" @tap="delOrderList" :data-ordernum="item.orderId"></image>
@@ -31,16 +31,16 @@
 
         <!-- 商品列表 -->
         <!-- 一个订单单个商品的显示 -->
-        <block v-if="item.orderItemDtos.length==1">
-          <block v-for="(prod, index2) in item.orderItemDtos" :key="index2">
+        <block v-if="item.orderDetails.length==1">
+          <block v-for="(prod, index2) in item.orderDetails" :key="index2">
             <view>
               <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderId">
                 <view class="prod-pic">
-                  <image :src="prod.image"></image>
+                  <image :src="serverUrl+prod.image"></image>
                 </view>
                 <view class="prod-info">
                   <view class="prodname">
-                    {{prod.image}}
+                    {{prod.title}}
                   </view>
                   <view class="prod-info-cont">{{prod.num}}</view>
                   <view class="price-nums">
@@ -58,9 +58,9 @@
         <block v-else>
           <view class="item-cont" @tap="toOrderDetailPage" :data-ordernum="item.orderId">
             <scroll-view scroll-x="true" scroll-left="0" scroll-with-animation="false" class="categories">
-              <block v-for="(prod, index2) in item.orderItemDtos" :key="index2">
+              <block v-for="(prod, index2) in item.orderDetails" :key="index2">
                 <view class="prod-pic">
-                  <image :src="prod.image"></image>
+                  <image :src="serverUrl+prod.image"></image>
                 </view>
               </block>
             </scroll-view>
@@ -71,17 +71,17 @@
           <text class="prodcount">共1件商品</text>
           <view class="prodprice">合计：
             <text class="symbol">￥</text>
-            <text class="big-num">{{wxs.parsePrice(item.actualTotal)[0]}}</text>
-            <text class="small-num">.{{wxs.parsePrice(item.actualTotal)[1]}}</text>
+            <text class="big-num">{{wxs.parsePrice(item.actualPay)[0]}}</text>
+            <text class="small-num">.{{wxs.parsePrice(item.actualPay)[1]}}</text>
           </view>
         </view>
         <!-- end 商品列表 -->
         <view class="prod-foot">
           <view class="btn">
-            <text v-if="item.status==1" class="button" @tap="onCancelOrder" :data-ordernum="item.orderNumber" hover-class="none">取消订单</text>
+            <text v-if="item.status==1" class="button" @tap="cancelOrder" :data-ordernum="item.orderNumber" hover-class="none">取消订单</text>
             <text class="button warn" @tap :data-ordernum="item.orderNumber" hover-class="none">再次购买</text>
             <text v-if="item.status==1" class="button warn" @tap="normalPay" :data-ordernum="item.orderNumber" hover-class="none">付款</text>
-            <text v-if="item.status==3 || item.status==5" class="button" @tap="toDeliveryPage" :data-ordernum="item.orderNumber" hover-class="none">查看物流</text>
+            <text v-if="item.status==3 || item.status==6" class="button" @tap="toDeliveryPage" :data-ordernum="item.orderNumber" hover-class="none">查看物流</text>
             <text v-if="item.status==3" class="button warn" @tap="onConfirmReceive" :data-ordernum="item.orderNumber" hover-class="none">确认收货</text>
           </view>
         </view>
@@ -106,14 +106,11 @@ var config = require("../../utils/config.js");
 export default {
   data() {
     return {
-      orderList: [
-		  {
-			  orderItemDtos: []
-		  }
-	  ],
+      orderList: [],
       current: 1,
       pages: 0,
-      sts: 0
+      sts: 0,
+	  serverUrl: ''
     };
   },
 
@@ -126,7 +123,8 @@ export default {
   onLoad: function (options) {
     if (options.sts) {
       this.setData({
-        sts: options.sts
+        sts: options.sts,
+		serverUrl: config.domain
       });
       this.loadOrderData(options.sts, 1);
     } else {
@@ -195,28 +193,14 @@ export default {
           if (res.data.pageNum == 1) {
             list = res.data.list;
           } else {
-            list = ths.list;
+            list = ths.orderList;
             Array.prototype.push.apply(list, res.data.list);
           }
-          list.forEach(item=> {
-			  var orderItemDtos = [];
-			  var params = {
-			    url: "/order/"+item.orderId,
-			    method: "GET",
-			  	needToken: true,
-			    callBack: function (res) {
-					item.orderItemDtos=res.data.orderDetails;
-				}
-			}
-			http.request(params);
-		  });
-		  console.log(list);
           ths.setData({
             orderList: list,
             pages: res.data.pages,
             current: res.data.pageNum
           });
-		  console.log(ths.orderList);
           uni.hideLoading();
         }
       };
@@ -246,7 +230,7 @@ export default {
     /**
      * 取消订单
      */
-    onCancelOrder: function (e) {
+    cancelOrder: function (e) {
       var ordernum = e.currentTarget.dataset.ordernum;
       var ths = this;
       uni.showModal({
@@ -256,7 +240,6 @@ export default {
         cancelColor: "#3e62ad",
         cancelText: '否',
         confirmText: '是',
-
         success(res) {
           if (res.confirm) {
             uni.showLoading({
@@ -279,7 +262,6 @@ export default {
 
       });
     },
-
     /**
      * 付款
      */
@@ -324,6 +306,7 @@ export default {
 			var params = {
 			  url: "/p/order/normalPay",
 			  method: "POST",
+			  needToken: true,
 			  data: {
 			    orderNumbers: e.currentTarget.dataset.ordernum
 			  },
@@ -405,9 +388,8 @@ export default {
             var ordernum = e.currentTarget.dataset.ordernum;
             uni.showLoading();
             var params = {
-              url: "/p/myOrder/" + ordernum,
+              url: "/order/" + ordernum,
               method: "DELETE",
-              data: {},
               callBack: function (res) {
                 ths.loadOrderData(ths.sts, 1);
                 uni.hideLoading();

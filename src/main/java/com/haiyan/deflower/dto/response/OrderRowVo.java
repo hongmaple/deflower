@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("订单详情")
-public class OrderDetailsVo extends Order {
+@ApiModel("订单一行数据")
+public class OrderRowVo extends Order {
     private List<OrderDetail> orderDetails;
 }

@@ -2,7 +2,7 @@ package com.haiyan.deflower.service;
 
 import com.haiyan.deflower.dto.request.OrderBody;
 import com.haiyan.deflower.dto.response.OrderDetailsVo;
-import com.haiyan.deflower.pojo.Order;
+import com.haiyan.deflower.dto.response.OrderRowVo;
 import com.haiyan.deflower.pojo.PageList;
 
 /**
@@ -24,7 +24,7 @@ public interface OrderService {
      * @param id
      * @return
      */
-    OrderDetailsVo queryById(Long id);
+    OrderDetailsVo queryById(String id);
 
     /**
      * 分页查询登录用户订单
@@ -34,7 +34,7 @@ public interface OrderService {
      * @param status
      * @return
      */
-    PageList<Order> queryUserOrderList(Integer page, Integer rows, Integer status);
+    PageList<OrderRowVo> queryUserOrderList(Integer page, Integer rows, Integer status);
 
     /**
      * 更新订单状态
@@ -43,12 +43,19 @@ public interface OrderService {
      * @param status
      * @return
      */
-    Boolean updateStatus(Long id, Integer status);
+    Boolean updateStatus(String id, Integer status);
 
     /**
      * 获取订单数
      * @return 订单数
      */
     Integer getOrderCount();
+
+    /**
+     * 删除订单
+     * @param id 订单id
+     * @return 结果
+     */
+    Boolean deletedOrder(String id);
 
 }

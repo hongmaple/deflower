@@ -9,25 +9,64 @@
       <view class="infoWarp">
         <view class="companyname">
           <text class="key">物流公司：</text>
-          <text class="value">{{companyName}}</text>
+          <text class="value">上海银领网络科技有限公司</text>
         </view>
         <view class="expno">
           <text class="key">运单编号：</text>
-          <text class="value">{{dvyFlowId}}</text>
+          <text class="value">2873784364556412332543</text>
         </view>
       </view>
     </view>
     <view class="deliveryDetail">
-      <block v-for="(item, index) in dvyData" :key="index">
-        
-        <view :class="'detailItem ' + (index==0?'lastest':'')">
+      <block>
+        <view class="'detailItem lastest')">
           <view class="dot">
             <image src="/static/images/icon/delive-dot.png"></image>
              <image src="/static/images/icon/dot.png"></image>
           </view>
           <view class="detail">
-            <view class="desc">{{item.context}}</view>
-            <view class="time">{{item.time}}</view>
+            <view class="desc">已被签收</view>
+            <view class="time">2021/3/25 12:00:00</view>
+          </view>
+        </view>
+		<view class="'detailItem')">
+		  <view class="dot">
+		    <image src="/static/images/icon/delive-dot.png"></image>
+		     <image src="/static/images/icon/dot.png"></image>
+		  </view>
+		  <view class="detail">
+		    <view class="desc">货已到达由岳麓区派送点</view>
+		    <view class="time">2021/3/25 09:00:00</view>
+		  </view>
+		</view>
+		<view class="'detailItem')">
+		  <view class="dot">
+		    <image src="/static/images/icon/delive-dot.png"></image>
+		     <image src="/static/images/icon/dot.png"></image>
+		  </view>
+		  <view class="detail">
+		    <view class="desc">货已到达由湖南长沙转运中心</view>
+		    <view class="time">2021/3/24 18:00:00</view>
+		  </view>
+		</view>
+		<view class="'detailItem')">
+		  <view class="dot">
+		    <image src="/static/images/icon/delive-dot.png"></image>
+		     <image src="/static/images/icon/dot.png"></image>
+		  </view>
+		  <view class="detail">
+		    <view class="desc">货已到达由广东清远转运中心</view>
+		    <view class="time">2021/3/24 13:00:00</view>
+		  </view>
+		</view>
+        <view class="'detailItem')">
+          <view class="dot">
+            <image src="/static/images/icon/delive-dot.png"></image>
+             <image src="/static/images/icon/dot.png"></image>
+          </view>
+          <view class="detail">
+            <view class="desc">货已由广东广州发出</view>
+            <view class="time">2021/3/24 09:00:00</view>
           </view>
         </view>
       </block>
@@ -48,7 +87,6 @@ export default {
       dvyData: []
     };
   },
-
   components: {},
   props: {},
 
@@ -57,26 +95,7 @@ export default {
    */
   onLoad: function (options) {
     var ths = this;
-    uni.showLoading();
-    var params = {
-      url: "/delivery/check",
-      method: "GET",
-      data: {
-        orderNumber: options.orderNum
-      },
-      callBack: function (res) {
-        //console.log(res);
-        ths.setData({
-          companyName: res.companyName,
-          dvyFlowId: res.dvyFlowId,
-          dvyData: res.data
-        });
-        uni.hideLoading();
-      }
-    };
-    http.request(params);
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

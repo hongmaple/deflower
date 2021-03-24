@@ -16,7 +16,7 @@ import java.util.Date;
 public class OrderStatus {
 
     @TableId(type = IdType.INPUT)
-    private Long orderId;
+    private String orderId;
     /**
      * 初始阶段：1、未付款、未发货；初始化所有数据
      * 付款阶段：2、已付款、未发货；更改付款时间
