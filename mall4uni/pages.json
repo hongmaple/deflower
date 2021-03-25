@@ -7,7 +7,7 @@
 				"navigationBarBackgroundColor": "white",
 				"navigationBarTextStyle": "black",
 				"enablePullDownRefresh": true,
-				"navigationBarTitleText": "亚米科技mall4j"
+				"navigationBarTitleText": "采花科技"
 			}
 		},
 		{
@@ -37,6 +37,15 @@
 				"backgroundTextStyle": "light",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTitleText": "分类商品",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/saysCommentary/saysCommentary",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "花语解说",
 				"navigationBarTextStyle": "black"
 			}
 		},
@@ -186,6 +195,12 @@
 				"text": "分类",
 				"iconPath": "/static/images/tabbar/category.png",
 				"selectedIconPath": "/static/images/tabbar/category-sel.png"
+			},
+			{
+				"pagePath": "pages/saysCommentary/saysCommentary",
+				"text": "花语解说",
+				"iconPath": "/static/images/tabbar/huayu.png",
+				"selectedIconPath": "/static/images/tabbar/huayu-sel.png"
 			},
 			{
 				"pagePath": "pages/basket/basket",

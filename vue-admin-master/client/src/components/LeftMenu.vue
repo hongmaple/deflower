@@ -46,13 +46,17 @@ export default {
           name: "账单管理",
           path: "fund",
           children: [
+            // {
+            //   path: "/fundList",
+            //   name: "资金流水"
+            // },
+            // {
+            //   path: "/payList",
+            //   name: "支付单据"
+            // }
             {
-              path: "/fundList",
-              name: "资金流水"
-            },
-            {
-              path: "/payList",
-              name: "支付单据"
+              path: "/orderList",
+              name: "订单管理"
             }
           ]
         },
@@ -107,6 +111,10 @@ export default {
             {
               path: "/SaysCommentaryList",
               name: "花语解说"
+            },
+            {
+              path: "/VideoTeaching",
+              name: "视频教学"
             }
           ]
         },

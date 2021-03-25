@@ -1,6 +1,7 @@
 package com.haiyan.deflower.service;
 
 import com.haiyan.deflower.dto.request.OrderBody;
+import com.haiyan.deflower.dto.request.OrderQuery;
 import com.haiyan.deflower.dto.response.OrderDetailsVo;
 import com.haiyan.deflower.dto.response.OrderRowVo;
 import com.haiyan.deflower.pojo.PageList;
@@ -35,6 +36,13 @@ public interface OrderService {
      * @return
      */
     PageList<OrderRowVo> queryUserOrderList(Integer page, Integer rows, Integer status);
+
+    /**
+     * 后台加载订单数据
+     * @param query 参数
+     * @return 订单数据
+     */
+    PageList<OrderRowVo> queryOrderList(OrderQuery query);
 
     /**
      * 更新订单状态

@@ -8,7 +8,8 @@
     <text @tap="onStsTap" data-sts="1" :class="sts==1?'on':''">待支付</text>
     <text @tap="onStsTap" data-sts="2" :class="sts==2?'on':''">待发货</text>
     <text @tap="onStsTap" data-sts="3" :class="sts==3?'on':''">待收货</text>
-    <text @tap="onStsTap" data-sts="5" :class="sts==5?'on':''">已完成</text>
+	<text @tap="onStsTap" data-sts="5" :class="sts==5?'on':''">已取消</text>
+    <text @tap="onStsTap" data-sts="4" :class="sts==4?'on':''">已完成</text>
   </view>
   <!-- end 头部菜单 -->
   <view class="main">
@@ -78,11 +79,11 @@
         <!-- end 商品列表 -->
         <view class="prod-foot">
           <view class="btn">
-            <text v-if="item.status==1" class="button" @tap="cancelOrder" :data-ordernum="item.orderNumber" hover-class="none">取消订单</text>
-            <text class="button warn" @tap :data-ordernum="item.orderNumber" hover-class="none">再次购买</text>
-            <text v-if="item.status==1" class="button warn" @tap="normalPay" :data-ordernum="item.orderNumber" hover-class="none">付款</text>
-            <text v-if="item.status==3 || item.status==6" class="button" @tap="toDeliveryPage" :data-ordernum="item.orderNumber" hover-class="none">查看物流</text>
-            <text v-if="item.status==3" class="button warn" @tap="onConfirmReceive" :data-ordernum="item.orderNumber" hover-class="none">确认收货</text>
+            <text v-if="item.status==1" class="button" @tap="cancelOrder" :data-ordernum="item.orderId" hover-class="none">取消订单</text>
+            <text class="button warn" @tap :data-ordernum="item.orderId" hover-class="none">再次购买</text>
+            <text v-if="item.status==1" class="button warn" @tap="normalPay" :data-ordernum="item.orderId" hover-class="none">付款</text>
+            <text v-if="item.status==3 || item.status==4" class="button" @tap="toDeliveryPage" :data-ordernum="item.orderId" hover-class="none">查看物流</text>
+            <text v-if="item.status==3" class="button warn" @tap="onConfirmReceive" :data-ordernum="item.orderId" hover-class="none">确认收货</text>
           </view>
         </view>
       </view>
@@ -246,8 +247,9 @@ export default {
               mask: true
             });
             var params = {
-              url: "/p/myOrder/cancel/" + ordernum,
+              url: "/order/"+ordernum+"/5",
               method: "PUT",
+			  needToken: true,
               data: {},
               callBack: function (res) {
                 //console.log(res);
@@ -262,54 +264,15 @@ export default {
 
       });
     },
-    /**
-     * 付款
-     */
-    onPayAgain: function (e) {
-      uni.showLoading({
-        mask: true
-      });
-      var params = {
-        url: "/p/order/pay",
-        method: "POST",
-        data: {
-          payType: 1,
-          orderNumbers: e.currentTarget.dataset.ordernum
-        },
-        callBack: res => {
-          //console.log(res);
-          uni.hideLoading();
-          uni.requestPayment({
-            timeStamp: res.timeStamp,
-            nonceStr: res.nonceStr,
-            package: res.packageValue,
-            signType: res.signType,
-            paySign: res.paySign,
-            success: function () {
-              uni.navigateTo({
-                url: '/pages/pay-result/pay-result?sts=1&orderNumbers=' + e.currentTarget.dataset.ordernum
-              });
-            },
-            fail: function (err) {//console.log("支付失败");
-            }
-          });
-        }
-      };
-      http.request(params);
-    },
-		
 		//模拟支付，直接提交成功
 		normalPay: function(e){
 			uni.showLoading({
 			  mask: true
 			});
 			var params = {
-			  url: "/p/order/normalPay",
-			  method: "POST",
+			  url: "/order/"+e.currentTarget.dataset.ordernum+"/2",
+			  method: "PUT",
 			  needToken: true,
-			  data: {
-			    orderNumbers: e.currentTarget.dataset.ordernum
-			  },
 			  callBack: res => {
 					console.log("res",res)
 					uni.hideLoading();
@@ -359,8 +322,9 @@ export default {
               mask: true
             });
             var params = {
-              url: "/p/myOrder/receipt/" + e.currentTarget.dataset.ordernum,
+              url: "/order/"+e.currentTarget.dataset.ordernum+"/4",
               method: "PUT",
+			  needToken: true,
               data: {},
               callBack: function (res) {
                 //console.log(res);

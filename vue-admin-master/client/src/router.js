@@ -106,6 +106,18 @@ const router = new Router({
           name: 'SaysCommentaryList',
           component: () => import('./views/flower/SaysCommentaryList'),
           meta: { title: '花语解说' }
+        },
+        {
+          path: '/orderList',
+          name: 'orderList',
+          component: () => import('./views/fundmanagement/orderList'),
+          meta: { title: '订单管理' }
+        },
+        {
+          path: '/VideoTeaching',
+          name: 'VideoTeaching',
+          component: () => import('./views/flower/VideoTeaching'),
+          meta: { title: '视频教学' }
         }
       ]
     },

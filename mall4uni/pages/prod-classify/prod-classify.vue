@@ -137,19 +137,15 @@ export default {
         this.getTagProd();
       } else if (sts == 1) {
         // 新品推荐
-        let url = "/prod/lastedProdPage";
-        this.getActProd(url);
+         this.getTagProd();
       } else if (sts == 2) {
         // 限时特惠
-        let url = "/prod/discountProdList";
-        this.getActProd(url);
+        this.getTagProd();
       } else if (sts == 3) {
         // 每日疯抢
-        let url = "/prod/moreBuyProdList";
-        this.getActProd(url);
+        this.getTagProd();
       } else if (sts == 4) {
-        // 优惠券商品列表
-        this.getProdByCouponId(options.tagid);
+        this.getTagProd();
       } else if (sts == 5) {
         // 收藏商品列表
         this.getCollectionProd();

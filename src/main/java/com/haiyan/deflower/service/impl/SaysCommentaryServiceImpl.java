@@ -12,6 +12,7 @@ import com.haiyan.deflower.utils.ServletUtils;
 import com.haiyan.deflower.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +77,9 @@ public class SaysCommentaryServiceImpl implements SaysCommentaryService {
     public PageList<SaysCommentary> listSaysCommentary(SaysCommentaryQuery query) {
         LambdaQueryChainWrapper<SaysCommentary> lambdaQuery = commentaryDao.lambdaQuery();
         lambdaQuery.orderByDesc(SaysCommentary::getId);
+        if(StringUtils.hasText(query.getFlowerName())) {
+            lambdaQuery.like(SaysCommentary::getFlowerName,query.getFlowerName());
+        }
         Page<SaysCommentary> page = lambdaQuery.page(new Page<>(query.getPageNum(), query.getPageSize()));
         List<SaysCommentary> saysCommentaries = page.getRecords();
         return PageList.of(saysCommentaries, page);

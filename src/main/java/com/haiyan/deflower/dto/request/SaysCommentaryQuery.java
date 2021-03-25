@@ -14,6 +14,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("查询花语解说")
 public class SaysCommentaryQuery extends PageDomain {
-    @ApiModelProperty("标题")
-    private String 花名;
+    @ApiModelProperty("花名")
+    private String flowerName;
 }

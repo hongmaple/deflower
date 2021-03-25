@@ -206,22 +206,6 @@ export default {
     });
 		//#endif
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  // onPullDownRefresh: function () {
-  //     wx.request({
-  //       url: '',
-  //       data: {},
-  //       method: 'GET',
-  //       success: function (res) { },
-  //       fail: function (res) { },
-  //       complete: function (res) {
-  //         wx.stopPullDownRefresh();
-  //       }
-  //     })
-  // },
   onPullDownRefresh: function () {
     // wx.showNavigationBarLoading() //在标题栏中显示加载
     //模拟加载

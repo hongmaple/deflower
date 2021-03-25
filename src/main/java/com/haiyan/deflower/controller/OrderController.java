@@ -1,6 +1,7 @@
 package com.haiyan.deflower.controller;
 
 import com.haiyan.deflower.dto.request.OrderBody;
+import com.haiyan.deflower.dto.request.OrderQuery;
 import com.haiyan.deflower.dto.response.OrderRowVo;
 import com.haiyan.deflower.pojo.AjaxResult;
 import com.haiyan.deflower.pojo.Order;
@@ -78,7 +79,7 @@ public class OrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "当前页", defaultValue = "1", type = "Integer"),
             @ApiImplicitParam(name = "rows", value = "每页大小", defaultValue = "5", type = "Integer"),
-            @ApiImplicitParam(name = "status", value = "订单状态：1未付款，2已付款未发货，3已发货未确认，4已确认未评价，5交易关闭，6交易成功，已评价", type = "Integer"),
+            @ApiImplicitParam(name = "status", value = "订单状态：1未付款，2已付款未发货，3已发货未确认，4.交易成功，5交易关闭", type = "Integer"),
     })
     @ApiResponses({
             @ApiResponse(code = 200, message = "订单的分页结果"),
@@ -90,6 +91,19 @@ public class OrderController {
             @RequestParam(value = "rows", defaultValue = "5") Integer rows,
             @RequestParam(value = "status", required = false) Integer status) {
         PageList<OrderRowVo> result = this.orderService.queryUserOrderList(page, rows, status);
+        AjaxResult ajaxResult = AjaxResult.success("查询订单成功",result);
+        return ajaxResult;
+    }
+
+    /**
+     * 后台加载订单数据
+     * @param query 参数
+     * @return 订单数据
+     */
+    @PostMapping("/user/list")
+    @ApiOperation(value = "分页查询用户订单，并且可以根据订单状态过滤", notes = "后台加载订单数据")
+    public AjaxResult queryOrderList(@RequestBody OrderQuery query) {
+        PageList<com.haiyan.deflower.dto.response.OrderRowVo> result = this.orderService.queryOrderList(query);
         AjaxResult ajaxResult = AjaxResult.success("查询订单成功",result);
         return ajaxResult;
     }

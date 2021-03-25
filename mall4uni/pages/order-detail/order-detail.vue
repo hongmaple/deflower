@@ -40,7 +40,7 @@
       <view class="prod-foot">
         <view class="btn">
           <button v-if="status==1" class="button" @tap="cancelOrder" :data-ordernum="orderNumber" hover-class="none">取消订单</button>
-          <button v-if="status==1" class="button warn" @tap="onConfirmReceive" :data-ordernum="orderNumber" hover-class="none">再次购买</button>
+          <button v-if="status==1" class="button warn" :data-ordernum="orderNumber" hover-class="none">再次购买</button>
           <button v-if="status==1" class="button warn" @tap="onPayAgain" :data-ordernum="orderNumber" hover-class="none">付款</button>
           <button v-if="status==3 || status==5" class="button" @tap="toDeliveryPage" :data-ordernum="orderNumber" hover-class="none">查看物流</button>
           <button v-if="status==3" class="button warn" @tap="onConfirmReceive" :data-ordernum="orderNumber" hover-class="none">确认收货</button>
@@ -214,7 +214,7 @@ export default {
             createTime: res.data.createTime,
             status: res.data.status,
             productTotalAmount: res.data.totalPay,
-            transfee: res.data.transfee,
+            transfee: 10,
 			OrderDetailsVo: res.data
           });
           uni.hideLoading();
@@ -288,6 +288,39 @@ export default {
 	          callBack: function (res) {
 	            //console.log(res);
 	            ths.loadOrderDetail(ths.sts, 1);
+	            uni.hideLoading();
+	          }
+	        };
+	        http.request(params);
+	      } else if (res.cancel) {//console.log('用户点击取消')
+	      }
+	    }
+	
+	  });
+	},
+	/**
+	 * 确认收货
+	 */
+	onConfirmReceive: function (e) {
+	  var ths = this;
+	  uni.showModal({
+	    title: '',
+	    content: '我已收到货？',
+	    confirmColor: "#eb2444",
+	
+	    success(res) {
+	      if (res.confirm) {
+	        uni.showLoading({
+	          mask: true
+	        });
+	        var params = {
+	          url: "/order/"+e.currentTarget.dataset.ordernum+"/4",
+	          method: "PUT",
+			  needToken: true,
+	          data: {},
+	          callBack: function (res) {
+	            //console.log(res);
+	            ths.loadOrderData(ths.sts, 1);
 	            uni.hideLoading();
 	          }
 	        };

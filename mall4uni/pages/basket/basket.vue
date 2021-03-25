@@ -125,41 +125,44 @@ export default {
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    uni.showLoading(); //加载购物车
-
-    var params = {
-      url: "/cart/list",
-      method: "POST",
-      data: {
-		  "pageNum": 1,
-		  "pageSize": 10
-	  },
-      callBack: res => {
-        if (res.data.total > 0) {
-          // 默认全选
-          var shopCartItemDiscounts = res.data.list;
-          shopCartItemDiscounts.forEach(shopCartItemDiscount => {
-                 shopCartItemDiscount.checked = true;
-          });
-          this.setData({
-            shopCartItemDiscounts: shopCartItemDiscounts,
-            allChecked: true
-          });
-        } else {
-          this.setData({
-            shopCartItemDiscounts: []
-          });
-        }
-
-        this.calTotalPrice(); //计算总价
-
-        uni.hideLoading();
-      }
-    };
-    http.request(params);
+     //加载购物车
+    this.carList();
     http.getCartCount(); //重新计算购物车总数量
   },
   methods: {
+	  carList: function() {
+		  uni.showLoading();
+		  var params = {
+		    url: "/cart/list",
+		    method: "POST",
+		    data: {
+		  	  "pageNum": 1,
+		  	  "pageSize": 10
+		    },
+		    callBack: res => {
+		      if (res.data.total > 0) {
+		        // 默认全选
+		        var shopCartItemDiscounts = res.data.list;
+		        shopCartItemDiscounts.forEach(shopCartItemDiscount => {
+		               shopCartItemDiscount.checked = true;
+		        });
+		        this.setData({
+		          shopCartItemDiscounts: shopCartItemDiscounts,
+		          allChecked: true
+		        });
+		      } else {
+		        this.setData({
+		          shopCartItemDiscounts: []
+		        });
+		      }
+		  
+		      this.calTotalPrice(); //计算总价
+		  
+		      uni.hideLoading();
+		    }
+		  };
+		  http.request(params);
+	  },
     /**
      * 去结算
      */
@@ -340,13 +343,10 @@ export default {
       var basketIds = [];
 
       for (var i = 0; i < shopCartItemDiscounts.length; i++) {
-        var cItems = shopCartItemDiscounts[i].shopCartItems;
-
-        for (var j = 0; j < cItems.length; j++) {
-          if (cItems[j].checked) {
-            basketIds.push(cItems[j].basketId);
-          }
-        }
+        var cItems = shopCartItemDiscounts[i];
+		   if (cItems.checked) {
+			 basketIds.push(cItems.id);
+		   }
       }
 
       if (basketIds.length == 0) {
@@ -359,22 +359,23 @@ export default {
           title: '',
           content: '确认要删除选中的商品吗？',
           confirmColor: "#eb2444",
-
           success(res) {
             if (res.confirm) {
               uni.showLoading({
                 mask: true
               });
-              var params = {
-                url: "/p/shopCart/deleteItem",
-                method: "DELETE",
-                data: basketIds,
-                callBack: function (res) {
-                  uni.hideLoading();
-                  ths.onShow();
-                }
-              };
-              http.request(params);
+			  basketIds.forEach(basketId => {
+				  var params = {
+				    url: "/cart/"+basketId,
+				    method: "DELETE",
+					needToken: true,
+				    callBack: function (res) {
+				      uni.hideLoading();
+				    }
+				  };
+				  http.request(params);
+			  });
+			  ths.carList();
             }
           }
 

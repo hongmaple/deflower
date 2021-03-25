@@ -141,11 +141,12 @@ export default {
      * 分类点击事件
      */
     onMenuTab: function (e) {
-      console.log(e);
       var id = e.currentTarget.dataset.id;
       var index = e.currentTarget.dataset.index; // this.getProdList(id);
-
-      this.getProdList(this.categoryList[index].categoryId);
+      this.setData({
+	    productList: []
+	  });
+      this.getProdList(id);
       this.setData({
         categoryImg: this.categoryList[index].pic,
         selIndex: index
@@ -169,7 +170,6 @@ export default {
 		  pageSize: 10
         },
         callBack: res => {
-          // console.log(res);
           this.setData({
             productList: res.data.list
           });

@@ -1,8 +1,6 @@
 package com.haiyan.deflower.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -82,4 +80,11 @@ public class Order {
     private String remark;
 
     private Integer status;
+
+    /**
+     * 逻辑删除
+     */
+    @TableLogic
+    @TableField(fill = FieldFill.INSERT)
+    private Boolean isDeleted;
 }

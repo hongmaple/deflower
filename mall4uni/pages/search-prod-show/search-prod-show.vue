@@ -10,38 +10,23 @@
         <image src="/static/images/icon/search.png" class="search-img"></image>
       </view>
       <view class="search-list-img" @tap="changeShowType">
-        <image v-if="showType==1" src="/static/images/icon/search-col.png"></image>
-        <image v-if="showType==2" src="/static/images/icon/search-col2.png"></image>
+        <image src="/static/images/icon/search-col.png"></image>
       </view>
-    </view>
-    <view class="tabs">
-      <text :class="'tab-item complete ' + (sts==0?'on':'')" @tap="onStsTap" data-sts="0">综合</text>
-      <text :class="'tab-item ' + (sts==1?'on':'')" @tap="onStsTap" data-sts="1">销量</text>
-      <text :class="'tab-item ' + (sts==2?'on':'')" @tap="onStsTap" data-sts="2">价格</text>
     </view>
   </view>
 
   <!-- 商品列表 -->
   <view class="prod-list">
-    <!-- 横向列表 -->
-    <view class="prod-show" v-if="showType==1">
-      <view class="hotsale-item-cont">
-        <block v-for="(item, index) in searchProdList" :key="index">
-          <prod :item="item" sts="6"></prod>
-        </block>
-      </view>
-    </view>
-
     <!-- 纵向列表 -->
-    <view class="cont-item" v-if="showType==2">
+    <view class="cont-item">
       <block v-for="(item, index) in searchProdList" :key="index">
-        <view class="show-item" @tap="toProdPage" :data-prodid="item.prodId">
+        <view class="show-item" @tap="toProdPage" :data-prodid="item.id">
           <view class="more-prod-pic">
-            <image :src="item.pic" class="more-pic"></image>
+            <image :src="serverUrl+item.images" class="more-pic"></image>
           </view>
           <view class="prod-text-right">
-            <view class="prod-text more">{{item.prodName}}</view>
-            <view class="cate-prod-info">{{item.praiseNumber}}评价 {{item.positiveRating}}%好评</view>
+            <view class="prod-text more">{{item.title}}</view>
+			<view class="prod-text more">适宜人群：{{item.appropriateCrowd}}</view>
             <view class="prod-price more">
               <text class="symbol">￥</text>
               <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text>
@@ -62,6 +47,7 @@
 // pages/search-prod-show/search-prod-show.js
 var http = require("../../utils/http.js");
 import prod from "../../components/production/production";
+var config = require("../../utils/config.js");
 
 export default {
   data() {
@@ -69,7 +55,8 @@ export default {
       sts: 0,
       showType: 2,
       searchProdList: [],
-      prodName: ""
+      prodName: "",
+	  serverUrl: config.domain
     };
   },
 
@@ -148,17 +135,16 @@ export default {
       var ths = this; //热门搜索
 
       var params = {
-        url: "/search/searchProdPage",
-        method: "GET",
-        data: {
-          current: 1,
-          prodName: this.prodName,
-          size: 10,
-          sort: this.sts
-        },
+		url: "/flower/list",
+		method: "POST",
+		data: {
+		  title: this.prodName,
+		  pageNum: 1,
+		  pageSize: 10
+		},
         callBack: function (res) {
           ths.setData({
-            searchProdList: res.records
+            searchProdList: res.data.list
           });
         }
       };

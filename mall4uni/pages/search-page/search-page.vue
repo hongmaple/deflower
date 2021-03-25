@@ -89,8 +89,19 @@ export default {
         });
       }
     };
-    http.request(params); // 获取历史搜索
-
+    //http.request(params); // 获取历史搜索
+    ths.setData({
+          hotSearchList: [
+			  {
+				  content: "一生有你",
+				  title: "一生有你"
+			  },
+			  {
+			  	  content: "玫瑰花",
+			  	  title: "玫瑰花"
+			  }
+		  ]
+    });
     this.getRecentSearch();
   },
 
