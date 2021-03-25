@@ -203,6 +203,12 @@
 				"selectedIconPath": "/static/images/tabbar/huayu-sel.png"
 			},
 			{
+				"pagePath": "pages/saysCommentary/saysCommentary",
+				"text": "视频教学",
+				"iconPath": "/static/images/tabbar/huayu.png",
+				"selectedIconPath": "/static/images/tabbar/huayu-sel.png"
+			},
+			{
 				"pagePath": "pages/basket/basket",
 				"text": "购物车",
 				"iconPath": "/static/images/tabbar/basket.png",

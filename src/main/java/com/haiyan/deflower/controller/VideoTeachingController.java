@@ -1,5 +1,6 @@
 package com.haiyan.deflower.controller;
 
+import com.haiyan.deflower.dto.request.VideoTeachingQuery;
 import com.haiyan.deflower.pojo.AjaxResult;
 import com.haiyan.deflower.pojo.PageDomain;
 import com.haiyan.deflower.pojo.VideoTeaching;
@@ -52,13 +53,13 @@ public class VideoTeachingController {
 
     /**
      * 加载视频
-     * @param pageDomain 视频
+     * @param query 视频
      * @return 视频
      */
     @PostMapping("/list")
     @ApiOperation("添加视频教学")
-    public AjaxResult videoTeachingList(@RequestBody PageDomain pageDomain) {
-        AjaxResult ajaxResult = AjaxResult.success("添加视频教学成功",videoTeachingService.videoTeachingList(pageDomain));
+    public AjaxResult videoTeachingList(@RequestBody VideoTeachingQuery query) {
+        AjaxResult ajaxResult = AjaxResult.success("添加视频教学成功",videoTeachingService.videoTeachingList(query));
         return ajaxResult;
     }
 

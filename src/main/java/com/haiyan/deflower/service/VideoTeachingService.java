@@ -1,5 +1,6 @@
 package com.haiyan.deflower.service;
 
+import com.haiyan.deflower.dto.request.VideoTeachingQuery;
 import com.haiyan.deflower.pojo.PageDomain;
 import com.haiyan.deflower.pojo.PageList;
 import com.haiyan.deflower.pojo.VideoTeaching;
@@ -24,10 +25,10 @@ public interface VideoTeachingService {
 
     /**
      * 加载视频
-     * @param pageDomain 视频
+     * @param query 参数
      * @return 视频
      */
-    PageList<VideoTeaching> videoTeachingList(PageDomain pageDomain);
+    PageList<VideoTeaching> videoTeachingList(VideoTeachingQuery query);
 
     /**
      *
