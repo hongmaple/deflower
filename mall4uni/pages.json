@@ -50,6 +50,15 @@
 			}
 		},
 		{
+			"path": "pages/VideoTeaching/VideoTeaching",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "视频教学",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
 			"path": "pages/search-page/search-page",
 			"style": {
 				"backgroundTextStyle": "light",
@@ -203,7 +212,7 @@
 				"selectedIconPath": "/static/images/tabbar/huayu-sel.png"
 			},
 			{
-				"pagePath": "pages/saysCommentary/saysCommentary",
+				"pagePath": "pages/VideoTeaching/VideoTeaching",
 				"text": "视频教学",
 				"iconPath": "/static/images/tabbar/huayu.png",
 				"selectedIconPath": "/static/images/tabbar/huayu-sel.png"

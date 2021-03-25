@@ -2,7 +2,6 @@ package com.haiyan.deflower.controller;
 
 import com.haiyan.deflower.dto.request.VideoTeachingQuery;
 import com.haiyan.deflower.pojo.AjaxResult;
-import com.haiyan.deflower.pojo.PageDomain;
 import com.haiyan.deflower.pojo.VideoTeaching;
 import com.haiyan.deflower.service.VideoTeachingService;
 import io.swagger.annotations.Api;

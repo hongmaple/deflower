@@ -19,8 +19,7 @@
         <block v-for="(item, index) in productList" :key="index">
           <view class="show-item">
             <view class="more-prod-pic">
-              <image :src="serverUrl + item.image" class="more-pic" mode="widthFix"></image>
-			   <video width="320" height="240" controls="controls">
+			   <video width="420" height="340" controls="controls">
 			           <source :src="serverUrl+item.url" type="video/mp4">
 			   </video>
             </view>
@@ -116,10 +115,10 @@ export default {
     getProdList: function(){
       //加载分类列表
       var params = {
-        url: "/SaysCommentary/list",
+        url: "/VideoTeaching/list",
         method: "POST",
         data: {
-          flowerName: this.flowerName,
+          title: this.flowerName,
 		  pageNum: 1,
 		  pageSize: 10
         },
