@@ -59,6 +59,24 @@
 			}
 		},
 		{
+			"path": "pages/CustomerServiceChat/CustomerServiceChat",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "客服聊天",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
+			"path": "pages/VideoTeachingDetails/VideoTeachingDetails",
+			"style": {
+				"backgroundTextStyle": "light",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "视频教学播放",
+				"navigationBarTextStyle": "black"
+			}
+		},
+		{
 			"path": "pages/search-page/search-page",
 			"style": {
 				"backgroundTextStyle": "light",
@@ -188,7 +206,25 @@
 		{
 			"path": "pages/register/register"
 		}
-	],
+	    ,{
+            "path" : "pages/VideoTeachingDetails/VideoTeachingDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "视频教学播放",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/CustomerServiceChat/CustomerServiceChat",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "客服聊天",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"tabBar": {
 		"selectedColor": "#3a86b9",
 		"color": "#b8b8b8",
@@ -214,8 +250,8 @@
 			{
 				"pagePath": "pages/VideoTeaching/VideoTeaching",
 				"text": "视频教学",
-				"iconPath": "/static/images/tabbar/huayu.png",
-				"selectedIconPath": "/static/images/tabbar/huayu-sel.png"
+				"iconPath": "/static/images/tabbar/voide.png",
+				"selectedIconPath": "/static/images/tabbar/voide-sel.png"
 			},
 			{
 				"pagePath": "pages/basket/basket",

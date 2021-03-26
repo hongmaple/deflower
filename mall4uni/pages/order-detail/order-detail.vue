@@ -37,15 +37,6 @@
           </view>
         </view>
       </block>
-      <view class="prod-foot">
-        <view class="btn">
-          <button v-if="status==1" class="button" @tap="cancelOrder" :data-ordernum="orderNumber" hover-class="none">取消订单</button>
-          <button v-if="status==1" class="button warn" :data-ordernum="orderNumber" hover-class="none">再次购买</button>
-          <button v-if="status==1" class="button warn" @tap="onPayAgain" :data-ordernum="orderNumber" hover-class="none">付款</button>
-          <button v-if="status==3 || status==5" class="button" @tap="toDeliveryPage" :data-ordernum="orderNumber" hover-class="none">查看物流</button>
-          <button v-if="status==3" class="button warn" @tap="onConfirmReceive" :data-ordernum="orderNumber" hover-class="none">确认收货</button>
-        </view>
-      </view>
     </view>
 
     <!-- 订单信息 -->
@@ -108,10 +99,15 @@
 
     <!-- 底部栏 -->
     <view class="order-detail-footer">
-      <text class="dele-order" v-if="status==5||status==6">删除订单</text>
+      <text class="dele-order" v-if="status==4||status==5">删除订单</text>
       <view class="footer-box">
-        <text class="apply-service">联系客服</text>
-        <text class="buy-again">再次购买</text>
+		 <text v-if="status==1" class="buy-again" @tap="cancelOrder" hover-class="none">取消订单</text>
+		 <text v-if="status==1" class="buy-again" hover-class="none">再次购买</text>
+		 <text v-if="status==1" class="buy-again" @tap="onPayAgain" hover-class="none">付款</text>
+		 <text v-if="status==3 || status==5" class="buy-again" @tap="toDeliveryPage" hover-class="none">查看物流</text>
+		 <text v-if="status==3" class="buy-again" @tap="onConfirmReceive" hover-class="none">确认收货</text>
+         <text class="apply-service" @tap="toCustomerServiceChat">联系客服</text>
+         <text class="buy-again">再次购买</text>
       </view>
     </view>
 
@@ -195,6 +191,14 @@ export default {
         url: '/pages/prod/prod?prodid=' + prodid
       });
     },
+	/**
+	 * 咨询客服
+	 */
+	toCustomerServiceChat: function (e) {
+	  uni.navigateTo({
+	    url: '/pages/CustomerServiceChat/CustomerServiceChat'
+	  });
+	},
 
     /**
      * 加载订单数据
@@ -267,7 +271,6 @@ export default {
 	 * 取消订单
 	 */
 	cancelOrder: function (e) {
-	  var ordernum = e.currentTarget.dataset.ordernum;
 	  var ths = this;
 	  uni.showModal({
 	    title: '',
@@ -314,13 +317,15 @@ export default {
 	          mask: true
 	        });
 	        var params = {
-	          url: "/order/"+e.currentTarget.dataset.ordernum+"/4",
+	          url: "/order/"+ths.orderNumber+"/4",
 	          method: "PUT",
 			  needToken: true,
 	          data: {},
 	          callBack: function (res) {
 	            //console.log(res);
-	            ths.loadOrderData(ths.sts, 1);
+	            uni.navigateBack({  
+	                delta: 1 
+	            });  
 	            uni.hideLoading();
 	          }
 	        };
@@ -330,7 +335,15 @@ export default {
 	    }
 	
 	  });
-	}
+	},
+	/**
+	 * 查看物流
+	 */
+	toDeliveryPage: function (e) {
+	  uni.navigateTo({
+	    url: '/pages/express-delivery/express-delivery?orderNum=' + e.currentTarget.dataset.ordernum
+	  });
+	},
   }
 };
 </script>

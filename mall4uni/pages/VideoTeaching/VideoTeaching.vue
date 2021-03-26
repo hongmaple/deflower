@@ -8,7 +8,6 @@
       <input placeholder="输入关键字搜索" class="sear-input" confirm-type="search" @confirm="toSearchProdPage" @input="getSearchContent" :value="flowerName"></input>
       <image src="/static/images/icon/search.png" class="search-img"></image>
     </view>
-    <text class="search-hint" @tap="goBackIndex">取消</text>
   </view>
 <!-- 滚动内容区 -->
   <view class="main">
@@ -17,15 +16,18 @@
     <!-- <block wx:for='{{ productList}}' wx:key=''> -->
       <view class="cont-item">
         <block v-for="(item, index) in productList" :key="index">
-          <view class="show-item">
+          <view class="show-item" @tap="toProdPage" :data-item="item">
             <view class="more-prod-pic">
-			   <video width="420" height="340" controls="controls">
-			           <source :src="serverUrl+item.url" type="video/mp4">
-			   </video>
+			  <image :src="serverUrl + item.pic" class="more-pic" mode="widthFix"></image>
             </view>
             <view class="prod-text-right">
               <view class="prod-text more">{{item.title}}</view>
-              <view class="cate-prod-info" v-if="item.isCharge">{{item.price}}</view>
+			  <view class="prod-price more" v-if="item.isCharge">
+			    <text class="symbol">￥</text> <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text><text class="small-num">.{{wxs.parsePrice(item.price)[1]}}</text> 
+			  </view>
+			  <view class="prod-price more" v-else>
+			    <text class="symbol">￥</text> <text class="big-num">免费</text> 
+			  </view>
             </view>
           </view>
          
@@ -129,7 +131,14 @@ export default {
         }
       };
       http.request(params);
-    }
+    },
+	//跳转详情页
+	toProdPage: function (e) {
+	  var item = e.currentTarget.dataset.item;
+	  uni.navigateTo({
+	    url: '/pages/VideoTeachingDetails/VideoTeachingDetails?item=' + JSON.stringify(item)
+	  });
+	}
   }
 };
 </script>

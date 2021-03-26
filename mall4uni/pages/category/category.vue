@@ -40,7 +40,7 @@
             </view>
             <view class="prod-text-right">
               <view class="prod-text more">{{item.title}}</view>
-              <view class="cate-prod-info">{{item.title}}</view>
+              <view class="cate-prod-info">{{item.flowerLanguage}}</view>
               <view class="prod-price more">
                 <text class="symbol">￥</text> <text class="big-num">{{wxs.parsePrice(item.price)[0]}}</text><text class="small-num">.{{wxs.parsePrice(item.price)[1]}}</text> 
               </view>
