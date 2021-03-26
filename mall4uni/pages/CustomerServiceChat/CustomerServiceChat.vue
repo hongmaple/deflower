@@ -12,14 +12,21 @@
 		data() {
 			return {
 				socket: {},
-				messages: [
+				messagesList: [],
+				sendMessages: {
 					
-				],
+				},
 				danmuValue: ''
 			}
 		},
 		onLoad: function (options) {
 			var user = JSON.parse(uni.getStorageSync('token'));
+			var sendMessages = {
+				toUserId: user.id
+			}
+			this.setData({
+			  sendMessages: sendMessages
+			});
 			this.openSocket(user.id);
 		},
 		methods: {
@@ -42,10 +49,16 @@
 			           };
 			           //获得消息事件
 			           this.socket.onmessage = function(msg) {
-			               console.log(msg.data);
 			               //发现消息进入    开始处理前端触发逻辑
+						   console.log(msg.data);
 						   var message = JSON.parse(msg.data);
-						   this.messages.push(message);
+						   var messagesList = this.messagesList;
+						   console.log(messagesList);
+						   messagesList.push(message);
+						   this.setData({
+						     messagesList: messagesList
+						   });
+						   console.log(this.messagesList);
 			           };
 			           //关闭事件
 			           this.socket.onclose = function() {
@@ -63,7 +76,9 @@
 			       }else {
 			           console.log("您的浏览器支持WebSocket");
 			           console.log(this.socket);
-			           this.socket.send('{"toUserId":"2","contentText":"sdfsdfsdf"}');
+					   var sendMessages = this.sendMessages;
+					   sendMessages.contentText=this.danmuValue;
+			           this.socket.send(JSON.stringify(sendMessages));
 			       }
 			   }
 		}
@@ -72,7 +87,6 @@
 
 <style>
 /* 底部栏 */
-
 .order-detail-footer {
   position: fixed;
   bottom: 0;
