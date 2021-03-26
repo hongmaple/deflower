@@ -14,19 +14,13 @@
 				socket: {},
 				messagesList: [],
 				sendMessages: {
-					
+					toUserId: 2
 				},
 				danmuValue: ''
 			}
 		},
 		onLoad: function (options) {
 			var user = JSON.parse(uni.getStorageSync('token'));
-			var sendMessages = {
-				toUserId: user.id
-			}
-			this.setData({
-			  sendMessages: sendMessages
-			});
 			this.openSocket(user.id);
 		},
 		methods: {
@@ -78,6 +72,7 @@
 			           console.log(this.socket);
 					   var sendMessages = this.sendMessages;
 					   sendMessages.contentText=this.danmuValue;
+					   console.log(JSON.stringify(sendMessages));
 			           this.socket.send(JSON.stringify(sendMessages));
 			       }
 			   }
