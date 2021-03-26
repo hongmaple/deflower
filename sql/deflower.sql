@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 25/03/2021 18:09:31
+ Date: 26/03/2021 18:21:49
 */
 
 SET NAMES utf8mb4;
@@ -31,12 +31,13 @@ CREATE TABLE `tb_address`  (
   `district` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '区',
   `detail` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地址' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '地址' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_address
 -- ----------------------------
 INSERT INTO `tb_address` VALUES (1, 3, 'maple', '17986897562', '湖南省', '长沙市', '岳麓区', '科教新村709');
+INSERT INTO `tb_address` VALUES (5, 2, 'sad', '15876899876', '河北省', '怀化市', '撒旦区', '阿萨的撒反对发598');
 
 -- ----------------------------
 -- Table structure for tb_background_user
@@ -51,7 +52,7 @@ CREATE TABLE `tb_background_user`  (
   `avatar_image` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '/profile/upload/2021/03/10/dbced90a-9594-4aa7-b228-05a482c26937.png' COMMENT '头像',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_background_user
@@ -76,7 +77,12 @@ CREATE TABLE `tb_cart`  (
   `price` double NULL DEFAULT NULL COMMENT '价格 单位元',
   `num` int(0) NULL DEFAULT NULL COMMENT '数量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_cart
+-- ----------------------------
+INSERT INTO `tb_cart` VALUES (9, 3, 3, '蝴蝶兰4株', '/profile/upload/2021/03/16/aefb92ae-6dd4-4510-baa3-a09144f794be.jpg', 388, 1);
 
 -- ----------------------------
 -- Table structure for tb_category
@@ -176,7 +182,8 @@ CREATE TABLE `tb_order`  (
 -- Records of tb_order
 -- ----------------------------
 INSERT INTO `tb_order` VALUES ('1374292737267879936', 3844, 3844, '2021-03-23 17:31:36', 3, 'maple', 'maple', '17986897562', '湖南省', '长沙市', '岳麓区', '科教新村709', '', '2', 0);
-INSERT INTO `tb_order` VALUES ('1374894696794546176', 378, 378, '2021-03-25 09:23:35', 3, 'maple', 'maple', '17986897562', '湖南省', '长沙市', '岳麓区', '科教新村709', '会不会v计划', '3', 0);
+INSERT INTO `tb_order` VALUES ('1374894696794546176', 378, 378, '2021-03-25 09:23:35', 3, 'maple', 'maple', '17986897562', '湖南省', '长沙市', '岳麓区', '科教新村709', '会不会v计划', '4', 0);
+INSERT INTO `tb_order` VALUES ('1375371868126601216', 178, 178, '2021-03-26 16:59:41', 2, 'maple', 'sad', '15876899876', '河北省', '怀化市', '撒旦区', '阿萨的撒反对发598', '', '1', 0);
 
 -- ----------------------------
 -- Table structure for tb_order_detail
@@ -193,7 +200,7 @@ CREATE TABLE `tb_order_detail`  (
   `image` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '商品图片',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `key_order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 151 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 152 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单详情表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_order_detail
@@ -203,6 +210,7 @@ INSERT INTO `tb_order_detail` VALUES (147, '1374292737267879936', 2, 2, '你是�
 INSERT INTO `tb_order_detail` VALUES (148, '1374292737267879936', 4, 1, '吉祥如意', '', 218, '/profile/upload/2021/03/16/d4832824-a70e-4704-8261-09b748868102.jpg');
 INSERT INTO `tb_order_detail` VALUES (149, '1374299887356727296', 3, 1, '蝴蝶兰4株', '', 388, '/profile/upload/2021/03/16/aefb92ae-6dd4-4510-baa3-a09144f794be.jpg');
 INSERT INTO `tb_order_detail` VALUES (150, '1374894696794546176', 1, 1, '一路上有你 [泰国进口] 真空玫瑰花，红玫瑰系列', '', 368, '/profile/upload/2021/03/16/3ac4761a-619b-44d1-9889-dac25275185c.jpg');
+INSERT INTO `tb_order_detail` VALUES (151, '1375371868126601216', 2, 1, '你是唯一 [11枝新品 一心一意的爱] 卡罗拉红玫瑰11枝', '', 168, '/profile/upload/2021/03/16/2e691a23-9678-4bd4-bdbd-23bfeff3f5b8.jpg');
 
 -- ----------------------------
 -- Table structure for tb_order_status
@@ -225,7 +233,8 @@ CREATE TABLE `tb_order_status`  (
 -- ----------------------------
 INSERT INTO `tb_order_status` VALUES ('1374292737267879936', 3, '2021-03-23 17:31:36', '2021-03-24 14:27:16', '2021-03-25 14:55:22', NULL, NULL);
 INSERT INTO `tb_order_status` VALUES ('1374299887356727296', 5, '2021-03-23 18:00:01', '2021-03-24 15:07:44', NULL, NULL, NULL);
-INSERT INTO `tb_order_status` VALUES ('1374894696794546176', 3, '2021-03-25 09:23:35', '2021-03-25 10:01:15', '2021-03-25 14:56:09', NULL, '2021-03-25 09:54:04');
+INSERT INTO `tb_order_status` VALUES ('1374894696794546176', 4, '2021-03-25 09:23:35', '2021-03-25 10:01:15', '2021-03-25 14:56:09', '2021-03-26 16:21:46', '2021-03-25 09:54:04');
+INSERT INTO `tb_order_status` VALUES ('1375371868126601216', 1, '2021-03-26 16:59:41', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tb_says_commentary
@@ -282,7 +291,7 @@ CREATE TABLE `tb_video_teaching`  (
   `price` double(100, 2) NULL DEFAULT NULL COMMENT '价格',
   `is_charge` tinyint(0) NULL DEFAULT NULL COMMENT '是否收费',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_video_teaching

@@ -69,7 +69,6 @@
 			           console.log("您的浏览器不支持WebSocket");
 			       }else {
 			           console.log("您的浏览器支持WebSocket");
-			           console.log(this.socket);
 					   var sendMessages = this.sendMessages;
 					   sendMessages.contentText=this.danmuValue;
 					   console.log(JSON.stringify(sendMessages));
