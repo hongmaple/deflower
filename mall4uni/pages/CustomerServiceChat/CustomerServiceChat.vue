@@ -105,6 +105,7 @@
 	font-size: 28rpx;
     border-radius: 50rpx;
 	border: 2rpx solid #777;
+	margin-left: 15rpx;
 }
 .buy-again {
   font-size: 26rpx;
