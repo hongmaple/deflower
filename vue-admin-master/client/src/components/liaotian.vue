@@ -9,13 +9,15 @@
       :close-on-click-modal="false"
       :visible.sync="dialong.show"
     >
-     <div v-for="(item, index) in messagesList" :key="index" style="width=700px;hight: 600px;overflow:scroll;">
+    <div style="width=700px;hight: 600px;overflow:scroll;">
+      <div v-for="(item, index) in messagesList" :key="index">
           <div :class="item.fromUserId==0?'content-right':'content-left'">
             <div style="width: 300px;">
               <div :class="item.fromUserId==0?'text-bs-right':'text-bs-left'" v-html="item.contentText"></div>
             </div>
           </div>
       </div>
+    </div>
       <div slot="footer" class="dialog-footer">
           <p style="display: none;" v-text="a"></p>
           <el-input type="textarea" v-model="danmuValue"></el-input>
