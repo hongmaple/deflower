@@ -29,6 +29,12 @@ const router = new Router({
           meta: { title: '后台用户信息列表' }
         },
         {
+          path: '/userList',
+          name: 'userList',
+          component: () => import('./views/userList'),
+          meta: { title: 'C端用户管理' }
+        },
+        {
           path: '/fundList',
           name: 'fundList',
           component: () => import('./views/fundmanagement/FundList'),

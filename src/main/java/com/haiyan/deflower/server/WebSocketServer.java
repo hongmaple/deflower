@@ -11,6 +11,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -100,6 +101,7 @@ public class WebSocketServer {
                 JSONObject jsonObject = JSON.parseObject(message);
                 // 追加发送人（防窜改）
                 jsonObject.put("fromUserId", this.userId);
+                jsonObject.put("sendTime",new Date());
                 String toUserId = jsonObject.getString("toUserId");
                 // 传送给对应 toUserId 用户的 WebSocket
                 if (StringUtils.isNotBlank(toUserId) && webSocketMap.containsKey(toUserId)) {

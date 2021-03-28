@@ -42,6 +42,11 @@ export default {
           path: "/staff"
         },
         {
+          icon: "el-icon-service",
+          name: "C端用户管理",
+          path: "/userList"
+        },
+        {
           icon: "el-icon-document",
           name: "账单管理",
           path: "fund",

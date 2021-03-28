@@ -2,6 +2,7 @@ package com.haiyan.deflower.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.haiyan.deflower.pojo.AjaxResult;
+import com.haiyan.deflower.pojo.PageDomain;
 import com.haiyan.deflower.pojo.User;
 import com.haiyan.deflower.service.UserService;
 import io.swagger.annotations.Api;
@@ -32,6 +33,18 @@ public class UserController {
     }
 
     /**
+     * 加载后台用户
+     * @param pageDomain 参数
+     * @return 结果
+     */
+    @PostMapping("/list")
+    @ApiOperation("加载后台用户")
+    public AjaxResult ListUser(@RequestBody PageDomain pageDomain) {
+        AjaxResult ajaxResult = AjaxResult.success(userService.ListUser(pageDomain));
+        return ajaxResult;
+    }
+
+    /**
      * 登陆
      * @param user 参数
      * @return 结果
@@ -52,6 +65,18 @@ public class UserController {
     @ApiOperation("修改用户信息")
     public AjaxResult updateUser(@Valid @RequestBody User user) {
         AjaxResult ajaxResult = AjaxResult.success(userService.updateUser(user));
+        return ajaxResult;
+    }
+
+    /**
+     * 删除用户
+     * @param id 用户id
+     * @return 结果
+     */
+    @DeleteMapping("/{id}")
+    @ApiOperation("删除用户")
+    public AjaxResult deletedUser(@PathVariable Long id) {
+        AjaxResult ajaxResult = AjaxResult.success(userService.deletedUser(id));
         return ajaxResult;
     }
 }

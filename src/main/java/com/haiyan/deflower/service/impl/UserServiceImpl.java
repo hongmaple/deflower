@@ -1,10 +1,13 @@
 package com.haiyan.deflower.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.haiyan.deflower.dao.UserDao;
 import com.haiyan.deflower.exception.ExceptionResult;
 import com.haiyan.deflower.mapper.UserMapper;
 import com.haiyan.deflower.pojo.BackgroundUser;
+import com.haiyan.deflower.pojo.PageDomain;
+import com.haiyan.deflower.pojo.PageList;
 import com.haiyan.deflower.pojo.User;
 import com.haiyan.deflower.service.UserService;
 import com.haiyan.deflower.utils.CookieUtils;
@@ -79,6 +82,24 @@ public class UserServiceImpl implements UserService {
         }
         if(!userDao.lambdaUpdate().eq(User::getId,user.getId()).update(user)) {
             throw new ExceptionResult("user","false",null,"修改失败");
+        }
+        return true;
+    }
+
+    @Override
+    public PageList<User> ListUser(PageDomain pageDomain) {
+        Page<User> page = userDao.lambdaQuery().page(new Page<>(pageDomain.getPageNum(), pageDomain.getPageSize()));
+        return PageList.of(page.getRecords(),page);
+    }
+
+    @Override
+    public Boolean deletedUser(Long id) {
+        User loginUser = userUtils.getUser(ServletUtils.getRequest());
+        if (userDao.lambdaQuery().eq(User::getId,loginUser.getId()).count()==0) {
+            throw new ExceptionResult("user","false",null,"当前用户不存在");
+        }
+        if(userMapper.deleteById(id)==0) {
+            throw new ExceptionResult("user","false",null,"删除失败");
         }
         return true;
     }

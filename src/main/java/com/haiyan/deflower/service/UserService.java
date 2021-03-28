@@ -1,5 +1,7 @@
 package com.haiyan.deflower.service;
 
+import com.haiyan.deflower.pojo.BackgroundUser;
+import com.haiyan.deflower.pojo.PageDomain;
 import com.haiyan.deflower.pojo.PageList;
 import com.haiyan.deflower.pojo.User;
 
@@ -27,4 +29,18 @@ public interface UserService {
      * @return 结果
      */
     Boolean updateUser(User user);
+
+    /**
+     * 加载后台用户
+     * @param pageDomain 参数
+     * @return 结果
+     */
+    PageList<User> ListUser(PageDomain pageDomain);
+
+    /**
+     * 删除用户
+     * @param id 用户id
+     * @return 结果
+     */
+    Boolean deletedUser(Long id);
 }
