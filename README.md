@@ -7,6 +7,11 @@
 ### 后端架构
 
 1. 技术栈
+| 技术                 | 说明                | 官网                                           |
+| -------------------- | ------------------- | ---------------------------------------------- |
+| SpringBoot           | 容器+MVC框架        | https://spring.io/projects/spring-boot         |
+| SpringSecurity       | 认证和授权框架      | https://spring.io/projects/spring-security     |
+
 | 技术 | 说明 | 官网 |
 | -------------------- | ------------------- | ---------------------------------------------- |
 | spring | 类的管理工具 | http://c.biancheng.net/spring/ |
