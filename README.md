@@ -9,7 +9,7 @@
 1. 技术栈
 | 技术 | 说明 | 官网 |
 | -------------------- | ------------------- | ---------------------------------------------- |
-| spring|类的管理工具 | http://c.biancheng.net/spring/ |
+| spring | 类的管理工具 | http://c.biancheng.net/spring/ |
 | springMvc | 显示层、控制层、数据层的操作 | https://www.jianshu.com/p/91a2d0a1e45a |
 | mybatis | ORM框架 | http://www.mybatis.org/mybatis-3/zh/index.html |
 | mybatisPlus | MyBatis的增强工具,在 MyBatis 的基础上只做增强不做改变,为简化开发、提高效率而生 | https://mp.baomidou.com/ |
