@@ -9,18 +9,18 @@
 1. 技术栈
 |技术|说明|官网|
 | -------------------- | ------------------- | ---------------------------------------------- |
-|spring|类的管理工具|http://c.biancheng.net/spring/|
-|springMvc|显示层、控制层、数据层的操作|https://www.jianshu.com/p/91a2d0a1e45a|
-|mybatis|ORM框架|http://www.mybatis.org/mybatis-3/zh/index.html|
-|mybatisPlus|MyBatis的增强工具,在 MyBatis 的基础上只做增强不做改变,为简化开发、提高效率而生|https://mp.baomidou.com/|
-|springBoot|容器+MVC框架|https://spring.io/projects/spring-boot|
-|websocket|单个TCP连接上进行全双工通信的协议|http://www.ruanyifeng.com/blog/2017/05/websocket.html|
-|pagehelper|MyBatis物理分页插件|http://git.oschina.net/free/Mybatis_PageHelper|
-|Swagger2|文档生成工具|https://github.com/swagger-api/swagger-ui|
-|lombok|省略getter和setter方法|https://www.jianshu.com/p/2543c71a8e45|
-|modelmapper|Java Object Mapping 工具|https://github.com/modelmapper/modelmapper|
-|fastjson|将Java对象转换为JSON表示|https://github.com/alibaba/fastjson|
-|Hibernator-Validator|验证框架|
+| spring|类的管理工具 | http://c.biancheng.net/spring/ |
+| springMvc | 显示层、控制层、数据层的操作 | https://www.jianshu.com/p/91a2d0a1e45a |
+| mybatis | ORM框架 | http://www.mybatis.org/mybatis-3/zh/index.html |
+| mybatisPlus | MyBatis的增强工具,在 MyBatis 的基础上只做增强不做改变,为简化开发、提高效率而生 | https://mp.baomidou.com/ |
+| springBoot | 容器+MVC框架 | https://spring.io/projects/spring-boot |
+| websocket | 单个TCP连接上进行全双工通信的协议 | http://www.ruanyifeng.com/blog/2017/05/websocket.html |
+| pagehelper | MyBatis物理分页插件 | http://git.oschina.net/free/Mybatis_PageHelper |
+| Swagger2 | 文档生成工具 | https://github.com/swagger-api/swagger-ui |
+| lombok | 省略getter和setter方法 | https://www.jianshu.com/p/2543c71a8e45 |
+| modelmapper | Java Object Mapping 工具 | https://github.com/modelmapper/modelmapper |
+| fastjson|将Java对象转换为JSON表示 | https://github.com/alibaba/fastjson |
+| Hibernator-Validator | 验证框架 |
 
 2. 数据库用的是mysql8.0，使用Navicat进行管理
 2.系统环境，windows ，jdk1.8
@@ -33,6 +33,9 @@ uniapp版本，做啥都不愁。即使不跨端，uni-app也是更好的小程�
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0330/105908_f19c45bb_8893195.png "142445_a8976d9e_5094767.png")
 uni-app 是一个使用 Vue.js 开发所有前端应用的框架，开发者编写一套代码，可发布到iOS、Android、Web（响应式）、以及各种小程序（微信/支付宝/百度/头条/QQ/钉钉/淘宝）、快应用等多个平台。 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0330/105942_fe5888a7_8893195.png "140954_a32581f8_5094767.png")
+##### 亮点功能
+视频教学模块，具备实时弹幕功能
+客服功能，实现了实时消息刷新，分开展示，界面美化。
 ##### uni-app相关截图
 
 ![un-app总截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappInfo.png)
@@ -89,7 +92,13 @@ uni-app 是一个使用 Vue.js 开发所有前端应用的框架，开发者编�
 	- 主题更换
 	- 404
 ##### 部分界面展示
-![![![![![![![输入图片说明](https://images.gitee.com/uploads/images/2021/0330/114910_b332138a_2099985.jpeg "屏幕截图 2021-03-30 114617.jpg")](https://images.gitee.com/uploads/images/2021/0330/114838_5dbd1691_2099985.jpeg "屏幕截图 2021-03-30 114558.jpg")](https://images.gitee.com/uploads/images/2021/0330/114827_e93fe58e_2099985.jpeg "屏幕截图 2021-03-30 114539.jpg")](https://images.gitee.com/uploads/images/2021/0330/114734_756c3c8d_2099985.jpeg "屏幕截图 2021-03-30 114521.jpg")](https://images.gitee.com/uploads/images/2021/0330/114722_8c625bb3_2099985.jpeg "屏幕截图 2021-03-30 114451.jpg")](https://images.gitee.com/uploads/images/2021/0330/114708_f282137d_2099985.jpeg "屏幕截图 2021-03-30 114433.jpg")](https://images.gitee.com/uploads/images/2021/0330/114654_f472a79c_2099985.jpeg "屏幕截图 2021-03-30 114411.jpg")
+![登陆](https://images.gitee.com/uploads/images/2021/0330/114910_b332138a_2099985.jpeg "屏幕截图 2021-03-30 114617.jpg")
+![用户](https://images.gitee.com/uploads/images/2021/0330/114838_5dbd1691_2099985.jpeg "屏幕截图 2021-03-30 114558.jpg")
+![花](https://images.gitee.com/uploads/images/2021/0330/114827_e93fe58e_2099985.jpeg "屏幕截图 2021-03-30 114539.jpg")
+![解说](https://images.gitee.com/uploads/images/2021/0330/114734_756c3c8d_2099985.jpeg "屏幕截图 2021-03-30 114521.jpg")
+![视频教学](https://images.gitee.com/uploads/images/2021/0330/114722_8c625bb3_2099985.jpeg "屏幕截图 2021-03-30 114451.jpg")
+![艾弗森是否](https://images.gitee.com/uploads/images/2021/0330/114708_f282137d_2099985.jpeg "屏幕截图 2021-03-30 114433.jpg")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0330/114654_f472a79c_2099985.jpeg "屏幕截图 2021-03-30 114411.jpg")
 ##### 项目编译和运行
   + 可以直接在git上下载项目源码。把github下载到本地，
 		git clone [](https://github.com/MrZHLF/vue-admin.git)
