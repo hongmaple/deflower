@@ -19,7 +19,7 @@
 | Swagger2 | 文档生成工具 | https://github.com/swagger-api/swagger-ui |
 | lombok | 省略getter和setter方法 | https://www.jianshu.com/p/2543c71a8e45 |
 | modelmapper | Java Object Mapping 工具 | https://github.com/modelmapper/modelmapper |
-| fastjson|将Java对象转换为JSON表示 | https://github.com/alibaba/fastjson |
+| fastjson| 将Java对象转换为JSON表示 | https://github.com/alibaba/fastjson |
 | Hibernator-Validator | 验证框架 |
 
 2. 数据库用的是mysql8.0，使用Navicat进行管理
