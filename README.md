@@ -6,23 +6,25 @@
 ## 软件架构
 ### 后端架构
 
-1. spring，springMvc,mybatis,mybatisPlus,springBoot,websocket,pagehelper,Swagger2,lombok,modelmapper,fastjson
+1. 技术栈
 | 技术 | 说明 | 官网 |
-|----|----|----|
-|    |    |    |
-|    |    |    |
-|    |    |    |
-|    |    |    |
-|    |    |    |
-|    |    |    |
-|    |    |    |
-|    |    |    |
-|    |    |    |
+|spring|----|----|
+|springMvc|    |    |
+|mybatis|    |    |
+|mybatisPlus|    |    |
+|springBoot|    |    |
+|websocket|    |    |
+|pagehelper|    |    |
+|Swagger2|    |    |
+|lombok|    |    |
+|modelmapper|    |    |
+|fastjson|    |    |
 
 2. 数据库用的是mysql8.0，使用Navicat进行管理
 2.系统环境，windows ，jdk1.8
 ### 前端项目
 #### mall4uni
+感谢[mall4uni ](https://gitee.com/gz-yami/mall4uni)
 介绍： 
 一个基于springboot的开源商城 uniapp端
 uniapp版本，做啥都不愁。即使不跨端，uni-app也是更好的小程序开发框架、更好的App跨平台框架、更方便的H5开发框架。不管领导安排什么样的项目，你都可以快速交付，不需要转换开发思维、不需要更改开发习惯。
@@ -36,11 +38,11 @@ uni-app 是一个使用 Vue.js 开发所有前端应用的框架，开发者编�
 编辑 utils/config.js 里的接口域名配置
 
 点击工具栏的运行 -> 运行到内置浏览器 即可开发调试~
-感谢[mall4uni ](https://gitee.com/gz-yami/mall4uni)
 #### vue-admin-master
 #### 基于vue3.0实现后台管理模板
 
 > 感谢[vue-admin](https://github.com/MrZHLF/vue-admin)
+
 > 使用vue最新脚手架搭建环境，编写界面，使用axios请求接口，渲染界面,实现页面登录注册，数据的增删改查,数据部分存储到easy-mock数据中。
 
 ##### 项目结构
