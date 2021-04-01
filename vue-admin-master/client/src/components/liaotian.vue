@@ -34,20 +34,7 @@ export default {
   data() {
     return {
         socket: {},
-	   	  messagesList: [
-           {
-              contentText: "你好",
-              fromUserId: 0,
-              sendTime: '',
-              toUserId: 3
-           },
-           {
-              contentText: "美女我想操你",
-              fromUserId: 3,
-              sendTime: '',
-              toUserId: 'admin1'
-           }
-         ],
+	   	  messagesList: [],
 		    danmuValue: '',
         a: 0
     };
