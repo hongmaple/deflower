@@ -131,6 +131,7 @@
 					  data: {
 					  },
 					  callBack: function (res) {
+						  console.log(res);
 					    uni.setStorageSync('token',res.data);
 					    uni.setStorageSync("loginResult",res);
 					  }
