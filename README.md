@@ -137,3 +137,13 @@ ruoyi:
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: E:/GitWarehouse/deflower/uploadPath
 ```
+到此就可以使用了。
+#### 另外我试着打包了安卓app，感觉挺好玩的，感兴趣的童鞋可以试试。
+1. 用HubilderX 配置应用图标等信息
+![用HubilderX 配置应用图标等信息](https://images.gitee.com/uploads/images/2021/0401/111123_3786d728_2099985.jpeg "屏幕截图 2021-04-01 111054.jpg")
+2.让手机跟电脑连接在一个局域网下，并配置电脑的网络ip地址
+![配置电脑的网络ip地址](https://images.gitee.com/uploads/images/2021/0401/111345_9a8a90b4_2099985.jpeg "屏幕截图 2021-04-01 111324.jpg")
+3.点击左上方发行，选择原生app云打包，并做如下设置
+![原生app云打包](https://images.gitee.com/uploads/images/2021/0401/111647_9a06ce49_2099985.jpeg "屏幕截图 2021-04-01 111607.jpg")
+4.安装即可运行。
+
