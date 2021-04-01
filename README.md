@@ -42,9 +42,7 @@ uni-app 是一个使用 Vue.js 开发所有前端应用的框架，开发者编�
 ![un-app总截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappInfo.png)
 
 ![un-app首页截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappIndex.png)
-
 ![un-app购物车截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappCart.png)
-
 ![un-app个人中心截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappMy.png)
 ##### 开发环境启动
 请使用 uniapp官方推荐的开发工具 HBuilderX 导入项目进行开发
@@ -140,11 +138,16 @@ ruoyi:
 到此就可以使用了。
 #### 另外我试着打包了安卓app，感觉挺好玩的，感兴趣的童鞋可以试试。
 1. 用HubilderX 配置应用图标等信息
+
 ![用HubilderX 配置应用图标等信息](https://images.gitee.com/uploads/images/2021/0401/111123_3786d728_2099985.jpeg "屏幕截图 2021-04-01 111054.jpg")
+
 2.让手机跟电脑连接在一个局域网下，并配置电脑的网络ip地址
+
 ![配置电脑的网络ip地址](https://images.gitee.com/uploads/images/2021/0401/111345_9a8a90b4_2099985.jpeg "屏幕截图 2021-04-01 111324.jpg")
+
 3.点击左上方发行，选择原生app云打包，并做如下设置
 
 ![原生app云打包](https://images.gitee.com/uploads/images/2021/0401/111647_9a06ce49_2099985.jpeg "屏幕截图 2021-04-01 111607.jpg")
+
 4.安装即可运行。
 
