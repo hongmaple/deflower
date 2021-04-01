@@ -80,7 +80,7 @@ public class UserController {
     @PostMapping("/info")
     @ApiOperation("获取当前用户登陆的信息")
     public AjaxResult getUserInfo() {
-        AjaxResult ajaxResult = AjaxResult.success(userService.getUserInfo());
+        AjaxResult ajaxResult = AjaxResult.success(JSON.toJSON(userService.getUserInfo()));
         return ajaxResult;
     }
 
