@@ -16,7 +16,7 @@
     <text class="gotobinding" @tap="toBindingPhone">去绑定</text>
   </view> -->
 
-		<view class="userinfo" v-if="isAuthInfo">
+		<view class="userinfo" v-if="isAuthInfo" @tap="toUserInfoPage">
 			<view class="userinfo-con">
 				<view class="userinfo-avatar">
 					<!-- <open-data type="userAvatarUrl"></open-data> -->
@@ -80,7 +80,7 @@
 					<view class="num">{{collectionCount}}</view>
 					<view class="tit">我的收藏</view>
 				</view>
-				<view class="col-item">
+				<view class="col-item" @tap="toOrderListPage" data-sts="0">
 					<view class="num">{{orderAmount}}</view>
 					<view class="tit">我的订单</view>
 				</view>
@@ -178,7 +178,6 @@
 		onShow: function() {
 			//加载订单数字
 			var ths = this; // var status = ths.data.status
-            console.log(uni.getStorageSync("loginResult"));
 			ths.setData({
 				loginResult: uni.getStorageSync("loginResult"),
 				// isAuthInfo: Boolean(wx.getStorageSync('loginResult').userId),
@@ -351,6 +350,11 @@
 					})
 				}, 1000)
 			},
+			toUserInfoPage: function(e) {
+				uni.navigateTo({
+					url: "../userInfo/userInfo"
+				})
+			}
 		}
 	};
 </script>

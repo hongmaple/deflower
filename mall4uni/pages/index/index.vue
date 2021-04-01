@@ -26,19 +26,19 @@
     <view class="cat-item">
       <view class="item" @tap="toClassifyPage" data-sts="1">
         <image src="/static/images/icon/newProd.png"></image>
-        <text>新品推荐</text>
+        <text>优雅绿植</text>
       </view>
-      <view class="item" @tap="toClassifyPage" data-sts="1">
+      <view class="item" @tap="toClassifyPage" data-sts="2">
         <image src="/static/images/icon/timePrice.png"></image>
-        <text>限时特惠</text>
+        <text>浪漫鲜花</text>
       </view>
       <view class="item" @tap="toClassifyPage" data-sts="3">
         <image src="/static/images/icon/neweveryday.png"></image>
-        <text>每日疯抢</text>
+        <text>一枝独秀</text>
       </view>
-      <view class="item" @tap="toCouponCenter">
+      <view class="item" @tap="toClassifyPage" data-sts="4">
         <image src="/static/images/icon/newprods.png"></image>
-        <text>领优惠券</text>
+        <text>心动时刻</text>
       </view>
     </view>
 

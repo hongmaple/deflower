@@ -58,19 +58,19 @@ export default {
       });
     } else if (this.sts == 1) {
       uni.setNavigationBarTitle({
-        title: '鲜花'
+        title: '优雅绿植'
       });
     } else if (this.sts == 2) {
       uni.setNavigationBarTitle({
-        title: '永生花'
+        title: '浪漫鲜花'
       });
     } else if (this.sts == 3) {
       uni.setNavigationBarTitle({
-        title: '每日疯抢'
+        title: '一枝独秀'
       });
     } else if (this.sts == 4) {
       uni.setNavigationBarTitle({
-        title: '优惠券活动商品'
+        title: '心动时刻'
       });
     } else if (this.sts == 5) {
       uni.setNavigationBarTitle({

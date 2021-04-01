@@ -103,4 +103,10 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
+
+    @Override
+    public User getUserInfo() {
+        User loginUser = userUtils.getUser(ServletUtils.getRequest());
+        return userDao.getById(loginUser.getId());
+    }
 }

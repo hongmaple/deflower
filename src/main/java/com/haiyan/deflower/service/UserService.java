@@ -43,4 +43,11 @@ public interface UserService {
      * @return 结果
      */
     Boolean deletedUser(Long id);
+
+    /**
+     * 获取当前用户登陆的信息
+     * @return 结果
+     */
+    User getUserInfo();
+
 }
