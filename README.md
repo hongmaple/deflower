@@ -38,14 +38,12 @@ uni-app 是一个使用 Vue.js 开发所有前端应用的框架，开发者编�
 视频教学模块，具备实时弹幕功能
 客服功能，实现了实时消息刷新，分开展示，界面美化。
 ##### uni-app相关截图
-
-![un-app总截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappInfo.png)
-
-![un-app首页截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappIndex.png)
-
-![un-app购物车截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappCart.png)
-
-![un-app个人中心截图](https://gitee.com/gz-yami/mall4uni/raw/master/static/screenshot/uniappMy.png)
+![首页](https://images.gitee.com/uploads/images/2021/0401/112346_5c335774_2099985.jpeg "屏幕截图 2021-04-01 100453.jpg")
+![分类](https://images.gitee.com/uploads/images/2021/0401/112408_6eac4168_2099985.jpeg "屏幕截图 2021-04-01 100545.jpg")
+![花语解说](https://images.gitee.com/uploads/images/2021/0401/112430_70c4a95e_2099985.jpeg "屏幕截图 2021-04-01 100604.jpg")
+![视频教学播放](https://images.gitee.com/uploads/images/2021/0401/112505_b03d4ee5_2099985.jpeg "屏幕截图 2021-04-01 100649.jpg")
+![购物车](https://images.gitee.com/uploads/images/2021/0401/112534_5c74d69f_2099985.jpeg "屏幕截图 2021-04-01 100710.jpg")
+![客服聊天](https://images.gitee.com/uploads/images/2021/0401/112600_7ff93bc3_2099985.jpeg "屏幕截图 2021-04-01 101506.jpg")
 ##### 开发环境启动
 请使用 uniapp官方推荐的开发工具 HBuilderX 导入项目进行开发
 
@@ -137,3 +135,19 @@ ruoyi:
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   profile: E:/GitWarehouse/deflower/uploadPath
 ```
+到此就可以使用了。
+#### 另外我试着打包了安卓app，感觉挺好玩的，感兴趣的童鞋可以试试。
+1. 用HubilderX 配置应用图标等信息
+
+![用HubilderX 配置应用图标等信息](https://images.gitee.com/uploads/images/2021/0401/111123_3786d728_2099985.jpeg "屏幕截图 2021-04-01 111054.jpg")
+
+2.让手机跟电脑连接在一个局域网下，并配置电脑的网络ip地址
+
+![配置电脑的网络ip地址](https://images.gitee.com/uploads/images/2021/0401/111345_9a8a90b4_2099985.jpeg "屏幕截图 2021-04-01 111324.jpg")
+
+3.点击左上方发行，选择原生app云打包，并做如下设置
+
+![原生app云打包](https://images.gitee.com/uploads/images/2021/0401/111647_9a06ce49_2099985.jpeg "屏幕截图 2021-04-01 111607.jpg")
+
+4.安装即可运行。
+
