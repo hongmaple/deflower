@@ -1,5 +1,8 @@
 # deflower
 
+* 阿里云服务器优惠：[点我进入](https://www.aliyun.com/daily-act/ecs/activity_selection?userCode=yclv4x57)，腾讯云产品优惠：[点我进入](https://curl.qcloud.com/ZHPbMWTl)&nbsp;&nbsp;
+* 腾讯云618：[点我领取](https://curl.qcloud.com/6znbHFOM)&nbsp;&nbsp;
+  
 ## 介绍
 该项目是前后端分离的卖花网站，有一个后端工程deflower，使用iade进行开发，基于jdk1.8，有两个前端工程，mall4uni，vue-admin-master，此项目采用单体架构，以使用最基础的技术来实现一个购物流程，使想初步接触电商的小伙伴能过快速理解这种类型的产品思想，实现流程，功能模块有，发布商品，花语解说，教学视频，管理员管理，前台用户管理，客服功能（简单的聊天），分类管理，个人中心等
 
